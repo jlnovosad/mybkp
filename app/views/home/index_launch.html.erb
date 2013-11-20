@@ -1,0 +1,37 @@
+<% provide(:title, '') %>
+<% if signed_in? %>
+    
+  <%-# Profile Info -%>
+  <div class="span6 offset3">
+    <h2><%= @user.name %></h2>
+
+    <%= render 'layouts/messages' %>
+
+    <div class="profile">
+      <div class="profilephoto">
+        <%= image_tag @user.photo.url(:small) %>
+      </div>
+    </div>
+    <br />
+    <div class="profile">
+      <ul>
+        <li><%= link_to 'Update My Profile', edit_user_registration_path %></li>
+        <li><a href="<%= following_user_path(@user) %>">My Bartenders (<%= @user.followed_users.count %>)</a></li>
+        <li><a href="<%= followers_user_path(@user) %>">My Followers (<%= @user.followers.count %>)</a></li>
+      </ul>
+    </div>
+  </div>
+
+<% else %>
+
+  <%-# Home page -%>
+  <div class="span10 offset1">
+    <div class="phoneart"></div>
+    <%= render 'layouts/messages' %>
+    <div id="homeblurb">The MyBarkeepers app lets you keep in touch with your favorite bartenders. Follow your favorite people and places to find tonight's best drink destination.</div>
+    <div class="maincta"><%= link_to "Download on the App Store", "#", class: "btn btn-large btn-primary" %></div> 
+    <div class="appbuttoncontainer"><a href="#"><div class="appbutton"></div></a></div>
+    <div id="homeblurb">You can also <%= link_to 'Sign Up', new_user_registration_path %> online or <%= link_to 'Sign In', new_user_session_path %> if you are already registered
+    <br />(but you need the app for the good stuff).</div> 
+  </div> 
+<% end %>

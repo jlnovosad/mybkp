@@ -1,0 +1,21 @@
+<div class="span6 offset3">
+<h2><%= @user.name %></h2>
+
+<%= render 'layouts/messages' %>
+
+<div class="profile">
+  <div class="profilephoto">
+    <%= image_tag @user.photo.url(:small) %>
+  </div>
+</div>
+<br />
+<div class="profile">
+  <ul>
+    <li><a href="<%= following_user_path(@user) %>">My Bartenders (<%= @user.followed_users.count %>)</a></li>
+    <li><a href="<%= followers_user_path(@user) %>">My Followers (<%= @user.followers.count %>)</a></li>
+  </ul>
+  <%= render 'follow_form' %>
+</div>
+</div>
+
+

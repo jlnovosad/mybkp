@@ -1,0 +1,18 @@
+<div class="span6 offset3">
+<h2>Invite a Friend</h2>
+
+<%= render 'layouts/messages' %>
+
+<%= form_for @message, :url => invite_path do |f| %>
+  
+  <%= f.hidden_field :subject, :value => "Invite a Friend" %>
+
+  <div><%= f.label :email %>
+  <%= f.email_field :email %></div>
+
+  <br />
+  <div><%= f.submit "Send Invitation", :class => 'btn btn-large btn-primary' %></div>
+
+<% end %>
+
+</div>

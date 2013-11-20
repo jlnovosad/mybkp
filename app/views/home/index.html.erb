@@ -1,0 +1,54 @@
+<% provide(:title, '') %>
+<% if signed_in? %>
+    
+  <%-# Profile Info -%>
+  <div class="span6 offset3">
+    <h2><%= @user.name %></h2>
+
+    <%= render 'layouts/messages' %>
+
+    <div class="profile">
+      <div class="profilephoto">
+        <%= image_tag @user.photo.url(:small) %>
+      </div>
+    </div>
+    <br />
+    <div class="profile">
+      <ul>
+        <li><%= link_to 'Update My Profile', edit_user_registration_path %></li>
+        <li><a href="<%= following_user_path(@user) %>">My Bartenders (<%= @user.followed_users.count %>)</a></li>
+        <li><a href="<%= followers_user_path(@user) %>">My Followers (<%= @user.followers.count %>)</a></li>
+      </ul>
+    </div>
+  </div>
+
+<% else %>
+
+  <%-# Home page -%>
+  <div class="span10 offset1">
+    <div class="phoneart"></div>
+    <%= render 'layouts/messages' %>
+    <div class="homeblurb">The MyBarkeepers app lets you keep in touch with your favorite bartenders. Follow your favorite people and places to find tonight's best drink destination.</div>
+    <br />
+    <div class="homeblurb">Coming soon to the App Store! Sign up for the list today and we will inform you when it's ready. </div> 
+    <br />
+    
+    <!-- Begin MailChimp Signup Form -->
+    <div id="mc_embed_signup">
+    <form action="http://mybarkeepers.us7.list-manage2.com/subscribe/post?u=dbb4d1f5367ae64794a16cb3f&amp;id=f01134f88a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" class="new_user" novalidate>
+      <div>
+        <input type="email" value="" name="EMAIL" class="smallinput" id="mce-EMAIL" placeholder="Enter your email">
+      </div>
+      <br />
+      <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+      </div>  
+      <div class="clear"><input type="submit" value="Sign up" name="subscribe" id="mc-embedded-subscribe" class="btn btn-large btn-primary"></div>
+    </form>
+    </div>
+
+    <!--End mc_embed_signup-->
+
+  </div> 
+<% end %>

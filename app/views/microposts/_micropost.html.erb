@@ -1,0 +1,10 @@
+<li>
+  <%= micropost.content %> 
+  <div class="timestamp">
+    <% if micropost.fsid.nil? || micropost.fsid.empty? %>
+  	<% else %>
+      at <%= find_venue_name(micropost.fsid) %>
+    <% end %>
+  </div>
+  <div class="timestamp"><%= time_ago_in_words(micropost.created_at) %> ago</div>
+</li>

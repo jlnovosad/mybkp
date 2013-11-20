@@ -1,0 +1,31 @@
+<div class="span6 offset3">
+<h2>Edit My Profile</h2>
+
+<%= render 'layouts/messages' %>
+
+<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :multipart => true }) do |f| %>
+  <%= devise_error_messages! %>
+
+  <div><%= f.label :photo, "Profile Photo" %>
+  <div class="profilephotoedit"><%= image_tag @user.photo.url(:small) %></div>
+  
+  <%= f.file_field :photo, :class => 'filefield' %></div>
+
+  <div><%= f.label :name %>
+  <%= f.text_field :name, :maxlength=>"50" %></div>
+
+  <div><%= f.label :email %>
+  <%= f.email_field :email %></div>
+
+  <div><%= f.label :password, "Change Your Password? (Leave blank if you don't want to)" %>
+  <%= f.password_field :password %></div>
+
+  <div><%= f.label :password_confirmation, "Change Password Confirmation" %>
+  <%= f.password_field :password_confirmation %></div>
+
+  <br />
+  <div><%= f.submit "Update", :class => 'btn btn-large btn-primary' %></div>
+
+<% end %>
+
+</div>

@@ -1,0 +1,6 @@
+<%= form_for(@micropost) do |f| %>
+  <div class="field">
+    <%= f.text_area :content, venueholder: "What are you up to?",  :cols => "10", :rows => "4", :maxlength => "100" %>
+  </div>
+  <%= f.submit "Update Status", class: "btn btn-small btn-primary" %>
+<% end %>

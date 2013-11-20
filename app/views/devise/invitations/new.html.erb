@@ -1,0 +1,15 @@
+<div class="span6 offset3">
+<h2>Invite a Friend</h2>
+
+<%= form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => {:method => :post} do |f| %>
+  <%= devise_error_messages! %>
+
+<% resource.class.invite_key_fields.each do |field| -%>
+  <div><%= f.label field %>
+  <%= f.text_field field %></div>
+<% end -%>
+<br/>
+  <div><%= f.submit "Send Invitation", :class => 'btn btn-large btn-primary'  %></div>
+<% end %>
+
+</div>
