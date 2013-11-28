@@ -3,7 +3,7 @@ class Relationship < ActiveRecord::Base
   #########################################
   # Setup accessible (or protected) attributes for your model
   #########################################
-  attr_accessible :followed_id
+  attr_accessible :followed_id, :status
 
   #########################################
   # refers to the join

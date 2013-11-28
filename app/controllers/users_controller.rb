@@ -33,7 +33,20 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :users=>@users.as_json(:only => [:id, :name, :tender, :invitation_token], :methods => [:photo_url], :include => {:reverse_relationships => { :only => [:id, :followed_id, :follower_id ] }} )
+        :user=>@user.as_json(:only => [:id, :name, :tender, :email, :invitation_token], :methods => [:photo_url], :include => {:reverse_relationships => { :only => [:id, :followed_id, :follower_id, :status ] }} )
+        } }
+    end
+  end
+
+  # friend requests
+  def friendrequests
+    @title = "Friend Requests"
+    @user = User.find(params[:id])
+    @users = @user.friend_requests
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> { 
+        :users=>@users.as_json(:only => [:id, :name, :tender], :methods => [:photo_url], :include => {:relationships => { :only => [:id, :followed_id, :follower_id, :status ] }} )
         } }
     end
   end
@@ -55,7 +68,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :user=>@user.as_json(:only => [:id, :name, :tender, :email, :invitation_token], :methods => [:photo_url], :include => {:reverse_relationships => { :only => [:id, :followed_id, :follower_id ] }} )
+        :user=>@user.as_json(:only => [:id, :name, :tender, :email, :invitation_token], :methods => [:photo_url], :include => {:reverse_relationships => { :only => [:id, :followed_id, :follower_id, :status ] }} )
         } }
     end
   end
@@ -147,7 +160,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json => {
-        :user=>@user.as_json(:only => [:id, :name, :tender], :methods => [:photo_url], :include => {:reverse_relationships => { :only => [:id, :followed_id, :follower_id ] }} )
+        :user=>@user.as_json(:only => [:id, :name, :tender], :methods => [:photo_url], :include => {:reverse_relationships => { :only => [:id, :followed_id, :follower_id, :status ] }} )
       } }
     end
   end
