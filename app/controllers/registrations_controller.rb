@@ -57,8 +57,16 @@ class RegistrationsController < Devise::RegistrationsController
         invitation_info[:invitation_sent_at] = @user[:invitation_sent_at]
         invitation_info[:invited_by_id] = @user[:invited_by_id]
         invitation_info[:invited_by_type] = @user[:invited_by_type]
-        #@user.destroy
-        @user.save!
+
+        # need to save friends here also
+        if @user.followers 
+          @user.followers.each { |follower|
+            allfollowers << follower
+          }
+          invitation_info[:followers] = allfollowers
+        end
+
+        @user.destroy
       end
     end
 
@@ -73,6 +81,15 @@ class RegistrationsController < Devise::RegistrationsController
       @user[:invitation_sent_at] = invitation_info[:invitation_sent_at]
       @user[:invited_by_id] = invitation_info[:invited_by_id]
       @user[:invited_by_type] = invitation_info[:invited_by_type]
+      
+      # add friends
+      allfollowers = invitation_info[:followers]
+      if allfollowers 
+        allfollowers.each { |follower|
+          @user.followers << follower
+        }
+      end
+
       @user.save!
     end
   end
