@@ -57,7 +57,8 @@ class RegistrationsController < Devise::RegistrationsController
         invitation_info[:invitation_sent_at] = @user[:invitation_sent_at]
         invitation_info[:invited_by_id] = @user[:invited_by_id]
         invitation_info[:invited_by_type] = @user[:invited_by_type]
-        @user.destroy
+        #@user.destroy
+        @user.save!
       end
     end
 
