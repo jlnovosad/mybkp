@@ -23,13 +23,28 @@ class User < ActiveRecord::Base
   # this is a list of the associations that any user has (users/4/microposts), @user.microposts
   #########################################
   has_many :microposts, dependent: :destroy
-  has_many :relationships, foreign_key: "follower_id", dependent: :destroy
-  has_many :followed_users, through: :relationships, source: :followed
-  has_many :reverse_relationships, foreign_key: "followed_id",
-                                   class_name:  "Relationship",
-                                   dependent:   :destroy
-  has_many :followers, through: :reverse_relationships, source: :follower
-  has_many :friend_requests, :through => :reverse_relationships, 
+  
+  has_many :relationships, 
+            foreign_key: "follower_id", 
+            dependent: :destroy
+  has_many :followed_users, 
+            through: :relationships, 
+            class_name: "User", 
+            source: :followed,
+            :conditions => ['relationships.status = ?',"FOLLOWING"]
+
+  has_many :reverse_relationships, 
+            foreign_key: "followed_id",
+            class_name: "Relationship",
+            dependent: :destroy
+  has_many :followers, 
+            through: :reverse_relationships, 
+            class_name: "User", 
+            source: :follower,
+            :conditions => ['relationships.status = ?',"FOLLOWING"]                            
+
+  has_many :friend_requests, 
+            :through => :reverse_relationships, 
             :class_name => "User", 
             :source => :follower, 
             :conditions => ['relationships.status = ?',"REQUEST"]
@@ -79,7 +94,11 @@ class User < ActiveRecord::Base
 
   def self.search(search)
     search_condition = "%" + search + "%"
-    find(:all, :conditions => ['name ILIKE ?', search_condition], :limit => 50, :order => "name ASC")
+    #where("'name ILIKE ?', search_condition", :limit => 50, :order => "name ASC")
+    #find(:all, :conditions => ['name ILIKE ?', search_condition], :limit => 50, :order => "name ASC")
+
+    order('name ASC').where('name LIKE ?', "%#{search}%")
+
   end
 
 end
