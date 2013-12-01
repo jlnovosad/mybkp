@@ -49,7 +49,8 @@ class RegistrationsController < Devise::RegistrationsController
 
   def destroy_if_previously_invited
     invitation_info = {}
-
+    allfollowers = {}
+    
     user_hash = params[:user]
     if user_hash && user_hash[:email]
       @user = User.find_by_email_and_encrypted_password(user_hash[:email], '')
