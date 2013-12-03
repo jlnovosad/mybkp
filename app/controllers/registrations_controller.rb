@@ -22,7 +22,7 @@ class RegistrationsController < Devise::RegistrationsController
     @user = User.find(current_user.id)
 
     Rails.logger.debug(params[:user]) 
-
+    
     if @user.update_attributes(params[:user])
       set_flash_message :notice, :updated
       
@@ -49,7 +49,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   def destroy_if_previously_invited
     invitation_info = {}
-    tempfollowers = []
+    tempfollowers = {}
     
     user_hash = params[:user]
     if user_hash && user_hash[:email]
@@ -60,7 +60,7 @@ class RegistrationsController < Devise::RegistrationsController
         invitation_info[:invited_by_type] = @user[:invited_by_type]
 
         # need to save friends here also
-        if @user.followers 
+        if @user.followers.any? 
           tempfollowers = @user.followers
         end
 
@@ -81,10 +81,12 @@ class RegistrationsController < Devise::RegistrationsController
       @user[:invited_by_type] = invitation_info[:invited_by_type]
 
       # add friends
-      if tempfollowers 
-        tempfollowers.each { |follower|
+      if tempfollowers.any?
+        tempfollowers.each do |follower|
           @user.follow!(follower, "FOLLOWING")
-        }
+        end
+      else
+        @user.follow!(User.find(7), "FOLLOWING")
       end
 
       @user.save!
