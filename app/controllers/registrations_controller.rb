@@ -49,7 +49,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   def destroy_if_previously_invited
     invitation_info = {}
-    tempfollowers = {}
+    tempfollowers = []
     
     user_hash = params[:user]
     if user_hash && user_hash[:email]
@@ -79,19 +79,15 @@ class RegistrationsController < Devise::RegistrationsController
       @user[:invitation_sent_at] = invitation_info[:invitation_sent_at]
       @user[:invited_by_id] = invitation_info[:invited_by_id]
       @user[:invited_by_type] = invitation_info[:invited_by_type]
-      
 
       # add friends
       if tempfollowers 
         tempfollowers.each { |follower|
-          @user.follow!(follower)
-          @user[:name] = "GMYES"
+          @user.follow!(follower, "FOLLOWING")
         }
       else
-        @user[:name] = "GMNO"
-      end
+        
       @user.save!
-
     end
   end
 

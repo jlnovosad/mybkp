@@ -209,6 +209,11 @@ class UsersController < ApplicationController
     end
   end
 
+  # relationship status
+  def myrelationship 
+
+  end
+
   # any user favorite venues
   def venues
     @title = "Venues"

@@ -41,7 +41,13 @@ class User < ActiveRecord::Base
             through: :reverse_relationships, 
             class_name: "User", 
             source: :follower,
-            :conditions => ['relationships.status = ?',"FOLLOWING"]                            
+            :conditions => ['relationships.status = ?',"FOLLOWING"]  
+
+  has_many :amfollowing, 
+            through: :reverse_relationships, 
+            class_name: "User", 
+            source: :follower,
+            :conditions => ['relationships.status = ?',"FOLLOWING"]                           
 
   has_many :friend_requests, 
             :through => :reverse_relationships, 
