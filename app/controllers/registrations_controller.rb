@@ -85,8 +85,12 @@ class RegistrationsController < Devise::RegistrationsController
       if tempfollowers 
         tempfollowers.each { |follower|
           @user.follow!(follower)
+          @user[:name] = "GMYES"
         }
+      else
+        @user[:name] = "GMNO"
       end
+
 
     end
   end

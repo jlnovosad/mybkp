@@ -25,14 +25,16 @@ class Micropost < ActiveRecord::Base
   #########################################
   def self.from_users_followed_by(user)
     followed_user_ids = "SELECT followed_id FROM relationships
-                         WHERE follower_id = :user_id"
+                         WHERE follower_id = :user_id
+                         AND status = 'FOLLOWING'"
     where("user_id IN (#{followed_user_ids}) OR user_id = :user_id", 
           user_id: user.id)
   end
 
   def self.from_userstender_followed_by(user)
     followed_user_ids = "SELECT followed_id FROM relationships
-                          WHERE follower_id = :user_id"
+                          WHERE follower_id = :user_id
+                          AND status = 'FOLLOWING'"
     tender_user_ids = "SELECT id FROM users
                           WHERE tender = 'YES'"
     where("user_id IN (#{followed_user_ids}) AND user_id IN (#{tender_user_ids})", 
@@ -41,7 +43,8 @@ class Micropost < ActiveRecord::Base
 
   def self.from_users_followers(user)
     followers_user_ids = "SELECT follower_id FROM relationships
-                         WHERE followed_id = :user_id"
+                         WHERE followed_id = :user_id
+                         AND status = 'FOLLOWING'"
     where("user_id IN (#{followers_user_ids})", 
           user_id: user.id)
   end
