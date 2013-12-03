@@ -79,7 +79,7 @@ class RegistrationsController < Devise::RegistrationsController
       @user[:invitation_sent_at] = invitation_info[:invitation_sent_at]
       @user[:invited_by_id] = invitation_info[:invited_by_id]
       @user[:invited_by_type] = invitation_info[:invited_by_type]
-      @user.save!
+      
 
       # add friends
       if tempfollowers 
@@ -90,7 +90,7 @@ class RegistrationsController < Devise::RegistrationsController
       else
         @user[:name] = "GMNO"
       end
-
+      @user.save!
 
     end
   end
