@@ -85,8 +85,8 @@ class RegistrationsController < Devise::RegistrationsController
         tempfollowers.each { |follower|
           @user.follow!(follower, "FOLLOWING")
         }
-      else
-        
+      end
+
       @user.save!
     end
   end
