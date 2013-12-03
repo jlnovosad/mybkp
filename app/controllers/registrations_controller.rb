@@ -49,7 +49,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   def destroy_if_previously_invited
     invitation_info = {}
-    allfollowers = {}
+    tempfollowers = {}
     
     user_hash = params[:user]
     if user_hash && user_hash[:email]
@@ -61,10 +61,7 @@ class RegistrationsController < Devise::RegistrationsController
 
         # need to save friends here also
         if @user.followers 
-          @user.followers.each { |follower|
-            allfollowers << follower
-          }
-          invitation_info[:followers] = allfollowers
+          tempfollowers = @user.followers
         end
 
         @user.destroy
@@ -84,11 +81,8 @@ class RegistrationsController < Devise::RegistrationsController
       @user[:invited_by_type] = invitation_info[:invited_by_type]
       
       # add friends
-      allfollowers = invitation_info[:followers]
-      if allfollowers 
-        allfollowers.each { |follower|
-          @user.followers << follower
-        }
+      if tempfollowers 
+        @user.followers = tempfollowers
       end
 
       @user.save!
