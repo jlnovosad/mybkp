@@ -36,18 +36,13 @@ class User < ActiveRecord::Base
   has_many :reverse_relationships, 
             foreign_key: "followed_id",
             class_name: "Relationship",
-            dependent: :destroy
+            dependent: :destroy,
+            :conditions => ['relationships.status = ?',"FOLLOWING"] 
   has_many :followers, 
             through: :reverse_relationships, 
             class_name: "User", 
             source: :follower,
-            :conditions => ['relationships.status = ?',"FOLLOWING"]  
-
-  has_many :amfollowing, 
-            through: :reverse_relationships, 
-            class_name: "User", 
-            source: :follower,
-            :conditions => ['relationships.status = ?',"FOLLOWING"]                           
+            :conditions => ['relationships.status = ?',"FOLLOWING"]                      
 
   has_many :friend_requests, 
             :through => :reverse_relationships, 

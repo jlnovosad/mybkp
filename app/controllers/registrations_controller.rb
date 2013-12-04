@@ -83,10 +83,8 @@ class RegistrationsController < Devise::RegistrationsController
       # add friends
       if tempfollowers.any?
         tempfollowers.each do |follower|
-          @user.follow!(follower, "FOLLOWING")
+          follower.follow!(@user, "FOLLOWING")
         end
-      else
-        @user.follow!(User.find(7), "FOLLOWING")
       end
 
       @user.save!

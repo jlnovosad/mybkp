@@ -11,7 +11,7 @@ class RelationshipsController < ApplicationController
       format.html { redirect_to @user }
       format.js 
       format.json  { render :json => {
-        :user=>@user.as_json(:only => [:id, :name, :tender, :email], :methods => [:photo_url], :include => {:reverse_relationships => { :only => [:id, :followed_id, :follower_id, :status ] }} )
+        :user=>@user.as_json(:only => [:id, :name, :tender, :email], :methods => [:photo_url])
       } }
     end
   end
@@ -21,15 +21,15 @@ class RelationshipsController < ApplicationController
   #########################################
   def updatestatus
     @relationship = Relationship.find(params[:id])
-    @user = @relationship.followed
     if current_user.id == @relationship.follower_id 
       @relationship.status = params[:relationship][:status]
       @relationship.save
+      @user = User.find(@relationship.followed_id)
       respond_to do |format|
         format.html { redirect_to @user }
         format.js
         format.json  { render :json => {
-          :user=>@user.as_json(:only => [:id, :name, :tender, :email], :methods => [:photo_url], :include => {:reverse_relationships => { :only => [:id, :followed_id, :follower_id, :status ] }} )
+          :user=>@user.as_json(:only => [:id, :name, :tender, :email], :methods => [:photo_url])
         } }
       end
     else

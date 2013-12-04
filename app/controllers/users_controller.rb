@@ -8,6 +8,9 @@ class UsersController < ApplicationController
 
   # full list of users
   def index
+
+    puts '====================== index'
+
     authorize! :index, @user, :message => 'Oops! Not authorized as an administrator.'
     @users = User.paginate(page: params[:page], :per_page => 50)
     respond_to do |format|
@@ -19,11 +22,13 @@ class UsersController < ApplicationController
   # search user names
   def search
     
+    puts '====================== search'
+
     # get search term
     if params[:search].nil?
       @users = []
     else 
-      @users = User.search(params[:search])
+      @users = User.search(params[:search]).limit(50)
       if @users.nil?
         @users = []
       end
@@ -32,28 +37,17 @@ class UsersController < ApplicationController
     # find
     respond_to do |format|
       format.html # index.html.erb
-      format.json  { render :json=> { 
-        :users=>@users.as_json(:only => [:id, :name, :tender, :invitation_token], :methods => [:photo_url], :include => {:reverse_relationships => { :only => [:id, :followed_id, :follower_id, :status ] }} )
-        } }
-    end
-  end
-
-  # friend requests
-  def friendrequests
-    @title = "Friend Requests"
-    @user = User.find(params[:id])
-    @users = @user.friend_requests
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json  { render :json=> { 
-        :users=>@users.as_json(:only => [:id, :name, :tender], :methods => [:photo_url], :include => {:relationships => { :only => [:id, :followed_id, :follower_id, :status ] }} )
-        } }
+      format.json  { render :json => {
+        :users=>@users.as_json(:only => [:id, :name, :tender], :methods => [:photo_url])
+      } }
     end
   end
 
   # search one user email
   def searchemail
     
+    puts '====================== searchemail'
+
     # get search term
     if params[:email].nil?
       @user = []
@@ -68,13 +62,16 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :user=>@user.as_json(:only => [:id, :name, :tender, :email, :invitation_token], :methods => [:photo_url], :include => {:reverse_relationships => { :only => [:id, :followed_id, :follower_id, :status ] }} )
+        :user=>@user.as_json(:only => [:id, :name, :tender, :email, :invitation_token], :methods => [:photo_url])
         } }
     end
   end
 
   # for checking valid token and download user
   def valid
+
+    puts '====================== valid'
+
     @user = current_user
     respond_to do |format|
       format.html # index.html.erb
@@ -87,6 +84,9 @@ class UsersController < ApplicationController
   # this method is PUT users#update at users/id.json
   # but to update a user use PUT registrations#update at users.json, custom devise method in registrations_controller.rb
   def update
+
+    puts '====================== update'
+
     @user = User.find(params[:id])
     respond_to do |format|
       format.html # index.html.erb
@@ -102,7 +102,10 @@ class UsersController < ApplicationController
 
   # any user friends posts feed - for home tab
   def feed
-    @title = "Feed"
+    @title = "Latest Posts"
+
+    puts '====================== feed'
+
     @user = User.find(params[:id])
     @feed_items = @user.feed.paginate(page: params[:page], :per_page => 50)
     respond_to do |format|
@@ -120,7 +123,10 @@ class UsersController < ApplicationController
 
   # any user friends posts feed - bartenders only - for home tab
   def feedtender
-    @title = "Feed"
+    @title = "Latest Posts"
+
+    puts '====================== feedtender'
+
     @user = User.find(params[:id])
     @feed_items = @user.feedtender.paginate(page: params[:page], :per_page => 50)
     respond_to do |format|
@@ -138,7 +144,10 @@ class UsersController < ApplicationController
 
   # feed of the most popular users for promotion (followed by Mr. Popular user #2)
   def feedpopular
-    @title = "Feed"
+    @title = "Latest Posts"
+
+    puts '====================== feedpopular'
+
     @user = User.find_by_email("mybarkeepers@lifestylesupply.co")
     @feed_items = @user.feedtender.paginate(page: params[:page], :per_page => 50)
     respond_to do |format|
@@ -156,20 +165,27 @@ class UsersController < ApplicationController
 
   # viewing user profiles (user detaiL)
   def show
+    @title = ""
+
+    puts '====================== show'
+
+    #@user = User.joins(:reverse_relationships).where("relationships.follower_id" => current_user.id).find(params[:id])
     @user = User.find(params[:id])
     respond_to do |format|
       format.html # index.html.erb
-      format.json  { render :json => {
-        :user=>@user.as_json(:only => [:id, :name, :tender], :methods => [:photo_url], :include => {:reverse_relationships => { :only => [:id, :followed_id, :follower_id, :status ] }} )
-      } }
+      format.json  { render :json=> { 
+        :user=>@user.as_json(:only => [:id, :name, :tender], :methods => [:photo_url]) 
+        } }
     end
   end
 
   # viewing user profiles (feed)
   def microposts
-    @title = "Microposts"
-    @user = User.find(params[:id])
-    @microposts = @user.microposts.paginate(page: params[:page], :per_page => 50).as_json(:only => [:content, :created_at], :methods => [:photo_url], 
+    @title = "Latest Posts"
+
+    puts '====================== microposts'
+
+    @microposts = User.find(params[:id]).microposts.paginate(page: params[:page], :per_page => 50).as_json(:only => [:content, :created_at], :methods => [:photo_url], 
       :include => { 
         :user => { :only => [:id, :name, :tender], :methods => [:photo_url] }, 
         :venue => { :only => [:id, :fs_venue_id] }
@@ -183,11 +199,47 @@ class UsersController < ApplicationController
     end
   end
 
+  # friend requests
+  def friendrequests
+    @title = "Friend Requests"
+    
+    puts '====================== friendrequests'
+
+    @users = User.find(params[:id]).friend_requests
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> { 
+        :users=>@users.as_json(:only => [:id, :name, :tender], :methods => [:photo_url])
+        } }
+    end
+  end
+
+  # any user favorite venues
+  def venues
+    @title = "Venues"
+
+    puts '====================== venues'
+
+    @venues = User.find(params[:id]).venues.paginate(page: params[:page], :per_page => 10)
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json => {
+        :venues=>@venues.as_json(:only => [:id, :fs_venue_id])
+        } }
+    end
+  end
+
+  #########################################
+  # relationships
+  #########################################
+
   # any user following
   def following
     @title = "Bartenders"
-    @user = User.find(params[:id])
-    @users = @user.followed_users.paginate(page: params[:page], :per_page => 50, :order => "name ASC")
+
+    puts '====================== following'
+
+    @users = User.find(params[:id]).followed_users.paginate(page: params[:page], :per_page => 50, :order => "name ASC")
     respond_to do |format|
       format.html { render 'show_follow' }
       format.json  { render :json=> { 
@@ -199,8 +251,10 @@ class UsersController < ApplicationController
   # any user followers
   def followers
     @title = "Followers"
-    @user = User.find(params[:id])
-    @users = @user.followers.paginate(page: params[:page], :per_page => 50, :order => "name ASC")
+
+    puts '====================== followers'
+
+    @users = User.find(params[:id]).followers.paginate(page: params[:page], :per_page => 50, :order => "name ASC")
     respond_to do |format|
       format.html { render 'show_follow' }
       format.json  { render :json=> { 
@@ -209,21 +263,22 @@ class UsersController < ApplicationController
     end
   end
 
-  # relationship status
-  def myrelationship 
+  # check relationship
+  def myrelationship
 
-  end
+    puts '====================== myrelationship'
 
-  # any user favorite venues
-  def venues
-    @title = "Venues"
-    @user = User.find(params[:id])
-    @venues = @user.venues.paginate(page: params[:page], :per_page => 10)
+    user = User.find(params[:id])
+    @relationship = current_user.following?(user)
+    if @relationship.nil?
+        @relationship = []
+      end
     respond_to do |format|
       format.html # index.html.erb
-      format.json  { render :json => {
-        :venues=>@venues.as_json(:only => [:id, :fs_venue_id])
+      format.json  { render :json=> { 
+        :relationship=>@relationship.as_json() 
         } }
     end
   end
+
 end
