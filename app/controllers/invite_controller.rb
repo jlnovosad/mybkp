@@ -8,7 +8,6 @@ class InviteController < ApplicationController
 
 	def create
 		@message = Message.new(params[:message])
-		
 		if @message.valid?
 		  	InvitationsMailer.new_message(@message).deliver
 		  	respond_to do |format|

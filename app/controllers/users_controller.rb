@@ -271,12 +271,36 @@ class UsersController < ApplicationController
     user = User.find(params[:id])
     @relationship = current_user.following?(user)
     if @relationship.nil?
-        @relationship = []
-      end
+      @relationship = []
+    end
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
         :relationship=>@relationship.as_json() 
+        } }
+    end
+  end
+
+  # email someone already in the system
+  def invitationemailonly
+
+    puts '====================== invitationemailonly'
+
+    @user = User.find(params[:message][:user_id])
+    
+    # send email
+    @message = Message.new(params[:message])
+    if @message.valid?
+      InvitationsMailer.new_message(@message).deliver
+    end
+    
+    # follow user, they already exist
+    current_user.follow!(@user, "FOLLOWING")
+    
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> { 
+        :user=>@user.as_json(:only => [:id, :name, :tender], :methods => [:photo_url]) 
         } }
     end
   end

@@ -20,7 +20,6 @@ class RegistrationsController < Devise::RegistrationsController
     end
 
     @user = User.find(current_user.id)
-
     Rails.logger.debug(params[:user]) 
     
     if @user.update_attributes(params[:user])
