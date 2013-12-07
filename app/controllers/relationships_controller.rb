@@ -11,7 +11,7 @@ class RelationshipsController < ApplicationController
       format.html { redirect_to @user }
       format.js 
       format.json  { render :json => {
-        :user=>@user.as_json(:only => [:id, :name, :tender, :email], :methods => [:photo_url])
+        :user=>@user.as_json(:only => [:id, :name, :tender, :email, :invitation_token], :methods => [:photo_url])
       } }
     end
   end
@@ -29,7 +29,7 @@ class RelationshipsController < ApplicationController
         format.html { redirect_to @user }
         format.js
         format.json  { render :json => {
-          :user=>@user.as_json(:only => [:id, :name, :tender, :email], :methods => [:photo_url])
+          :user=>@user.as_json(:only => [:id, :name, :tender, :email, :invitation_token], :methods => [:photo_url])
         } }
       end
     else
