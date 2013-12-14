@@ -287,16 +287,11 @@ class UsersController < ApplicationController
 
     puts '====================== invitationemailonly'
 
-    @user = User.find(params[:message][:user_id])
-    
     # send email
     @message = Message.new(params[:message])
     if @message.valid?
       InvitationsMailer.new_message(@message).deliver
     end
-    
-    # follow user, they already exist
-    current_user.follow!(@user, "FOLLOWING")
     
     respond_to do |format|
       format.html # index.html.erb

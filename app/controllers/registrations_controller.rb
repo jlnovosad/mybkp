@@ -52,8 +52,7 @@ class RegistrationsController < Devise::RegistrationsController
 
     user_hash = params[:user]
 
-    Rails.logger.debug("AROUND CREATE")
-    Rails.logger.debug(params[:user]) 
+    puts "AROUND CREATE1"
     
     if user_hash && user_hash[:email]
       @user = User.find_by_email_and_encrypted_password(user_hash[:email], '')
@@ -62,12 +61,12 @@ class RegistrationsController < Devise::RegistrationsController
         invitation_info[:invited_by_id] = @user[:invited_by_id]
         invitation_info[:invited_by_type] = @user[:invited_by_type]
 
-        Rails.logger.debug("AROUND CREATE DESTROYING")
+        puts "AROUND CREATE2"
 
         # need to save friends here also
         if @user.followers.any? 
 
-          Rails.logger.debug("AROUND CREATE followers")
+          puts "AROUND CREATE3"
 
           tempfollowers = @user.followers
         end
@@ -76,41 +75,38 @@ class RegistrationsController < Devise::RegistrationsController
       end
     end
 
-    Rails.logger.debug("AROUND CREATE 2")
+    puts "AROUND CREATE4"
 
     # execute the action (create)
     yield
     # Note that the after_filter is executed at THIS position !
 
-    Rails.logger.debug("AROUND CREATE 3")
+    puts "AROUND CREATE5"
 
     # Restore info about the last invitation (for later reference)
     # Reset the invitation_info only, if invited_by_id is still nil at this stage:
     @user = User.find_by_email_and_invited_by_id(user_hash[:email], nil)
 
-    Rails.logger.debug("AROUND CREATE 4")
-    Rails.logger.debug(@user) 
+    puts "AROUND CREATE6"
 
     if @user
       @user[:invitation_sent_at] = invitation_info[:invitation_sent_at]
       @user[:invited_by_id] = invitation_info[:invited_by_id]
       @user[:invited_by_type] = invitation_info[:invited_by_type]
 
-      Rails.logger.debug("AROUND CREATE 5")
-      Rails.logger.debug(@user) 
+      puts "AROUND CREATE7"
 
       # add friends
       if tempfollowers.any?
         tempfollowers.each do |follower|
 
-          Rails.logger.debug("AROUND CREATE follower")
-          
+          puts "AROUND CREATE8"
+
           follower.follow!(@user, "FOLLOWING")
         end
       end
 
-      Rails.logger.debug("AROUND CREATE 6")
-      Rails.logger.debug(@user) 
+      puts "AROUND CREATE9"
 
       @user.save!
     end
