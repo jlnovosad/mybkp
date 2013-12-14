@@ -287,6 +287,9 @@ class UsersController < ApplicationController
 
     puts '====================== invitationemailonly'
 
+    # get user
+    @user = User.find_by_email(params[:message][:email])
+
     # send email
     @message = Message.new(params[:message])
     if @message.valid?
