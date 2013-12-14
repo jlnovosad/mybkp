@@ -19,10 +19,10 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   resources :users do
     # added GETs for all these to customize data we get about a user
     member do
-      get :following, :followers, :myrelationship, :invitationemailonly, :venues, :microposts, :feed, :feedtender, :feedpopular, :valid, :search
+      get :following, :followers, :myrelationship, :venues, :microposts, :feed, :feedtender, :feedpopular, :valid, :search
     end
     member do
-      post :searchemail
+      post :searchemail, :invitationemailonly
     end
     #resources :venues, only: [:create, :destroy]
   end
