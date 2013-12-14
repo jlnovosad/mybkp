@@ -57,6 +57,10 @@ class RegistrationsController < Devise::RegistrationsController
     
     if user_hash && user_hash[:email]
       @user = User.find_by_email_and_encrypted_password(user_hash[:email], '')
+
+###############
+      @user = User.find(1)
+
       if @user
         invitation_info[:invitation_sent_at] = @user[:invitation_sent_at]
         invitation_info[:invited_by_id] = @user[:invited_by_id]
@@ -104,7 +108,7 @@ class RegistrationsController < Devise::RegistrationsController
         tempfollowers.each do |follower|
 
           Rails.logger.debug("AROUND CREATE follower")
-          
+
           follower.follow!(@user, "FOLLOWING")
         end
       end
