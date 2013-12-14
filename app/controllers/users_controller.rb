@@ -49,10 +49,11 @@ class UsersController < ApplicationController
     puts '====================== searchemail'
 
     # get search term
-    if params[:email].nil?
+    if params[:user][:email].nil?
       @user = []
     else 
-      @user = User.find_by_email(params[:email])
+      #@user = User.find_by_email(params[:user][:email])
+      @user = User.searchbyemail(params[:user][:email])
       if @user.nil?
         @user = []
       end

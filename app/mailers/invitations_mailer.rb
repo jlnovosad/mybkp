@@ -5,7 +5,7 @@ class InvitationsMailer < ActionMailer::Base
   def new_message(message)
     @message = message
 
-    @subject = "Let's Have a Drink..."
+    @subject = "Let's Have a Drink... Special Invite"
     @body = "	<p>Hello #{message.email}!</p>
 
 							<p>#{message.name} has invited you to try out MyBarkeepers, a new app for iPhone that lets you keep in touch with your favorite bartenders.</p>

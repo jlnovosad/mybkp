@@ -37,7 +37,7 @@ user.microposts.create!(content: "The view of New York, the Hudson River & New J
 user.microposts.create!(content: "woooooooooooo")
 user.follow!(User.find_by_name("J.L. Novosad"), "FOLLOWING")
 
-user = User.create! :name => "Kim O'Connor", :email => "test5@mybarkeepers.com", :password => "foobar", :password_confirmation => "foobar", :tender => "YES"
+user = User.create! :name => "Kim O'Connor", :email => "test5@mybarkeeperS.com", :password => "foobar", :password_confirmation => "foobar", :tender => "YES"
 user.microposts.create!(content: "slick your hair back, listen to some huey lewis", :venue_id => 4)
 user.microposts.create!(content: "Check out the rooftop bar")
 user.follow!(User.find_by_name("J.L. Novosad"), "FOLLOWING")

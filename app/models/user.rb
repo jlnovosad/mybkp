@@ -94,12 +94,17 @@ class User < ActiveRecord::Base
   end
 
   def self.search(search)
-    search_condition = "%" + search + "%"
+    
+    #search_condition = "%" + search.downcase + "%"
     #where("'name ILIKE ?', search_condition", :limit => 50, :order => "name ASC")
     #find(:all, :conditions => ['name ILIKE ?', search_condition], :limit => 50, :order => "name ASC")
 
-    order('name ASC').where('name LIKE ?', "%#{search}%")
+    order('name ASC').where('lower(name) LIKE ?', "%#{search.downcase}%").limit(50)
 
+  end
+
+  def self.searchbyemail(email)
+    where('lower(email) = ?', email.downcase).limit(50)
   end
 
 end
