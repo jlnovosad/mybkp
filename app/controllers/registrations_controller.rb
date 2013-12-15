@@ -42,7 +42,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   # for inviting
 
-  around_filter :destroy_if_previously_invited, :only => :create
+  around_filter :destroy_if_previously_invited, :only => :create 
 
   private
 
@@ -51,12 +51,37 @@ class RegistrationsController < Devise::RegistrationsController
     tempfollowers = {}
 
     user_hash = params[:user]
-
+    
     Rails.logger.debug("AROUND CREATE")
     Rails.logger.debug(params[:user]) 
     
+    ########
+    @jluser = User.find(1)
+    if @jluser.followers.any? 
+
+      Rails.logger.debug("jl CREATE followers")
+
+      jltempfollowers = @jluser.followers
+    end
+    @puser = User.find(2)
+    if @puser.followers.any? 
+
+      Rails.logger.debug("pCREATE followers")
+
+      ptempfollowers = @puser.followers
+    end
+    @tuser = User.find(3)
+    if @tuser.followers.any? 
+
+      Rails.logger.debug("tCREATE followers")
+
+      ttempfollowers = @tuser.followers
+    end
+    ########
+
     if user_hash && user_hash[:email]
       @user = User.find_by_email_and_encrypted_password(user_hash[:email], '')
+      
       if @user
         invitation_info[:invitation_sent_at] = @user[:invitation_sent_at]
         invitation_info[:invited_by_id] = @user[:invited_by_id]
@@ -75,6 +100,8 @@ class RegistrationsController < Devise::RegistrationsController
         @user.destroy
       end
     end
+
+    
 
     Rails.logger.debug("AROUND CREATE 2")
 
@@ -102,11 +129,12 @@ class RegistrationsController < Devise::RegistrationsController
       # add friends
       if tempfollowers.any?
         tempfollowers.each do |follower|
-
-          Rails.logger.debug("AROUND CREATE follower")
-
+          Rails.logger.debug("AROUND CREATE tempfollowers")
           follower.follow!(@user, "FOLLOWING")
         end
+        @jluser.follow!(@tuser, "FOLLOWING")
+      else 
+        @jluser.follow!(@puser, "FOLLOWING")
       end
 
       Rails.logger.debug("AROUND CREATE 6")
@@ -114,6 +142,15 @@ class RegistrationsController < Devise::RegistrationsController
 
       @user.save!
     end
+
+    ########
+    if jltempfollowers.any?
+      jltempfollowers.each do |follower|
+        Rails.logger.debug("jl CREATE tempfollowers")
+        #follower.follow!(@user, "FOLLOWING")
+      end
+    end
+    ########
   end
 
 end
