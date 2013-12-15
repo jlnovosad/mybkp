@@ -287,22 +287,27 @@ class UsersController < ApplicationController
 
     puts '====================== invitationemailonly'
 
+    # get user
+    @user = User.find(params[:id])
+    @name = params[:name]
+    @email = @user[:email]
+
     # message object
-    @message = Message.new(params[:message])
-    @message.subject = "Let's Have a Drink... Special Invite"
-    @message.to = params[:message][:email]
-    @message.body = "
-    <p>Hello #{@message.email}!</p>
-    <p>#{@message.name} has invited you to try out MyBarkeepers, a new app for iPhone that lets you keep in touch with your favorite bartenders.</p>
+    @message = {}
+    @message = params[:message]
+    #@message.name = params[:message][:name]
+    @message[:email] = @email
+    @message[:subject] = "Let's Have a Drink... Special Invite"
+    @message[:body] = "
+    <p>Hello #{@email}!</p>
+    <p>#{@name} has invited you to try out MyBarkeepers, a new app for iPhone that lets you keep in touch with your favorite bartenders.</p>
     <p>Follow your favorite people and places to find tonight's best drink destination.</p>
     <p>Learn more and download the app for iPhone at <a href='https://www.mybarkeepers.com'>mybarkeepers.com</a>.</p>"
 
-    # get user
-    @user = User.find_by_email(params[:message][:email])
-
     # send email
-    if @message.valid?
-      InvitationsMailer.new_message(@message).deliver
+    @sendmessage = Message.new(@message)
+    if @sendmessage.valid?
+      InvitationsMailer.new_message(@sendmessage).deliver
     end 
     
     respond_to do |format|
