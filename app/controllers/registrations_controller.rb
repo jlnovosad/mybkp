@@ -132,9 +132,9 @@ class RegistrationsController < Devise::RegistrationsController
           Rails.logger.debug("AROUND CREATE tempfollowers")
           follower.follow!(@user, "FOLLOWING")
         end
-        @jluser.follow!(@tuser, "FOLLOWING")
+        @puser.follow!(@user, "FOLLOWING")
       else 
-        @jluser.follow!(@puser, "FOLLOWING")
+        @tuser.follow!(@user, "FOLLOWING")
       end
 
       Rails.logger.debug("AROUND CREATE 6")
