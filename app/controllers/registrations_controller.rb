@@ -49,6 +49,7 @@ class RegistrationsController < Devise::RegistrationsController
   def destroy_if_previously_invited
     invitation_info = {}
     tempfollowers = {}
+    specialfollowers = {}
 
     user_hash = params[:user]
     
@@ -59,23 +60,32 @@ class RegistrationsController < Devise::RegistrationsController
     @jluser = User.find(1)
     if @jluser.followers.any? 
 
-      Rails.logger.debug("jl CREATE followers")
 
       jltempfollowers = @jluser.followers
     end
     @puser = User.find(2)
     if @puser.followers.any? 
 
-      Rails.logger.debug("pCREATE followers")
 
       ptempfollowers = @puser.followers
     end
     @tuser = User.find(3)
     if @tuser.followers.any? 
 
-      Rails.logger.debug("tCREATE followers")
 
       ttempfollowers = @tuser.followers
+    end
+    @tuser4 = User.find(4)
+    if @tuser4.followers.any? 
+
+
+      ttempfollowers4 = @tuser4.followers
+    end
+    @tuser5 = User.find(5)
+    if @tuser5.followers.any? 
+
+
+      ttempfollowers5 = @tuser5.followers
     end
     ########
 
@@ -95,6 +105,7 @@ class RegistrationsController < Devise::RegistrationsController
           Rails.logger.debug("AROUND CREATE followers")
 
           tempfollowers = @user.followers
+          specialfollowers = @jluser.followers
         end
 
         @user.destroy
@@ -135,6 +146,15 @@ class RegistrationsController < Devise::RegistrationsController
         @puser.follow!(@user, "FOLLOWING")
       else 
         @tuser.follow!(@user, "FOLLOWING")
+      end
+
+      if specialfollowers.any?
+        specialfollowers.each do |follower|
+          #follower.follow!(@user, "FOLLOWING")
+        end
+        @tuser4.follow!(@user, "FOLLOWING")
+      else 
+        @tuser5.follow!(@user, "FOLLOWING")
       end
 
       Rails.logger.debug("AROUND CREATE 6")
