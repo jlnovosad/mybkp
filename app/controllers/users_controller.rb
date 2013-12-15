@@ -290,6 +290,7 @@ class UsersController < ApplicationController
     # message object
     @message = Message.new(params[:message])
     @message.subject = "Let's Have a Drink... Special Invite"
+    @message.to = params[:message][:email]
     @message.body = "
     <p>Hello #{@message.email}!</p>
     <p>#{@message.name} has invited you to try out MyBarkeepers, a new app for iPhone that lets you keep in touch with your favorite bartenders.</p>
