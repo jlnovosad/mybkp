@@ -244,7 +244,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { render 'show_follow' }
       format.json  { render :json=> { 
-        :followed_users=>@users.as_json(:only => [:id, :name, :tender], :methods => [:photo_url]) 
+        :followed_users=>@users.as_json(:only => [:id, :name, :tender, :invitation_token], :methods => [:photo_url]) 
         } }
     end
   end
