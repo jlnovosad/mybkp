@@ -27,28 +27,30 @@ class User < ActiveRecord::Base
   has_many :relationships, 
             foreign_key: "follower_id", 
             dependent: :destroy
+
   has_many :followed_users, 
+            -> { where(['relationships.status = ?',"FOLLOWING"] ) },
             through: :relationships, 
             class_name: "User", 
-            source: :followed,
-            :conditions => ['relationships.status = ?',"FOLLOWING"]
+            source: :followed
 
   has_many :reverse_relationships, 
+            -> { where(['relationships.status = ?',"FOLLOWING"] ) },
             foreign_key: "followed_id",
             class_name: "Relationship",
-            dependent: :destroy,
-            :conditions => ['relationships.status = ?',"FOLLOWING"] 
+            dependent: :destroy
+
   has_many :followers, 
+            -> { where(['relationships.status = ?',"FOLLOWING"] ) },
             through: :reverse_relationships, 
             class_name: "User", 
-            source: :follower,
-            :conditions => ['relationships.status = ?',"FOLLOWING"]                      
+            source: :follower                    
 
   has_many :friend_requests, 
+            -> { where(['relationships.status = ?',"REQUEST"] ) },
             :through => :reverse_relationships, 
             :class_name => "User", 
-            :source => :follower, 
-            :conditions => ['relationships.status = ?',"REQUEST"]
+            :source => :follower
 
   #########################################
   # foursquare venues for user, this is different than the others because venues can have more than one user
