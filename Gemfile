@@ -29,6 +29,7 @@ gem 'bootstrap-will_paginate', '0.0.6'
 gem 'faker', '0.3.1'
 gem "paperclip", "~> 3.1"
 gem 'hirb'
+gem 'aws-sdk'
 
 # upgrade
 gem 'protected_attributes'

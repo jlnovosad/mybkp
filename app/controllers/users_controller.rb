@@ -297,7 +297,7 @@ class UsersController < ApplicationController
     @message = params[:message]
     #@message.name = params[:message][:name]
     @message[:email] = @email
-    @message[:subject] = "Let's Have a Drink... Special Invite"
+    @message[:subject] = "Let's Have a Drink..."
     @message[:body] = "
     <p>Hello #{@email}!</p>
     <p>#{@name} has invited you to try out MyBarkeepers, a new app for iPhone that lets you keep in touch with your favorite bartenders.</p>
