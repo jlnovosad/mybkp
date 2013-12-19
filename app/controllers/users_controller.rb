@@ -259,7 +259,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { render 'show_follow' }
       format.json  { render :json=> { 
-        :followers=>@users.as_json(:only => [:id, :name, :tender], :methods => [:photo_url] ) 
+        :followers=>@users.as_json(:only => [:id, :name, :tender, :invitation_token], :methods => [:photo_url] ) 
         } }
     end
   end
@@ -300,8 +300,8 @@ class UsersController < ApplicationController
     @message[:subject] = "Let's Have a Drink..."
     @message[:body] = "
     <p>Hello #{@email}!</p>
-    <p>#{@name} has invited you to try out MyBarkeepers, a new app for iPhone that lets you keep in touch with your favorite bartenders.</p>
-    <p>Follow your favorite people and places to find tonight's best drink destination.</p>
+    <p>#{@name} has invited you to try out MyBarkeepers, a new app for iPhone that lets you stay in touch with your favorite bartenders.</p>
+    <p>You and your friends can see who's working where and discover new drinking destinations. Bartenders can build their following and promote their latest concoction.</p>
     <p>Learn more and download the app for iPhone at <a href='https://www.mybarkeepers.com'>mybarkeepers.com</a>.</p>"
 
     # send email
