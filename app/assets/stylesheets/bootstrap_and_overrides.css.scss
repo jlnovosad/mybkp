@@ -253,7 +253,7 @@ section {
 
 .herocontainer {
   background-image: image-url("bg.png");
-  text-align: left;
+  text-align: center;
 }
 
 .maincontainer {
@@ -263,14 +263,6 @@ section {
 
 .footercontainer {
   height: 200px;
-}
-
-.phoneart {
-  margin: -280px 0 0 0;
-  background-image: image-url("phone.png");
-  width: 250px;
-  height: 540px;
-  float: right;
 }
 
 .btn .btn-large .btn-primary {
@@ -295,7 +287,7 @@ section {
 }
 
 .homeblurb {
-  width: 480px;
+  
 }
 
 .center {
@@ -494,6 +486,14 @@ p {
   }
 }
 
+.phoneart {
+  padding: 0px;
+  margin: 100px 0 0 0;
+  height: 540px;
+  text-align: left;
+  background-image: image-url("phone.png");
+  background-repeat: none;
+}
 
 
 /* footer */

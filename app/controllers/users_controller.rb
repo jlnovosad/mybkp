@@ -221,7 +221,7 @@ class UsersController < ApplicationController
 
     puts '====================== venues'
 
-    @venues = User.find(params[:id]).venues.paginate(page: params[:page], :per_page => 10)
+    @venues = User.find(params[:id]).venues
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json => {
