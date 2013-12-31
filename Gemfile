@@ -36,3 +36,8 @@ gem 'protected_attributes'
 
 #mail
 gem 'mandrill-api'
+
+# heroku
+group :production do
+  gem 'rails_12factor'
+end
