@@ -19,20 +19,19 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   resources :users do
     # added GETs for all these to customize data we get about a user
     member do
-      get :following, :followers, :myrelationship, :venues, :microposts, :feed, :feedtender, :feedpopular, :valid, :search
+      get :following, :following_count, :followers, :followers_count, :myrelationship, :venues, :microposts, :feed, :feedtender, :feedpopular, :valid, :search
     end
     member do
       post :searchemail, :invitationemailonly
     end
-    #resources :venues, only: [:create, :destroy]
   end
 
   #########################################
-  # related models
+  # user related models
   #########################################
   resources :microposts, only: [:create, :destroy]
   resources :tokens,:only => [:create, :destroy]
-    resources :relationships, only: [:create, :destroy, :show] do
+  resources :relationships, only: [:create, :destroy, :show] do
     member do
       post :updatestatus
     end
@@ -42,10 +41,42 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   # the venues
   #########################################
   resources :venues, only: [:index, :create] do 
-    # added POSTs for all these so we can update info on venues
+    member do
+      get :feed
+    end
+  end
+
+  #########################################
+  # venue related models
+  #########################################
+  resources :favorites, only: [:create, :destroy] 
+  resources :workfavorites, only: [:create, :destroy] 
+
+  #########################################
+  # the drinks
+  #########################################
+  resources :drinks, only: [:index, :create, :show] do 
+    collection do
+      get :search, :feedpopular
+    end
+    member do
+      get :drinkusers
+    end
     member do
       post :favorite, :unfavorite
-      get :feed
+    end
+  end
+  resources :categories, only: [:index, :create, :show] do 
+    collection do
+      get :search, :feedpopular
+    end
+    member do
+      post :tagdrink, :untagdrink
+    end
+  end
+  resources :styles, only: [:index, :show] do 
+    member do
+      post :taguser, :untaguser
     end
   end
 

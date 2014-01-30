@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
   # my custom ones
   # this is a list of the associations that any user has (users/4/microposts), @user.microposts
   #########################################
+
   has_many :microposts, dependent: :destroy
   
   has_many :relationships, 
@@ -44,19 +45,41 @@ class User < ActiveRecord::Base
             -> { where(['relationships.status = ?',"FOLLOWING"] ) },
             through: :reverse_relationships, 
             class_name: "User", 
-            source: :follower                    
+            source: :follower  
 
   has_many :friend_requests, 
             -> { where(['relationships.status = ?',"REQUEST"] ) },
-            :through => :reverse_relationships, 
-            :class_name => "User", 
-            :source => :follower
+            through: :reverse_relationships, 
+            class_name: "User", 
+            source: :follower 
 
   #########################################
   # foursquare venues for user, this is different than the others because venues can have more than one user
   #########################################
-  has_and_belongs_to_many :venues, :uniq => true
+  #has_and_belongs_to_many :venues, :uniq => true
+  has_many :favorites, dependent: :destroy
+  has_many :venues,
+            -> { uniq.limit(50) },
+            through: :favorites,
+            class_name: "Venue",
+            source: :venue
 
+  has_many :workfavorites, dependent: :destroy
+  has_many :workvenues,
+            -> { uniq.limit(50) },
+            through: :workfavorites,
+            class_name: "Venue",
+            source: :venue
+
+  #########################################
+  # drinks
+  #########################################
+  has_many :user_drinks, dependent: :destroy
+  has_many :drinks,
+            -> { uniq.limit(50).order(:name) },
+            :through => :user_drinks,
+            class_name: "Drink"
+            
   #########################################
   # paperclip profile photo
   #########################################
@@ -67,6 +90,8 @@ class User < ActiveRecord::Base
   # these methods can be called from the controller to get data from other models 
   # look in the controller and see these get called 
   #########################################                       
+  
+  # status feeds
   def feed
     Micropost.from_users_followed_by(self)
   end
@@ -79,6 +104,7 @@ class User < ActiveRecord::Base
     Micropost.from_users_followers(self)
   end
   
+  # users following
   def following?(other_user)
     relationships.find_by_followed_id(other_user.id)
   end
@@ -87,26 +113,52 @@ class User < ActiveRecord::Base
     relationships.create!(followed_id: other_user.id, status: status)
   end
 
-  #def unfollow!(other_user)
-  #  relationships.find_by_followed_id(other_user.id).destroy
-  #end
+  def unfollow!(other_user)
+    relationships.find_by_followed_id(other_user.id).destroy
+  end
 
+  # venues favoriting
+  def favorite!(venue)
+    favorites.create!(venue_id: venue.id)
+  end
+
+  def unfavorite!(venue)
+    favorites.find_by_venue_id(venue.id).destroy
+  end
+
+  # workfavorites
+  def addworkplace!(venue)
+    workfavorites.create!(venue_id: venue.id)
+  end
+
+  def removeworkplace!(venue)
+    workfavorites.find_by_venue_id(venue.id).destroy
+  end
+
+  # profile photos
   def photo_url
     photo.url(:small)
   end
 
+  # search
   def self.search(search)
-    
-    #search_condition = "%" + search.downcase + "%"
-    #where("'name ILIKE ?', search_condition", :limit => 50, :order => "name ASC")
-    #find(:all, :conditions => ['name ILIKE ?', search_condition], :limit => 50, :order => "name ASC")
-
     order('name ASC').where('lower(name) LIKE ?', "%#{search.downcase}%").limit(50)
-
   end
 
   def self.searchbyemail(email)
     where('lower(email) = ?', email.downcase).limit(50)
   end
 
+  def self.get_drink_users(drink)
+
+    # ordering by number of followers
+    select( "DISTINCT users.*, count(relationships.id) AS relationships_count" ).
+    where( "users.id IN (SELECT user_id FROM user_drinks WHERE drink_id = :drink_id) AND users.tender = 'YES'", drink_id: drink.id).
+    joins( "INNER JOIN relationships ON relationships.followed_id = users.id" ).
+    group( "users.id" ).
+    order( "relationships_count DESC").
+    limit(10)
+  end
+
 end
+

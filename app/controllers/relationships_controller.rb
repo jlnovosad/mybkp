@@ -33,20 +33,5 @@ class RelationshipsController < ApplicationController
         } }
       end
     else
-      redirect_to root_url
-    end
-  end
-
-  #########################################
-  # stop following someone
-  #########################################
-  def destroy
-    @user = Relationship.find(params[:id]).followed
-    current_user.unfollow!(@user)
-    respond_to do |format|
-      format.html { redirect_to @user }
-      format.js
-      format.json { render :json => @user }
-    end
   end
 end

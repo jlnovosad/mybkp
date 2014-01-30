@@ -11,7 +11,7 @@ class MicropostsController < ApplicationController
     if @micropost.save
       respond_to do |format|
         format.html # index.html.erb
-        format.json  { render :json=> @micropost.as_json(:only => [:content, :venue_id, :created_at]) } 
+        format.json  { render :json=> @micropost.as_json(:only => [:content, :venue_id, :created_at, :working]) } 
       end
     else
       flash[:success] = "Micropost failed!"
@@ -24,7 +24,10 @@ class MicropostsController < ApplicationController
   #########################################
   def destroy
     @micropost.destroy
-    redirect_to root_url
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> @micropost.as_json() } 
+    end
   end
 
   private

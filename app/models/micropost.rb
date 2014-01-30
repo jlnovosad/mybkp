@@ -3,7 +3,7 @@ class Micropost < ActiveRecord::Base
   #########################################
   # Setup accessible (or protected) attributes for your model
   #########################################
-  attr_accessible :content, :venue_id, :photo
+  attr_accessible :content, :venue_id, :photo, :working
   belongs_to :user
   belongs_to :venue
 

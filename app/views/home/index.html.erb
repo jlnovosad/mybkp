@@ -16,8 +16,8 @@
     <div class="profile">
       <ul>
         <li><%= link_to 'Update My Profile', edit_user_registration_path %></li>
-        <li><a href="<%= following_user_path(@user) %>">My Bartenders (<%= @user.followed_users.count %>)</a></li>
-        <li><a href="<%= followers_user_path(@user) %>">My Followers (<%= @user.followers.count %>)</a></li>
+        <!--<li><a href="<%= following_user_path(@user) %>">My Bartenders (<%= @user.followed_users.count %>)</a></li>
+        <li><a href="<%= followers_user_path(@user) %>">My Followers (<%= @user.followers.count %>)</a></li>-->
       </ul>
     </div>
   </div>
@@ -29,10 +29,11 @@
     <%= render 'layouts/messages' %>
     <div class="homeblurb">The MyBarkeepers app lets you stay in touch with your favorite bartenders. You and your friends can see who's working where and discover new drinking destinations. Bartenders can build their following and promote their latest concoction. Let's have a drink!</div>
     <br />
-    <div class="homeblurb">Coming soon to the App Store! Sign up for the list today and we'll email you when it's ready. </div> 
-    <br />
+    <div class="homeblurb">Available now for iPhone!</div> 
+    <div class="maincta"><%= link_to "Download", "https://itunes.apple.com/us/app/mybarkeepers/id784235366?ls=1&mt=8", class: "btn btn-large btn-primary" %></div> 
+    <div class="appbuttoncontainer"><a href="https://itunes.apple.com/us/app/mybarkeepers/id784235366?ls=1&mt=8"><div class="appbutton"></div></a></div>
     
-    <!-- Begin MailChimp Signup Form -->
+    <!-- Begin MailChimp Signup Form 
     <div id="mc_embed_signup">
     <form action="http://mybarkeepers.us7.list-manage2.com/subscribe/post?u=dbb4d1f5367ae64794a16cb3f&amp;id=f01134f88a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" class="new_user" novalidate>
       <div>
@@ -45,7 +46,7 @@
       </div>  
       <div class="clear"><input type="submit" value="Sign up" name="subscribe" id="mc-embedded-subscribe" class="btn btn-large btn-primary"></div>
     </form>
-    </div>
+    </div>-->
 
     <!--End mc_embed_signup-->
 

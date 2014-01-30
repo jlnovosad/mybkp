@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :correct_user,   only: :destroy
 
   #########################################
   # main
@@ -12,7 +11,7 @@ class UsersController < ApplicationController
     puts '====================== index'
 
     authorize! :index, @user, :message => 'Oops! Not authorized as an administrator.'
-    @users = User.paginate(page: params[:page], :per_page => 50)
+    @users = User.paginate(page: params[:page], :per_page => 50, :order => 'lower(name) ASC')
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json => @users.to_json }
@@ -112,9 +111,14 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :feed_items=>@feed_items.as_json(:only => [:content, :created_at], :methods => [:photo_url], 
+        :feed_items=>@feed_items.as_json(:only => [:content, :created_at, :working], :methods => [:photo_url], 
           :include => { 
-            :user => { :only => [:id, :name, :tender], :methods => [:photo_url] },
+            :user => { :only => [:id, :name, :tender], :methods => [:photo_url],
+              :include => { 
+                :drinks => { :only => [:id, :name] },
+                :workvenues => { :only => [:id, :fs_venue_id] }
+              }
+            },
             :venue => { :only => [:id, :fs_venue_id] } 
           }
         )
@@ -133,9 +137,14 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :feed_items=>@feed_items.as_json(:only => [:content, :created_at], :methods => [:photo_url], 
+        :feed_items=>@feed_items.as_json(:only => [:content, :created_at, :working], :methods => [:photo_url], 
           :include => { 
-            :user => { :only => [:id, :name, :tender], :methods => [:photo_url] },
+            :user => { :only => [:id, :name, :tender], :methods => [:photo_url],
+              :include => { 
+                :drinks => { :only => [:id, :name] },
+                :workvenues => { :only => [:id, :fs_venue_id] }
+              }
+            },
             :venue => { :only => [:id, :fs_venue_id] } 
           }
         )
@@ -154,9 +163,14 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :feed_items=>@feed_items.as_json(:only => [:content, :created_at], :methods => [:photo_url], 
+        :feed_items=>@feed_items.as_json(:only => [:content, :created_at, :working], :methods => [:photo_url], 
           :include => { 
-            :user => { :only => [:id, :name, :tender], :methods => [:photo_url] },
+            :user => { :only => [:id, :name, :tender], :methods => [:photo_url],
+              :include => { 
+                :drinks => { :only => [:id, :name] },
+                :workvenues => { :only => [:id, :fs_venue_id] }
+              }
+            },
             :venue => { :only => [:id, :fs_venue_id] } 
           }
         )
@@ -172,11 +186,17 @@ class UsersController < ApplicationController
 
     #@user = User.joins(:reverse_relationships).where("relationships.follower_id" => current_user.id).find(params[:id])
     @user = User.find(params[:id])
+
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :user=>@user.as_json(:only => [:id, :name, :tender], :methods => [:photo_url]) 
-        } }
+        :user=>@user.as_json(:only => [:id, :name, :tender], :methods => [:photo_url],
+          :include => { 
+            :drinks => { :only => [:id, :name] },
+            :workvenues => { :only => [:id, :fs_venue_id] }
+          }
+        ) 
+      } }
     end
   end
 
@@ -186,10 +206,15 @@ class UsersController < ApplicationController
 
     puts '====================== microposts'
 
-    @microposts = User.find(params[:id]).microposts.paginate(page: params[:page], :per_page => 50).as_json(:only => [:content, :created_at], :methods => [:photo_url], 
+    @microposts = User.find(params[:id]).microposts.paginate(page: params[:page], :per_page => 50).as_json(:only => [:id, :content, :created_at, :working], :methods => [:photo_url], 
       :include => { 
-        :user => { :only => [:id, :name, :tender], :methods => [:photo_url] }, 
-        :venue => { :only => [:id, :fs_venue_id] }
+        :user => { :only => [:id, :name, :tender], :methods => [:photo_url],
+          :include => { 
+            :drinks => { :only => [:id, :name] },
+            :workvenues => { :only => [:id, :fs_venue_id] }
+          }
+        },
+        :venue => { :only => [:id, :fs_venue_id] } 
       }
     )
     respond_to do |format|
@@ -240,11 +265,22 @@ class UsersController < ApplicationController
 
     puts '====================== following'
 
-    @users = User.find(params[:id]).followed_users.paginate(page: params[:page], :per_page => 50, :order => "name ASC")
+    @user = User.find(params[:id])
+    @users = @user.followed_users.paginate(page: params[:page], :per_page => 50, :order => 'lower(name) ASC')
     respond_to do |format|
       format.html { render 'show_follow' }
       format.json  { render :json=> { 
         :followed_users=>@users.as_json(:only => [:id, :name, :tender, :invitation_token], :methods => [:photo_url]) 
+        } }
+    end
+  end
+
+  def following_count
+    @fcount = User.find(params[:id]).followed_users.count
+    respond_to do |format|
+      format.html { render 'show_follow' }
+      format.json  { render :json=> { 
+        :modelcount=>@fcount.as_json() 
         } }
     end
   end
@@ -255,11 +291,21 @@ class UsersController < ApplicationController
 
     puts '====================== followers'
 
-    @users = User.find(params[:id]).followers.paginate(page: params[:page], :per_page => 50, :order => "name ASC")
+    @users = User.find(params[:id]).followers.paginate(page: params[:page], :per_page => 50, :order => 'lower(name) ASC')
     respond_to do |format|
       format.html { render 'show_follow' }
       format.json  { render :json=> { 
         :followers=>@users.as_json(:only => [:id, :name, :tender, :invitation_token], :methods => [:photo_url] ) 
+        } }
+    end
+  end
+
+  def followers_count
+    @fcount = User.find(params[:id]).followers.count
+    respond_to do |format|
+      format.html { render 'show_follow' }
+      format.json  { render :json=> { 
+        :modelcount=>@fcount.as_json() 
         } }
     end
   end
@@ -317,5 +363,4 @@ class UsersController < ApplicationController
         } }
     end
   end
-
 end

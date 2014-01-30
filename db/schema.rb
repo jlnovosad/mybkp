@@ -11,10 +11,48 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130616013839) do
+ActiveRecord::Schema.define(version: 20140130123849) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "categories", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "popular"
+  end
+
+  add_index "categories", ["created_at"], name: "index_categories_on_created_at", using: :btree
+
+  create_table "drink_categories", force: true do |t|
+    t.integer  "drink_id"
+    t.integer  "category_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "drink_categories", ["drink_id", "category_id"], name: "index_drink_categories_on_drink_id_and_category_id", using: :btree
+
+  create_table "drinks", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "popular"
+    t.integer  "user_id"
+  end
+
+  add_index "drinks", ["created_at"], name: "index_drinks_on_created_at", using: :btree
+  add_index "drinks", ["user_id"], name: "index_drinks_on_user_id", using: :btree
+
+  create_table "favorites", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "venue_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "favorites", ["user_id", "venue_id"], name: "index_favorites_on_user_id_and_venue_id", using: :btree
 
   create_table "microposts", force: true do |t|
     t.text     "content"
@@ -26,6 +64,7 @@ ActiveRecord::Schema.define(version: 20130616013839) do
     t.string   "photo_content_type"
     t.integer  "photo_file_size"
     t.datetime "photo_updated_at"
+    t.string   "working"
   end
 
   add_index "microposts", ["user_id", "created_at"], name: "index_microposts_on_user_id_and_created_at", using: :btree
@@ -53,10 +92,19 @@ ActiveRecord::Schema.define(version: 20130616013839) do
   add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
 
+  create_table "user_drinks", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "drink_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_drinks", ["user_id", "drink_id"], name: "index_user_drinks_on_user_id_and_drink_id", using: :btree
+
   create_table "users", force: true do |t|
-    t.string   "email",                             default: "",               null: false
-    t.string   "name",                              default: "",               null: false
-    t.string   "tender",                            default: "NO",             null: false
+    t.string   "email",                             default: "",   null: false
+    t.string   "name",                              default: "",   null: false
+    t.string   "tender",                            default: "NO", null: false
     t.string   "encrypted_password",                default: ""
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -94,13 +142,6 @@ ActiveRecord::Schema.define(version: 20130616013839) do
 
   add_index "users_roles", ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
 
-  create_table "users_venues", id: false, force: true do |t|
-    t.integer "venue_id"
-    t.integer "user_id"
-  end
-
-  add_index "users_venues", ["venue_id", "user_id"], name: "index_users_venues_on_venue_id_and_user_id", using: :btree
-
   create_table "venues", force: true do |t|
     t.string   "fs_venue_id"
     t.datetime "created_at"
@@ -108,5 +149,14 @@ ActiveRecord::Schema.define(version: 20130616013839) do
   end
 
   add_index "venues", ["fs_venue_id", "created_at"], name: "index_venues_on_fs_venue_id_and_created_at", using: :btree
+
+  create_table "workfavorites", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "venue_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "workfavorites", ["user_id", "venue_id"], name: "index_workfavorites_on_user_id_and_venue_id", using: :btree
 
 end
