@@ -16,7 +16,7 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   #########################################
   # the users
   #########################################
-  resources :users do
+  resources :users, only: [:index, :create, :show, :update]  do
     # added GETs for all these to customize data we get about a user
     member do
       get :following, :following_count, :followers, :followers_count, :myrelationship, :venues, :microposts, :feed, :feedtender, :feedpopular, :valid, :search
@@ -31,7 +31,7 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   #########################################
   resources :microposts, only: [:create, :destroy]
   resources :tokens,:only => [:create, :destroy]
-  resources :relationships, only: [:create, :destroy, :show] do
+  resources :relationships, only: [:create, :destroy] do
     member do
       post :updatestatus
     end
@@ -42,15 +42,10 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   #########################################
   resources :venues, only: [:index, :create] do 
     member do
-      get :feed
+      post :favorite, :unfavorite, :workfavorite, :workunfavorite
+      get :feed, :workerfeed
     end
   end
-
-  #########################################
-  # venue related models
-  #########################################
-  resources :favorites, only: [:create, :destroy] 
-  resources :workfavorites, only: [:create, :destroy] 
 
   #########################################
   # the drinks
@@ -63,20 +58,12 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
       get :drinkusers
     end
     member do
-      post :favorite, :unfavorite
+      post :favorite, :unfavorite, :tagdrink, :untagdrink
     end
   end
   resources :categories, only: [:index, :create, :show] do 
     collection do
       get :search, :feedpopular
-    end
-    member do
-      post :tagdrink, :untagdrink
-    end
-  end
-  resources :styles, only: [:index, :show] do 
-    member do
-      post :taguser, :untaguser
     end
   end
 

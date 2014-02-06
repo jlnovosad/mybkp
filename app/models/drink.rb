@@ -1,23 +1,17 @@
 class Drink < ActiveRecord::Base
 
 	attr_accessible :name, :popular, :user_id
-  validates_uniqueness_of :name
+  validates :name, :uniqueness => { :case_sensitive => false }
 
 	has_many :drink_categories, dependent: :destroy
   has_many :categories,
-            -> { uniq.limit(50).order(:name) },
+            -> { uniq.order(:name) },
             :through => :drink_categories,
             class_name: "Category"
 
-  has_many :drink_ingredients, dependent: :destroy
-  has_many :ingredients,
-            -> { uniq.limit(50) },
-            :through => :drink_ingredients,
-            class_name: "Ingredient"
-
   has_many :user_drinks, dependent: :destroy
   has_many :users,
-            -> { where(['tender = ?',"YES"]).uniq.limit(50) },
+            -> { where(['tender = ?',"YES"]).uniq.order(:name) },
             :through => :user_drinks,
             class_name: "User"
             #-> { where(['tender = ?',"NO"]).uniq.order("users.followers_count DESC").limit(50) },

@@ -32,6 +32,6 @@ class RelationshipsController < ApplicationController
           :user=>@user.as_json(:only => [:id, :name, :tender, :email, :invitation_token], :methods => [:photo_url])
         } }
       end
-    else
+    end
   end
 end

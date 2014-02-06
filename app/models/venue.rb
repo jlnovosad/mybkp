@@ -16,14 +16,14 @@ class Venue < ActiveRecord::Base
 	#has_and_belongs_to_many :users, :uniq => true
 	has_many :favorites, dependent: :destroy
   has_many :users,
-  					-> { uniq },
+  					-> { uniq.order(:name) },
             :through => :favorites,
             class_name: "User",
             source: :user
 
   has_many :workfavorites, dependent: :destroy
   has_many :tenders,
-  					-> { uniq },
+  					-> { uniq.order(:name) },
             :through => :workfavorites,
             class_name: "User",
             source: :user
@@ -33,6 +33,10 @@ class Venue < ActiveRecord::Base
 	# look in the controller and see these get called 
 	#########################################                       
 	def feed
+		Micropost.from_venue(self)
+	end
+
+	def workerfeed
 		Micropost.from_venue(self)
 	end
 end

@@ -206,7 +206,7 @@ class UsersController < ApplicationController
 
     puts '====================== microposts'
 
-    @microposts = User.find(params[:id]).microposts.paginate(page: params[:page], :per_page => 50).as_json(:only => [:id, :content, :created_at, :working], :methods => [:photo_url], 
+    @microposts = User.find(params[:id]).microposts.paginate(page: params[:page], :per_page => 50).as_json(:only => [:id, :content, :created_at, :updated_at, :working], :methods => [:photo_url], 
       :include => { 
         :user => { :only => [:id, :name, :tender], :methods => [:photo_url],
           :include => { 
@@ -231,7 +231,7 @@ class UsersController < ApplicationController
     
     puts '====================== friendrequests'
 
-    @users = User.find(params[:id]).friend_requests
+    @users = current_user.friend_requests
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
@@ -249,9 +249,14 @@ class UsersController < ApplicationController
     @venues = User.find(params[:id]).venues.paginate(page: params[:page], :per_page => 1000)
     respond_to do |format|
       format.html # index.html.erb
-      format.json  { render :json => {
-        :venues=>@venues.as_json(:only => [:id, :fs_venue_id])
-        } }
+      format.json  { render :json=> { 
+        :venues=>@venues.as_json(:only => [:id, :fs_venue_id], 
+          :include => { 
+            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] },
+            :tenders => { :only => [:id, :name, :tender], :methods => [:photo_url] } 
+          }
+        ) 
+      } }
     end
   end
 
@@ -270,8 +275,13 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { render 'show_follow' }
       format.json  { render :json=> { 
-        :followed_users=>@users.as_json(:only => [:id, :name, :tender, :invitation_token], :methods => [:photo_url]) 
-        } }
+        :followed_users=>@users.as_json(:only => [:id, :name, :tender, :invitation_token], :methods => [:photo_url],
+          :include => { 
+            :drinks => { :only => [:id, :name] },
+            :workvenues => { :only => [:id, :fs_venue_id] }
+          }
+        ) 
+      } }
     end
   end
 
@@ -295,8 +305,13 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { render 'show_follow' }
       format.json  { render :json=> { 
-        :followers=>@users.as_json(:only => [:id, :name, :tender, :invitation_token], :methods => [:photo_url] ) 
-        } }
+        :followers=>@users.as_json(:only => [:id, :name, :tender, :invitation_token], :methods => [:photo_url],
+          :include => { 
+            :drinks => { :only => [:id, :name] },
+            :workvenues => { :only => [:id, :fs_venue_id] }
+          }
+        ) 
+      } }
     end
   end
 
@@ -324,7 +339,7 @@ class UsersController < ApplicationController
       format.html # index.html.erb
       format.json  { render :json=> { 
         :relationship=>@relationship.as_json() 
-        } }
+      } }
     end
   end
 

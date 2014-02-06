@@ -11,11 +11,20 @@ class MicropostsController < ApplicationController
     if @micropost.save
       respond_to do |format|
         format.html # index.html.erb
-        format.json  { render :json=> @micropost.as_json(:only => [:content, :venue_id, :created_at, :working]) } 
+        format.json  { render :json=> { 
+          :micropost=>@micropost.as_json(:only => [:content, :created_at, :working], :methods => [:photo_url], 
+            :include => { 
+              :user => { :only => [:id, :name, :tender], :methods => [:photo_url],
+                :include => { 
+                  :drinks => { :only => [:id, :name] },
+                  :workvenues => { :only => [:id, :fs_venue_id] }
+                }
+              },
+              :venue => { :only => [:id, :fs_venue_id] } 
+            }
+          )
+        } }
       end
-    else
-      flash[:success] = "Micropost failed!"
-      redirect_to root_url
     end
   end
 
@@ -32,11 +41,12 @@ class MicropostsController < ApplicationController
 
   private
 
-    #########################################
-    # only you can perform actions on your stuff
-    #########################################
-    def correct_user
-      @micropost = current_user.microposts.find_by_id(params[:id])
-      redirect_to root_url if @micropost.nil?
-    end
+  #########################################
+  # only you can perform actions on your stuff
+  #########################################
+  def correct_user
+    @micropost = current_user.microposts.find_by_id(params[:id])
+    redirect_to root_url if @micropost.nil?
+  end
+  
 end

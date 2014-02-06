@@ -114,10 +114,14 @@ class User < ActiveRecord::Base
   end
 
   def unfollow!(other_user)
-    relationships.find_by_followed_id(other_user.id).destroy
+    favorites.find_by_followed_id(other_user.id).destroy
   end
 
   # venues favoriting
+  def favorited?(venue)
+    relationships.find_by_venue_id(venue.id)
+  end
+
   def favorite!(venue)
     favorites.create!(venue_id: venue.id)
   end
@@ -127,6 +131,10 @@ class User < ActiveRecord::Base
   end
 
   # workfavorites
+  def workfavorited?(venue)
+    workfavorites.find_by_venue_id(venue.id)
+  end
+
   def addworkplace!(venue)
     workfavorites.create!(venue_id: venue.id)
   end

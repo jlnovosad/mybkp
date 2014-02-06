@@ -1,5 +1,7 @@
 class DrinksController < ApplicationController
+
   before_filter :authenticate_user!
+  before_filter :correct_user, only: [:tagdrink, :untagdrink]
 
   #########################################
   # lists all the drinks that we have saved, not actually used
@@ -11,7 +13,8 @@ class DrinksController < ApplicationController
       format.json  { render :json=> { 
         :drinks=>@drinks.as_json(:only => [:id, :name],
           :include => { 
-            :categories => @categories.as_json(:only => [:id, :name, :popular]) 
+            :categories => { :only => [:id, :name, :popular] },
+            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }
           } 
         )
       } }
@@ -28,7 +31,8 @@ class DrinksController < ApplicationController
       format.json  { render :json=> { 
         :drinks=>@drinks.as_json(:only => [:id, :name, :popular],
           :include => { 
-            :categories => @categories.as_json(:only => [:id, :name, :popular]) 
+            :categories => { :only => [:id, :name, :popular] },
+            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }
           } 
         )
       } }
@@ -55,7 +59,8 @@ class DrinksController < ApplicationController
       format.json  { render :json=> { 
         :drinks=>@drinks.as_json(:only => [:id, :name, :popular],
           :include => { 
-            :categories => @categories.as_json(:only => [:id, :name, :popular]) 
+            :categories => { :only => [:id, :name, :popular] },
+            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }
           } 
         )
       } }
@@ -66,14 +71,22 @@ class DrinksController < ApplicationController
   # creates new
   #########################################
   def create
-    @user = current_user
-
-    # exists?
-    drinkname = params[:drink][:name];
-    @drink = Drink.where('lower(name) LIKE ?', "%#{drinkname.downcase}%")
+    
+    # exists as a drink
+    name = params[:drink][:name];
+    @drink = Drink.find(:first, :conditions => ["lower(name) = ?", name.downcase]) 
     if @drink.blank? 
+      
       # created through user and the connection will already be there
-      @drink = @user.drinks.create(params[:drink])
+      @drink = current_user.drinks.create(params[:drink])
+    else 
+
+      # already favorited?
+      favoritedrink = current_user.drinks(:id).find_by_id(@drink.id)
+
+      if favoritedrink.nil? 
+        current_user.drinks << @drink
+      end
     end
       
     respond_to do |format|
@@ -124,14 +137,18 @@ class DrinksController < ApplicationController
   # accesses the join table
   #########################################
   def favorite
-    @user = current_user
     @drink = Drink.find(params[:id])
-    @user.drinks << @drink 
+    current_user.drinks << @drink
     
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :drink=>@drink.as_json(:only => [:id, :name, :popular])
+        :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id],
+          :include => { 
+            :categories => { :only => [:id, :name, :popular] },
+            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }
+          } 
+        )
       } }
     end
   end
@@ -140,15 +157,70 @@ class DrinksController < ApplicationController
   # accesses the join table 
   #########################################
   def unfavorite
-    @user = current_user
     @drink = Drink.find(params[:id])
-    @user.drinks.delete(@drink)
+    current_user.drinks.destroy(@drink)
 
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :drink=>@drink.as_json(:only => [:id, :name, :popular])
+        :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id],
+          :include => { 
+            :categories => { :only => [:id, :name, :popular] },
+            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }
+          } 
+        )
       } }
     end
   end
+
+  #########################################
+  # tags a drink with a category
+  #########################################
+  def tagdrink
+    @category = Category.find(params[:category][:id])
+    @drink = Drink.find(params[:id])
+    @drink.categories << @category 
+    
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> { 
+        :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id],
+          :include => { 
+            :categories => { :only => [:id, :name, :popular] },
+            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }
+          } 
+        )
+      } }
+    end
+  end
+
+  #########################################
+  # untags a drink with a category
+  #########################################
+  def untagdrink
+    @category = Category.find(params[:category][:id])
+    @drink = Drink.find(params[:id])
+    @drink.categories.delete(@category)
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> { 
+        :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id],
+          :include => { 
+            :categories => { :only => [:id, :name, :popular] },
+            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }
+          } 
+        )
+      } }
+    end
+  end
+
+  #########################################
+  # only you can perform actions on your stuff
+  #########################################
+  def correct_user
+    @drink = current_user.drinks.find_by_id(params[:id])
+    redirect_to root_url if @drink.nil?
+  end
+
 end

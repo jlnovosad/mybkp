@@ -1,4 +1,5 @@
 class CategoriesController < ApplicationController
+
   before_filter :authenticate_user!
 
   #########################################
@@ -9,7 +10,11 @@ class CategoriesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :categories => @categories.as_json( { :only => [:id, :name, :popular] } )
+        :categories => @categories.as_json(:only => [:id, :name, :popular],
+          :include => { 
+            :drinks => { :only => [:id, :name, :popular] }
+          }
+        )
       } }
     end
   end
@@ -22,7 +27,11 @@ class CategoriesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :categories => @categories.as_json( { :only => [:id, :name, :popular] } )
+        :categories => @categories.as_json(:only => [:id, :name, :popular],
+          :include => { 
+            :drinks => { :only => [:id, :name, :popular] }
+          }
+        )
       } }
     end
   end
@@ -45,7 +54,11 @@ class CategoriesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :categories => @categories.as_json( { :only => [:id, :name, :popular] } )
+        :categories => @categories.as_json(:only => [:id, :name, :popular],
+          :include => { 
+            :drinks => { :only => [:id, :name, :popular] }
+          }
+        )
       } }
     end
   end
@@ -55,9 +68,8 @@ class CategoriesController < ApplicationController
   #########################################
   def create
 
-    # exists?
-    catname = params[:category][:name];
-    @category = Category.where('lower(name) LIKE ?', "%#{catname.downcase}%")
+    name = params[:category][:name];
+    @category = Category.find(:first, :conditions => ["lower(name) = ?", name.downcase]) 
     if @category.blank? 
       @category = Category.create(params[:category])
     end
@@ -65,7 +77,11 @@ class CategoriesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :category => @category.as_json(:only => [:id, :name, :popular])
+        :category => @category.as_json(:only => [:id, :name, :popular],
+          :include => { 
+            :drinks => { :only => [:id, :name, :popular] }
+          }
+        )
       } }
     end
   end
@@ -88,35 +104,4 @@ class CategoriesController < ApplicationController
     end
   end
 
-  #########################################
-  # tags a drink with a category
-  #########################################
-  def tagdrink
-    @category = Category.find(params[:id])
-    @drink = Drink.find(params[:drink][:id])
-    @drink.categories << @category 
-    
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json  { render :json=> { 
-        :category => @category.as_json(:only => [:id, :name, :popular])
-      } }
-    end
-  end
-
-  #########################################
-  # untags a drink with a category
-  #########################################
-  def untagdrink
-    @category = Category.find(params[:id])
-    @drink = Drink.find(params[:drink][:id])
-    @drink.categories.delete(@category)
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json  { render :json=> { 
-        :category => @category.as_json(:only => [:id, :name, :popular])
-      } }
-    end
-  end
 end
