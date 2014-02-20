@@ -4,6 +4,11 @@ namespace :db do
     make_categories
     make_ingredients
     make_drinks
+
+    # not for live
+    make_users
+    make_microposts
+    make_relationships
   end
 end
 
@@ -74,4 +79,35 @@ def make_categoriesold
 	Category.create!(name: "Whiskey", popular: "YES")
 	Category.create!(name: "Wine", popular: "YES")
 	Category.create!(name: "Coffee", popular: "YES")
+end
+
+################################### NOT FOR LIVE
+
+def make_users
+  99.times do |n|
+    name  = Faker::Name.name
+    email = "example-#{n+1}@lifestylesupply.co"
+    password  = "foobar"
+    User.create!(name:     name,
+                 email:    email,
+                 password: password,
+                 password_confirmation: password)
+  end
+end
+
+def make_microposts
+  users = User.all(limit: 6)
+  50.times do
+    content = Faker::Lorem.sentence(5)
+    users.each { |user| user.microposts.create!(content: content) }
+  end
+end
+
+def make_relationships
+  users = User.all
+  user  = users.first
+  followed_users = users[2..50]
+  followers      = users[3..40]
+  followed_users.each { |followed| user.follow!(followed, "FOLLOWING") }
+  followers.each      { |follower| follower.follow!(user, "FOLLOWING") }
 end

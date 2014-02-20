@@ -7,12 +7,13 @@ class MicropostsController < ApplicationController
   # pass user_id, content
   #########################################
   def create
-    @micropost = current_user.microposts.build(params[:micropost])
-    if @micropost.save
+    @user = current_user
+    @micropost = @user.microposts.build(params[:micropost])
+    if @user.save
       respond_to do |format|
         format.html # index.html.erb
         format.json  { render :json=> { 
-          :micropost=>@micropost.as_json(:only => [:content, :created_at, :working], :methods => [:photo_url], 
+          :micropost=>@micropost.as_json(:only => [:id, :content, :created_at, :working], :methods => [:photo_url], 
             :include => { 
               :user => { :only => [:id, :name, :tender], :methods => [:photo_url],
                 :include => { 
@@ -20,11 +21,28 @@ class MicropostsController < ApplicationController
                   :workvenues => { :only => [:id, :fs_venue_id] }
                 }
               },
-              :venue => { :only => [:id, :fs_venue_id] } 
+              :venue => { :only => [:id, :fs_venue_id, :name] },
+              :users => { :only => [:id, :name, :tender], :methods => [:photo_url] } 
             }
           )
         } }
       end
+    end
+  end
+
+  #########################################
+  # tags a user
+  #########################################
+  def taguser
+    @user = User.find(params[:user][:id])
+    @micropost = Micropost.find(params[:id])
+    @micropost.users << @user 
+    
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> { 
+        :micropost=>@micropost.as_json(:only => [:id, :content, :created_at, :working], :methods => [:photo_url])
+      } }
     end
   end
 

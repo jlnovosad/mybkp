@@ -32,10 +32,10 @@ class RegistrationsController < Devise::RegistrationsController
           redirect_to after_update_path_for(@user)
         }
         format.json  { render :json=> { 
-          :user=>@user.as_json(:only => [:id, :name, :tender, :email], :methods => [:photo_url],
+          :user=>@user.as_json(:only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
             :include => { 
               :drinks => { :only => [:id, :name] },
-              :workvenues => { :only => [:id, :fs_venue_id] }
+              :workvenues => { :only => [:id, :fs_venue_id, :name] }
             }
           ) 
         } }

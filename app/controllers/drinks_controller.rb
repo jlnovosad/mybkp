@@ -7,7 +7,8 @@ class DrinksController < ApplicationController
   # lists all the drinks that we have saved, not actually used
   #########################################
   def index
-    @drinks = Drink.paginate(page: params[:page], :per_page => 50, :order => 'lower(name) ASC')
+    @drinks = Drink.limit(50).order('lower(name) ASC')
+
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
@@ -25,7 +26,7 @@ class DrinksController < ApplicationController
   # lists all the drinks that we marked as popular
   #########################################
   def feedpopular
-    @drinks = Drink.where(['popular = ?',"YES"]).order('lower(name) ASC').all
+    @drinks = Drink.where(['popular = ?',"YES"]).order('lower(name) ASC')
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
@@ -48,7 +49,7 @@ class DrinksController < ApplicationController
     if params[:search].nil?
       @drinks = []
     else 
-      @drinks = Drink.search(params[:search]).limit(50)
+      @drinks = Drink.search(params[:search]).limit(50).order('lower(name) ASC')
       if @drinks.nil?
         @drinks = []
       end

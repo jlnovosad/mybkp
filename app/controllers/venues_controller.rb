@@ -5,14 +5,15 @@ class VenuesController < ApplicationController
   # lists all the venues that we have saved, not actually used
   #########################################
   def index
-    @venues = Venue.paginate(page: params[:page], :per_page => 50)
+    @venues = Venue.paginate(page: params[:page], :per_page => 50).includes(:tenders, :favorites, :workfavorites).order('lower(name) ASC')
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :venue=>@venue.as_json(:only => [:id, :fs_venue_id], 
+        :venues=>@venues.as_json(:only => [:id, :fs_venue_id, :name], 
           :include => { 
-            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] },
-            :tenders => { :only => [:id, :name, :tender], :methods => [:photo_url] } 
+            :tenders => { :only => [:id, :name, :tender], :methods => [:photo_url] },
+            :favorites => { :only => [:id, :user_id, :venue_id] },
+            :workfavorites => { :only => [:id, :user_id, :venue_id] }
           }
         ) 
       } }
@@ -24,19 +25,20 @@ class VenuesController < ApplicationController
   #########################################
   def workerfeed 
     @venue = Venue.find(params[:id])
-    @feed_items = @venue.workerfeed.paginate(page: params[:page], :per_page => 50)
+    @feed_items = @venue.workerfeed.paginate(page: params[:page], :per_page => 50).includes(:user, :venue, :users)
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :feed_items=>@feed_items.as_json(:only => [:content, :created_at, :working], :methods => [:photo_url], 
+        :feed_items=>@feed_items.as_json(:only => [:id, :content, :created_at, :working], :methods => [:photo_url], 
           :include => { 
             :user => { :only => [:id, :name, :tender], :methods => [:photo_url],
               :include => { 
                 :drinks => { :only => [:id, :name] },
-                :workvenues => { :only => [:id, :fs_venue_id] }
+                :workvenues => { :only => [:id, :fs_venue_id, :name] }
               }
             },
-            :venue => { :only => [:id, :fs_venue_id] } 
+            :venue => { :only => [:id, :fs_venue_id, :name] },
+            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }  
           }
         )
       } }
@@ -48,19 +50,20 @@ class VenuesController < ApplicationController
   #########################################
   def feed 
     @venue = Venue.find(params[:id])
-    @feed_items = @venue.feed.paginate(page: params[:page], :per_page => 50)
+    @feed_items = @venue.feed.paginate(page: params[:page], :per_page => 50).includes(:user, :venue, :users)
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :feed_items=>@feed_items.as_json(:only => [:content, :created_at, :working], :methods => [:photo_url], 
+        :feed_items=>@feed_items.as_json(:only => [:id, :content, :created_at, :working], :methods => [:photo_url], 
           :include => { 
             :user => { :only => [:id, :name, :tender], :methods => [:photo_url],
               :include => { 
                 :drinks => { :only => [:id, :name] },
-                :workvenues => { :only => [:id, :fs_venue_id] }
+                :workvenues => { :only => [:id, :fs_venue_id, :name] }
               }
             },
-            :venue => { :only => [:id, :fs_venue_id] } 
+            :venue => { :only => [:id, :fs_venue_id, :name] },
+            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }  
           }
         )
       } }
@@ -71,15 +74,16 @@ class VenuesController < ApplicationController
   # creates a new venue or finds the existing
   #########################################
   def create
-    @venue = Venue.find_by_fs_venue_id(params[:venue][:fs_venue_id])
+    @venue = Venue.includes(:tenders, :favorites, :workfavorites).find_by_fs_venue_id(params[:venue][:fs_venue_id])
     if @venue
 
-      # if the venue was already in the db, return that entry so the app has the info anyway
+      # if the venue was already in the db, return that entry so the app has the info anyway (refresh name first)
+      @venue.update_attributes(name: params[:venue][:name])
 
       respond_to do |format|
         format.html # index.html.erb
         format.json  { render :json=> { 
-          :venue=>@venue.as_json(:only => [:id, :fs_venue_id], 
+          :venue=>@venue.as_json(:only => [:id, :fs_venue_id, :name], 
             :include => { 
               :tenders => { :only => [:id, :name, :tender], :methods => [:photo_url] },
               :favorites => { :only => [:id, :user_id, :venue_id] },
@@ -91,12 +95,12 @@ class VenuesController < ApplicationController
     else
       
       # create
-      @venue = Venue.create(params[:venue])
+      @venue = Venue.includes(:tenders, :favorites, :workfavorites).create(params[:venue])
 
       respond_to do |format|
         format.html # index.html.erb
         format.json  { render :json=> { 
-          :venue=>@venue.as_json(:only => [:id, :fs_venue_id], 
+          :venue=>@venue.as_json(:only => [:id, :fs_venue_id, :name], 
             :include => { 
               :tenders => { :only => [:id, :name, :tender], :methods => [:photo_url] },
               :favorites => { :only => [:id, :user_id, :venue_id] },
@@ -117,7 +121,7 @@ class VenuesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :venue=>@venue.as_json(:only => [:id, :fs_venue_id], 
+        :venue=>@venue.as_json(:only => [:id, :fs_venue_id, :name], 
           :include => { 
             :tenders => { :only => [:id, :name, :tender], :methods => [:photo_url] },
             :favorites => { :only => [:id, :user_id, :venue_id] },
@@ -137,7 +141,7 @@ class VenuesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :venue=>@venue.as_json(:only => [:id, :fs_venue_id], 
+        :venue=>@venue.as_json(:only => [:id, :fs_venue_id, :name], 
           :include => { 
             :tenders => { :only => [:id, :name, :tender], :methods => [:photo_url] },
             :favorites => { :only => [:id, :user_id, :venue_id] },
@@ -157,7 +161,7 @@ class VenuesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :venue=>@venue.as_json(:only => [:id, :fs_venue_id], 
+        :venue=>@venue.as_json(:only => [:id, :fs_venue_id, :name], 
           :include => { 
             :tenders => { :only => [:id, :name, :tender], :methods => [:photo_url] },
             :favorites => { :only => [:id, :user_id, :venue_id] },
@@ -177,7 +181,7 @@ class VenuesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :venue=>@venue.as_json(:only => [:id, :fs_venue_id], 
+        :venue=>@venue.as_json(:only => [:id, :fs_venue_id, :name], 
           :include => { 
             :tenders => { :only => [:id, :name, :tender], :methods => [:photo_url] },
             :favorites => { :only => [:id, :user_id, :venue_id] },

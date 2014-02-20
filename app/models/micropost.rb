@@ -3,7 +3,7 @@ class Micropost < ActiveRecord::Base
   #########################################
   # Setup accessible (or protected) attributes for your model
   #########################################
-  attr_accessible :content, :venue_id, :photo, :working
+  attr_accessible :content, :venue_id, :photo, :working, :users
   belongs_to :user
   belongs_to :venue
 
@@ -19,6 +19,15 @@ class Micropost < ActiveRecord::Base
   #########################################
   has_attached_file :photo, :styles => { :small => "640x640#" },
                             :default_url => 'missing_photo.png'
+
+  #########################################
+  # tag users
+  #########################################
+  has_many :micropost_users, dependent: :destroy
+  has_many :users,
+            -> { uniq },
+            :through => :micropost_users,
+            class_name: "User"
 
   #########################################
   # an actually db query, the controller uses these
@@ -50,8 +59,11 @@ class Micropost < ActiveRecord::Base
   end
 
   def self.from_venue(venue)
-    where("venue_id = :venue_id", 
-          venue_id: venue.id)
+    where("venue_id = ?", venue.id)
+  end
+
+  def self.from_venue_workers(venue)
+    where("venue_id = ? AND working = ? AND updated_at >= ?", venue.id, "YES", Time.now - 8.hours)
   end
 
   def photo_url

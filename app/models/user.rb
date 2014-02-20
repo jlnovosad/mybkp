@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   #########################################
   # Setup accessible (or protected) attributes for your model
   #########################################
-  attr_accessible :name, :email, :current_password, :password, :password_confirmation, :remember_me, :photo, :tender, :invitation_token, :invited_by_id, :invited_by_type
+  attr_accessible :name, :email, :current_password, :password, :password_confirmation, :remember_me, :photo, :tender, :invitation_token, :invited_by_id, :invited_by_type, :notify, :privateprofile
   attr_accessor :current_password
 
 
@@ -24,7 +24,8 @@ class User < ActiveRecord::Base
   #########################################
 
   has_many :microposts, dependent: :destroy
-  
+  has_many :micropost_users, dependent: :destroy # tagged in posts, but we don't also have microposts because of the dual name conflict
+
   has_many :relationships, 
             foreign_key: "follower_id", 
             dependent: :destroy
@@ -36,7 +37,6 @@ class User < ActiveRecord::Base
             source: :followed
 
   has_many :reverse_relationships, 
-            -> { where(['relationships.status = ?',"FOLLOWING"] ) },
             foreign_key: "followed_id",
             class_name: "Relationship",
             dependent: :destroy
@@ -45,10 +45,10 @@ class User < ActiveRecord::Base
             -> { where(['relationships.status = ?',"FOLLOWING"] ) },
             through: :reverse_relationships, 
             class_name: "User", 
-            source: :follower  
+            source: :follower 
 
-  has_many :friend_requests, 
-            -> { where(['relationships.status = ?',"REQUEST"] ) },
+  has_many :friendrequests, 
+            -> { where(['relationships.status = ?',"REQUEST"] ).order('relationships.updated_at DESC') },
             through: :reverse_relationships, 
             class_name: "User", 
             source: :follower 
@@ -76,7 +76,7 @@ class User < ActiveRecord::Base
   #########################################
   has_many :user_drinks, dependent: :destroy
   has_many :drinks,
-            -> { uniq.limit(50).order(:name) },
+            -> { uniq.limit(50) },
             :through => :user_drinks,
             class_name: "Drink"
             

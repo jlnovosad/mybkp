@@ -3,7 +3,7 @@ class Venue < ActiveRecord::Base
 	#########################################
 	# Setup accessible (or protected) attributes for your model
 	#########################################
-	attr_accessible :fs_venue_id
+	attr_accessible :fs_venue_id, :name
 
 	#########################################
 	# doesn't allow us to save more than once
@@ -16,14 +16,14 @@ class Venue < ActiveRecord::Base
 	#has_and_belongs_to_many :users, :uniq => true
 	has_many :favorites, dependent: :destroy
   has_many :users,
-  					-> { uniq.order(:name) },
+  					-> { uniq.limit(50) },
             :through => :favorites,
             class_name: "User",
             source: :user
 
   has_many :workfavorites, dependent: :destroy
   has_many :tenders,
-  					-> { uniq.order(:name) },
+  					-> { uniq.limit(50) },
             :through => :workfavorites,
             class_name: "User",
             source: :user
@@ -37,6 +37,6 @@ class Venue < ActiveRecord::Base
 	end
 
 	def workerfeed
-		Micropost.from_venue(self)
+		Micropost.from_venue_workers(self)
 	end
 end

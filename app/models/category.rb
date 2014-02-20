@@ -5,7 +5,7 @@ class Category < ActiveRecord::Base
 	
 	has_many :drink_categories, dependent: :destroy
   has_many :drinks,
-  					-> { uniq.order(:name) },
+  					-> { uniq },
             :through => :drink_categories,
             class_name: "Drink"
 

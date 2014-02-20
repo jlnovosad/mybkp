@@ -19,21 +19,25 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   resources :users, only: [:index, :create, :show, :update]  do
     # added GETs for all these to customize data we get about a user
     member do
-      get :following, :following_count, :followers, :followers_count, :myrelationship, :venues, :microposts, :feed, :feedtender, :feedpopular, :valid, :search
+      get :following, :following_count, :followers, :followers_count, :recentfollowers, :friendrequests, :myrelationship, :myreverserelationship, :venues, :microposts, :feed, :feedtender, :feedpopular, :valid, :search
     end
     member do
-      post :searchemail, :invitationemailonly
+      post :searchemail, :invitationemailonly, :refreshnotify, :blockuser
     end
   end
 
   #########################################
   # user related models
   #########################################
-  resources :microposts, only: [:create, :destroy]
+  resources :microposts, only: [:create, :destroy] do
+    member do
+      post :taguser
+    end
+  end
   resources :tokens,:only => [:create, :destroy]
   resources :relationships, only: [:create, :destroy] do
     member do
-      post :updatestatus
+      post :updatestatus, :confirmfollow
     end
   end
 

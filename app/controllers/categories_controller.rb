@@ -23,7 +23,7 @@ class CategoriesController < ApplicationController
   # lists all the categories that we have marked as popular
   #########################################
   def feedpopular
-    @categories = Category.where(['popular = ?',"YES"]).order('lower(name) ASC').all
+    @categories = Category.where(['popular = ?',"YES"]).order('lower(name) ASC')
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
