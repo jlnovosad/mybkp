@@ -1,9 +1,14 @@
 namespace :db do
   desc "Fill database with sample data"
   task populate: :environment do
-    make_categories
-    make_drinks
+    #make_categories
+    #make_drinks
+    tag_drinks
   end
+end
+
+def tag_drinks
+  
 end
 
 def make_categories

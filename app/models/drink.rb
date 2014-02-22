@@ -5,13 +5,13 @@ class Drink < ActiveRecord::Base
 
 	has_many :drink_categories, dependent: :destroy
   has_many :categories,
-            -> { uniq },
+            -> { order('lower(name) ASC') },
             :through => :drink_categories,
             class_name: "Category"
 
   has_many :user_drinks, dependent: :destroy
   has_many :users,
-            -> { where(['tender = ?',"YES"]).uniq.order(:name) },
+            -> { where(['tender = ?',"YES"]).order('lower(name) ASC')},
             :through => :user_drinks,
             class_name: "User"
             #-> { where(['tender = ?',"NO"]).uniq.order("users.followers_count DESC").limit(50) },
