@@ -14,8 +14,7 @@ class RelationshipsController < ApplicationController
     @user.update_attributes!(:notify => "YES")
     
     respond_to do |format|
-      format.html { redirect_to @user }
-      format.js 
+      format.html # index.html.erb
       format.json  { render :json=> { 
         :user=>@user.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
           :include => { 
@@ -47,8 +46,7 @@ class RelationshipsController < ApplicationController
       end
 
       respond_to do |format|
-        format.html { redirect_to @user }
-        format.js
+        format.html # index.html.erb
         format.json  { render :json=> { 
           :user=>@user.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
             :include => { 
@@ -78,8 +76,7 @@ class RelationshipsController < ApplicationController
       @user = User.find(@relationship.follower_id)
 
       respond_to do |format|
-        format.html { redirect_to @user }
-        format.js
+        format.html # index.html.erb
         format.json  { render :json=> { 
           :user=>@user.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
             :include => { 

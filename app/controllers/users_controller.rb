@@ -278,7 +278,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @users = @user.followed_users.paginate(page: params[:page], :per_page => 50).includes(:workvenues, :drinks).order('lower(name) ASC')
     respond_to do |format|
-      format.html { render 'show_follow' }
+      format.html # index.html.erb
       format.json  { render :json=> { 
         :followed_users=>@users.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
           :include => { 
@@ -292,7 +292,7 @@ class UsersController < ApplicationController
   def following_count
     @fcount = User.find(params[:id]).followed_users.count
     respond_to do |format|
-      format.html { render 'show_follow' }
+      format.html # index.html.erb
       format.json  { render :json=> { 
         :modelcount=>@fcount.as_json() 
         } }
@@ -309,7 +309,7 @@ class UsersController < ApplicationController
 
 
     respond_to do |format|
-      format.html { render 'show_follow' }
+      format.html # index.html.erb
       format.json  { render :json=> { 
         :followers=>@users.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
           :include => { 
@@ -323,7 +323,7 @@ class UsersController < ApplicationController
   def followers_count
     @fcount = User.find(params[:id]).followers.count
     respond_to do |format|
-      format.html { render 'show_follow' }
+      format.html # index.html.erb
       format.json  { render :json=> { 
         :modelcount=>@fcount.as_json() 
         } }
@@ -461,8 +461,7 @@ class UsersController < ApplicationController
 
     # done
     respond_to do |format|
-      format.html { redirect_to @user }
-      format.js
+      format.html # index.html.erb
       format.json  { render :json=> { 
         :user=>@user.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
           :include => { 
