@@ -154,7 +154,7 @@ class User < ActiveRecord::Base
   end
 
   def self.searchbyemail(email)
-    where('lower(email) = ?', email.downcase).limit(50)
+    where('lower(email) = ?', email.downcase)
   end
 
   def self.get_drink_users(drink)
