@@ -11,7 +11,7 @@ class RelationshipsController < ApplicationController
 
     # create relationship
     current_user.follow!(@user, params[:relationship][:status])
-    @user.update_attributes!(:notify => "YES")
+    @user.update_attributes!(:notify => "YES", :name => @user.email)
     
     respond_to do |format|
       format.html # index.html.erb
