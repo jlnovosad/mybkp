@@ -59,14 +59,14 @@ class User < ActiveRecord::Base
   #has_and_belongs_to_many :venues, :uniq => true
   has_many :favorites, dependent: :destroy
   has_many :venues,
-            -> { uniq.limit(50) },
+            -> { order('lower(name) ASC').limit(50) },
             through: :favorites,
             class_name: "Venue",
             source: :venue
 
   has_many :workfavorites, dependent: :destroy
   has_many :workvenues,
-            -> { uniq.limit(50) },
+            -> { order('lower(name) ASC').limit(50) },
             through: :workfavorites,
             class_name: "Venue",
             source: :venue
@@ -76,7 +76,7 @@ class User < ActiveRecord::Base
   #########################################
   has_many :user_drinks, dependent: :destroy
   has_many :drinks,
-            -> { uniq.limit(50) },
+            -> { order('lower(name) ASC').limit(50) },
             :through => :user_drinks,
             class_name: "Drink"
             

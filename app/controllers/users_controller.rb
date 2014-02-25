@@ -56,7 +56,7 @@ class UsersController < ApplicationController
       @user = []
     else 
       #@user = User.find_by_email(params[:user][:email])
-      @user = User.searchbyemail(params[:user][:email]).includes(:workvenues, :drinks)
+      @user = User.searchbyemail(params[:user][:email])
       if @user.nil?
         @user = []
       end
