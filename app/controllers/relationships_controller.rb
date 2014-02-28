@@ -11,8 +11,12 @@ class RelationshipsController < ApplicationController
 
     # create relationship
     current_user.follow!(@user, params[:relationship][:status])
-    @user.update_attributes!(:notify => "YES", :name => @user.email)
-    
+    if @user.name.nil?
+      @user.update_attributes!(:notify => "YES", :name => @user.email)
+    else
+      @user.update_attributes!(:notify => "YES")
+    end
+
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
