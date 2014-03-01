@@ -36,8 +36,7 @@ class Micropost < ActiveRecord::Base
     followed_user_ids = "SELECT followed_id FROM relationships
                          WHERE follower_id = :user_id
                          AND status = 'FOLLOWING'"
-    where("user_id IN (#{followed_user_ids}) OR user_id = :user_id", 
-          user_id: user.id)
+    where("user_id IN (#{followed_user_ids}) OR user_id = :user_id", user_id: user.id)
   end
 
   def self.from_userstender_followed_by(user)
@@ -46,24 +45,22 @@ class Micropost < ActiveRecord::Base
                           AND status = 'FOLLOWING'"
     tender_user_ids = "SELECT id FROM users
                           WHERE tender = 'YES'"
-    where("user_id IN (#{followed_user_ids}) AND user_id IN (#{tender_user_ids})", 
-          user_id: user.id)
+    where("user_id IN (#{followed_user_ids}) AND user_id IN (#{tender_user_ids})", user_id: user.id)
   end
 
   def self.from_users_followers(user)
     followers_user_ids = "SELECT follower_id FROM relationships
                          WHERE followed_id = :user_id
                          AND status = 'FOLLOWING'"
-    where("user_id IN (#{followers_user_ids})", 
-          user_id: user.id)
+    where("user_id IN (#{followers_user_ids})", user_id: user.id)
   end
 
   def self.from_venue(venue)
-    where("venue_id = ?", venue.id)
+    where("venue_id = ? AND users.privateprofile != ?", venue.id, "YES")
   end
 
   def self.from_venue_workers(venue)
-    where("venue_id = ? AND working = ? AND updated_at >= ?", venue.id, "YES", Time.now - 8.hours)
+    where("venue_id = ? AND working = ? AND microposts.updated_at >= ? AND users.privateprofile != ?", venue.id, "YES", Time.now - 8.hours, "YES")
   end
 
   def photo_url
