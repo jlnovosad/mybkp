@@ -30,12 +30,7 @@ class DrinksController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :drinks=>@drinks.as_json(:only => [:id, :name, :popular],
-          :include => { 
-            :categories => { :only => [:id, :name, :popular] },
-            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }
-          } 
-        )
+        :drinks=>@drinks.as_json(:only => [:id, :name, :popular])
       } }
     end
   end
@@ -58,12 +53,7 @@ class DrinksController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :drinks=>@drinks.as_json(:only => [:id, :name, :popular],
-          :include => { 
-            :categories => { :only => [:id, :name, :popular] },
-            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }
-          } 
-        )
+        :drinks=>@drinks.as_json(:only => [:id, :name, :popular])
       } }
     end
   end
@@ -96,8 +86,12 @@ class DrinksController < ApplicationController
         :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id],
           :include => { 
             :categories => { :only => [:id, :name, :popular] },
-            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }
-          } 
+            :users => { :only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
+              :include => { 
+                :workvenues => { :only => [:id, :fs_venue_id, :name] }
+              }
+            }
+          }
         )
       } }
     end
@@ -115,8 +109,12 @@ class DrinksController < ApplicationController
         :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id],
           :include => { 
             :categories => { :only => [:id, :name, :popular] },
-            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }
-          } 
+            :users => { :only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
+              :include => { 
+                :workvenues => { :only => [:id, :fs_venue_id, :name] }
+              }
+            }
+          }
         )
       } }
     end
@@ -147,8 +145,12 @@ class DrinksController < ApplicationController
         :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id],
           :include => { 
             :categories => { :only => [:id, :name, :popular] },
-            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }
-          } 
+            :users => { :only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
+              :include => { 
+                :workvenues => { :only => [:id, :fs_venue_id, :name] }
+              }
+            }
+          }
         )
       } }
     end
@@ -167,8 +169,12 @@ class DrinksController < ApplicationController
         :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id],
           :include => { 
             :categories => { :only => [:id, :name, :popular] },
-            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }
-          } 
+            :users => { :only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
+              :include => { 
+                :workvenues => { :only => [:id, :fs_venue_id, :name] }
+              }
+            }
+          }
         )
       } }
     end
@@ -188,8 +194,12 @@ class DrinksController < ApplicationController
         :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id],
           :include => { 
             :categories => { :only => [:id, :name, :popular] },
-            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }
-          } 
+            :users => { :only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
+              :include => { 
+                :workvenues => { :only => [:id, :fs_venue_id, :name] }
+              }
+            }
+          }
         )
       } }
     end
@@ -209,8 +219,12 @@ class DrinksController < ApplicationController
         :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id],
           :include => { 
             :categories => { :only => [:id, :name, :popular] },
-            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }
-          } 
+            :users => { :only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
+              :include => { 
+                :workvenues => { :only => [:id, :fs_venue_id, :name] }
+              }
+            }
+          }
         )
       } }
     end
