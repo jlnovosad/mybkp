@@ -4,7 +4,7 @@ class DrinksController < ApplicationController
   before_filter :correct_user, only: [:tagdrink, :untagdrink]
 
   #########################################
-  # lists all the drinks that we have saved, not actually used
+  # lists all the drinks that we have saved not actually used
   #########################################
   def index
     @drinks = Drink.limit(50).order('lower(name) ASC')
