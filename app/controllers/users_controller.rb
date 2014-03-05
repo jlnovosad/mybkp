@@ -411,12 +411,12 @@ class UsersController < ApplicationController
 
     # get user
     @user = User.find(params[:id])
-    @name = params[:name]
     @email = @user[:email]
 
     # message object
     @message = {}
     @message = params[:message]
+    @name = params[:message][:name]
     #@message.name = params[:message][:name]
     @message[:email] = @email
     @message[:subject] = "Let's Have a Drink..."
