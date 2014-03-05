@@ -422,8 +422,10 @@ class UsersController < ApplicationController
     @message[:subject] = "Let's Have a Drink..."
     @message[:body] = "
     <p>Hello #{@email}!</p>
+    <br/>
     <p>#{@name} has invited you to try out MyBarkeepers, a new app for iPhone that lets you stay in touch with your favorite bartenders.</p>
     <p>You and your friends can see who's working where and discover new drinking destinations. Bartenders can build their following and promote their latest concoction.</p>
+    <br/>
     <p>Learn more and download the app for iPhone at <a href='https://www.mybarkeepers.com'>mybarkeepers.com</a>.</p>"
 
     # send email
