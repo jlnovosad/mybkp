@@ -1,7 +1,7 @@
 class Drink < ActiveRecord::Base
 
 	attr_accessible :name, :popular, :user_id
-  validates :name, :uniqueness => { :case_sensitive => false }
+  #validates :name, :uniqueness => { :case_sensitive => false }
 
 	has_many :drink_categories, dependent: :destroy
   has_many :categories,

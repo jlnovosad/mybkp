@@ -8,8 +8,8 @@ class User < ActiveRecord::Base
 
   before_save :ensure_authentication_token
 
-  validates :name, presence: true
-  validates_length_of :name, :minimum => 1, :maximum => 50
+  #validates :name, presence: true
+  validates_length_of :name, :maximum => 50
 
   #########################################
   # Setup accessible (or protected) attributes for your model
