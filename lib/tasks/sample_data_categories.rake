@@ -2,7 +2,7 @@ namespace :db do
   desc "Fill database with sample data"
   task populate: :environment do
     #make_categories
-    make_morecategories
+    #make_morecategories
     end
 end
 
