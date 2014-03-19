@@ -1,7 +1,7 @@
 namespace :db do
   desc "Fill database with sample data"
   task populate: :environment do
-    make_drinks
+    make_drinks2
   end
 end
 
@@ -276,6 +276,10 @@ def make_drinks
     @category = Category.find_by_name("Fernet")
     @drink.categories << @category
 
+
+end
+
+def make_drinks2 
   @drink = Drink.create!(name: "The Last Word", popular: "NO", user_id:1)
   @category = Category.find_by_name("Gin")
     @drink.categories << @category
@@ -409,6 +413,4 @@ def make_drinks
   @drink = Drink.create!(name: "Aguaymanto Sour", popular: "NO", user_id:1)
   @category = Category.find_by_name("Sour")
     @drink.categories << @category
-
-
-end
+  end
