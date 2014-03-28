@@ -486,6 +486,17 @@ p {
   }
 }
 
+.featuredphoneart {
+  padding: 0 0 0 0;
+  margin: 5px 0 0 50px;
+  width: 250px;
+  height: 530px;
+  text-align: left;
+  background-image: image-url("phonefeatured.png");
+  background-repeat: none;
+  float: right;
+}
+
 .phoneart {
   padding: 0px;
   margin: 0px 0 0 0;
