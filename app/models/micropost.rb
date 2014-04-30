@@ -3,7 +3,7 @@ class Micropost < ActiveRecord::Base
   #########################################
   # Setup accessible (or protected) attributes for your model
   #########################################
-  attr_accessible :content, :venue_id, :photo, :working, :users
+  attr_accessible :content, :venue_id, :photo, :working, :users, :user_id
   belongs_to :user
   belongs_to :venue
 
@@ -36,7 +36,9 @@ class Micropost < ActiveRecord::Base
     followed_user_ids = "SELECT followed_id FROM relationships
                          WHERE follower_id = :user_id
                          AND status = 'FOLLOWING'"
-    where("user_id IN (#{followed_user_ids}) OR user_id = :user_id", user_id: user.id)
+    venue_user_ids = "SELECT id FROM users
+                          WHERE venueprofile = 'YES'"
+    where("user_id IN (#{venue_user_ids}) OR (user_id IN (#{followed_user_ids}) OR user_id = :user_id)", user_id: user.id)
   end
 
   def self.from_userstender_followed_by(user)
@@ -45,7 +47,9 @@ class Micropost < ActiveRecord::Base
                           AND status = 'FOLLOWING'"
     tender_user_ids = "SELECT id FROM users
                           WHERE tender = 'YES'"
-    where("user_id IN (#{followed_user_ids}) AND user_id IN (#{tender_user_ids})", user_id: user.id)
+    venue_user_ids = "SELECT id FROM users
+                          WHERE venueprofile = 'YES'"
+    where("user_id IN (#{venue_user_ids}) OR (user_id IN (#{followed_user_ids}) AND user_id IN (#{tender_user_ids}))", user_id: user.id)
   end
 
   def self.from_users_followers(user)

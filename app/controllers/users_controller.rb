@@ -110,7 +110,7 @@ class UsersController < ApplicationController
       format.json  { render :json=> { 
         :feed_items=>@feed_items.as_json(:only => [:id, :content, :created_at, :working], :methods => [:photo_url], 
           :include => { 
-            :user => { :only => [:id, :name, :tender], :methods => [:photo_url],
+            :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
               :include => { 
                 :workvenues => { :only => [:id, :fs_venue_id, :name] }
               }
@@ -136,7 +136,7 @@ class UsersController < ApplicationController
       format.json  { render :json=> { 
         :feed_items=>@feed_items.as_json(:only => [:id, :content, :created_at, :working], :methods => [:photo_url], 
           :include => { 
-            :user => { :only => [:id, :name, :tender], :methods => [:photo_url],
+            :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
               :include => { 
                 :workvenues => { :only => [:id, :fs_venue_id, :name] }
               }
@@ -162,7 +162,7 @@ class UsersController < ApplicationController
       format.json  { render :json=> { 
         :feed_items=>@feed_items.as_json(:only => [:id, :content, :created_at, :working], :methods => [:photo_url], 
           :include => { 
-            :user => { :only => [:id, :name, :tender], :methods => [:photo_url],
+            :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
               :include => { 
                 :workvenues => { :only => [:id, :fs_venue_id, :name] }
               }
