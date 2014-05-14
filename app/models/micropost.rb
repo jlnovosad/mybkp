@@ -47,9 +47,7 @@ class Micropost < ActiveRecord::Base
                           AND status = 'FOLLOWING'"
     tender_user_ids = "SELECT id FROM users
                           WHERE tender = 'YES'"
-    venue_user_ids = "SELECT id FROM users
-                          WHERE venueprofile = 'YES'"
-    where("user_id IN (#{venue_user_ids}) OR (user_id IN (#{followed_user_ids}) AND user_id IN (#{tender_user_ids}))", user_id: user.id)
+    where("user_id IN (#{followed_user_ids}) AND user_id IN (#{tender_user_ids})", user_id: user.id)
   end
 
   def self.from_users_followers(user)
