@@ -7,7 +7,7 @@ task :update_feed => :environment do
   u = User.find_by_name("Juke Bar Staff")
   m = Micropost.create!(content: "Every night 'til 9 pm!  Not kidding! All beer, wine and well is 5 bucks. Our award winning specialty cocktails are $8! (ok.. we didn't win any awards... yet!)", venue_id: v.id, user_id:u.id)
 
-  v = Venue.find_by_name("Yuca Bar")
+  v = Venue.find_by_name("Yuca Bar & Restaurant")
   u = User.find_by_name("Yuca Bar Staff")
   m = Micropost.create!(content: "Weekdays til 8pm. Mojitos, Caipirinhas, Margaritas $7, Sangria and wine $6", venue_id: v.id, user_id:u.id)
 
