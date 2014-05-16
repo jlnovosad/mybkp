@@ -151,7 +151,7 @@ class User < ActiveRecord::Base
 
   # search
   def self.search(search)
-    order('name ASC').where('lower(name) LIKE ?', "%#{search.downcase}%").limit(50)
+    order('name ASC').where('lower(name) LIKE ? AND venueprofile IS NULL', "%#{search.downcase}%").limit(50)
   end
 
   def self.searchbyemail(email)

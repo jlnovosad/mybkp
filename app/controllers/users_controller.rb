@@ -37,7 +37,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :users=>@users.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
+        :users=>@users.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile, :venueprofile], :methods => [:photo_url],
           :include => { 
             :workvenues => { :only => [:id, :fs_venue_id, :name] }
           }
