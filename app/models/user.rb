@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   #########################################
   # Setup accessible (or protected) attributes for your model
   #########################################
-  attr_accessible :name, :email, :current_password, :password, :password_confirmation, :remember_me, :photo, :tender, :invitation_token, :invited_by_id, :invited_by_type, :notify, :privateprofile, :venueprofile
+  attr_accessible :name, :email, :current_password, :password, :password_confirmation, :remember_me, :photo, :tender, :invitation_token, :invited_by_id, :invited_by_type, :notify, :privateprofile, :venueprofile, :location_id
   attr_accessor :current_password
 
 
@@ -24,6 +24,7 @@ class User < ActiveRecord::Base
   # this is a list of the associations that any user has (users/4/microposts), @user.microposts
   #########################################
 
+  belongs_to :locations
   has_many :microposts, dependent: :destroy
   has_many :micropost_users, dependent: :destroy # tagged in posts, but we don't also have microposts because of the dual name conflict
 
@@ -99,6 +100,10 @@ class User < ActiveRecord::Base
 
   def feedtender
     Micropost.from_userstender_followed_by(self)
+  end
+
+  def feedpopular
+    Micropost.from_userspopular_followed_by(self)
   end
 
   def followersfeed

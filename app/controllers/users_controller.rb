@@ -84,7 +84,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :user=>@user.as_json(:only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
+        :user=>@user.as_json(:only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile, :location_id], :methods => [:photo_url],
           :include => { 
             :workvenues => { :only => [:id, :fs_venue_id, :name] }
           }
@@ -137,7 +137,7 @@ class UsersController < ApplicationController
         :feed_items=>@feed_items.as_json(:only => [:id, :content, :created_at, :working], :methods => [:photo_url], 
           :include => { 
             :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
-              :include => { 
+              :include => { #
                 :workvenues => { :only => [:id, :fs_venue_id, :name] }
               }
             },
@@ -149,14 +149,14 @@ class UsersController < ApplicationController
     end
   end
 
-  # feed of the most popular users for promotion (followed by Mr. Popular user #2)
+  # feed of the most popular users for promotion
   def feedpopular
     @title = "Latest Posts"
 
     puts '====================== feedpopular'
 
     @user = User.find_by_email("mybarkeepers@lifestylesupply.co")
-    @feed_items = @user.feedtender.paginate(page: params[:page], :per_page => 50).includes(:user, :venue, :users)
+    @feed_items = @user.feedpopular.paginate(page: params[:page], :per_page => 50).includes(:user, :venue, :users)
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
@@ -186,7 +186,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :user=>@user.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
+        :user=>@user.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile, :location_id], :methods => [:photo_url],
           :include => { 
             :drinks => { :only => [:id, :name] },
             :workvenues => { :only => [:id, :fs_venue_id, :name] }

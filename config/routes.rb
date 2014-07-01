@@ -40,6 +40,9 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
       post :updatestatus, :confirmfollow
     end
   end
+  resources :locations, only: [:index, :create, :show] do
+    
+  end
 
   #########################################
   # the venues

@@ -37,8 +37,9 @@ class Micropost < ActiveRecord::Base
                          WHERE follower_id = :user_id
                          AND status = 'FOLLOWING'"
     venue_user_ids = "SELECT id FROM users
-                          WHERE venueprofile = 'YES'"
-    where("user_id IN (#{venue_user_ids}) OR (user_id IN (#{followed_user_ids}) OR user_id = :user_id)", user_id: user.id)
+                         WHERE venueprofile = 'YES'
+                         AND (location_id = :location_id)"
+    where("user_id IN (#{venue_user_ids}) OR (user_id IN (#{followed_user_ids}) OR user_id = :user_id)", user_id: user.id, location_id: user.location_id)
   end
 
   def self.from_userstender_followed_by(user)
@@ -48,6 +49,16 @@ class Micropost < ActiveRecord::Base
     tender_user_ids = "SELECT id FROM users
                           WHERE tender = 'YES'"
     where("user_id IN (#{followed_user_ids}) AND user_id IN (#{tender_user_ids})", user_id: user.id)
+  end
+
+  def self.from_userspopular_followed_by(user)
+    followed_user_ids = "SELECT followed_id FROM relationships
+                         WHERE follower_id = :user_id
+                         AND status = 'FOLLOWING'"
+    venue_user_ids = "SELECT id FROM users
+                         WHERE venueprofile = 'YES'
+                         AND (location_id = :location_id)"
+    where("user_id IN (#{venue_user_ids}) OR (user_id IN (#{followed_user_ids}) OR user_id = :user_id)", user_id: user.id, location_id: user.location_id)
   end
 
   def self.from_users_followers(user)

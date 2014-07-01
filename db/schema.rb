@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140428222450) do
+ActiveRecord::Schema.define(version: 20140626120116) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,15 @@ ActiveRecord::Schema.define(version: 20140428222450) do
   end
 
   add_index "favorites", ["user_id", "venue_id"], name: "index_favorites_on_user_id_and_venue_id", using: :btree
+
+  create_table "locations", force: true do |t|
+    t.text     "city"
+    t.text     "state"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "locations", ["created_at"], name: "index_locations_on_created_at", using: :btree
 
   create_table "micropost_users", force: true do |t|
     t.datetime "created_at"
@@ -140,6 +149,7 @@ ActiveRecord::Schema.define(version: 20140428222450) do
     t.string   "notify"
     t.string   "privateprofile",                    default: "NO"
     t.string   "venueprofile"
+    t.integer  "location_id"
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree

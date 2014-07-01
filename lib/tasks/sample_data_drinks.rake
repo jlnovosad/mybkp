@@ -1,7 +1,7 @@
 namespace :db do
   desc "Fill database with sample data"
   task populate: :environment do
-    make_drinks2
+    #make_drinks2
   end
 end
 
