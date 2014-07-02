@@ -14,8 +14,8 @@ task :update_feed => :environment do
   u = User.find_by_name("Cariño Restaurant and Cantina")
   m = Micropost.create!(content: "Monday, Thursday and Friday 4pm-7pm, $4 glass of red sangria; $5 house & frozen margaritas; $5 tequila and Tecate; $5 Dos XX Amber and Pacifico beers on draft", venue_id: v.id, user_id:u.id)
 
-  v = Venue.find_by_name("La Cava")
-  u = User.find_by_name("La Cava")
+  v = Venue.find_by_name("La Cava Wine Bar")
+  u = User.find_by_name("La Cava Wine Bar")
   m = Micropost.create!(content: "$7 glass of wine, $5 beers, Mon-Fri 12pm-7pm", venue_id: v.id, user_id:u.id)
 
   v = Venue.find_by_name("Rattle N Hum")
@@ -52,8 +52,8 @@ task :update_feed => :environment do
   u = User.find_by_name("Pianos")
   m = Micropost.create!(content: "$4 beers, wines, well drinks; $5 margaritas, every day 2pm-8pm", venue_id: v.id, user_id:u.id)
 
-  v = Venue.find_by_name("Hill Country")
-  u = User.find_by_name("Hill Country")
+  v = Venue.find_by_name("Hill Country Barbecue Market")
+  u = User.find_by_name("Hill Country Barbecue Market")
   m = Micropost.create!(content: "$3 PBRs, $5 premium beers, and $20 margarita pitchers, every day 4pm-7pm", venue_id: v.id, user_id:u.id)
 
   v = Venue.find_by_name("Dalton's Bar And Grill")
