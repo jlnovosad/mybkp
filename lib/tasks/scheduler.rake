@@ -1,9 +1,11 @@
 desc "This task is called by the Heroku scheduler add-on"
 
 
-task :update_feed_monday => :environment do
+task :update_feed => :environment do
   puts "Updating feed..."
   
+  if Time.now.monday?
+
   v = Venue.find_by_name("Juke Bar")
   u = User.find_by_name("Juke Bar")
   m = Micropost.create!(content: "Every night 'til 9 pm!  Not kidding! All beer, wine and well is 5 bucks. Our award winning specialty cocktails are $8! (ok.. we didn't win any awards... yet!)", venue_id: v.id, user_id:u.id)
@@ -20,12 +22,10 @@ task :update_feed_monday => :environment do
   u = User.find_by_name("Rattle N Hum")
   m = Micropost.create!(content: "$5 well drinks, select beers, wines, Mon-Fri 11am-7pm", venue_id: v.id, user_id:u.id)
 
-  puts "done."
-end
+  end
 
 
-task :update_feed_tuesday => :environment do
-  puts "Updating feed..."
+  if Time.now.tuesday?
   
   v = Venue.find_by_name("Thirsty Scholar")
   u = User.find_by_name("Thirsty Scholar")
@@ -43,12 +43,10 @@ task :update_feed_tuesday => :environment do
   u = User.find_by_name("Stitch Bar & Lounge")
   m = Micropost.create!(content: "$6 draft beers, $8 red or white wines, cosmopolitan, appletinis, $7 red or white sangria, Mon-Fri 11am-7pm", venue_id: v.id, user_id:u.id)
 
-  puts "done."
-end
+  end
 
 
-task :update_feed_wednesday => :environment do
-  puts "Updating feed..."
+  if Time.now.wednesday?
   
   v = Venue.find_by_name("Pianos")
   u = User.find_by_name("Pianos")
@@ -66,12 +64,10 @@ task :update_feed_wednesday => :environment do
   u = User.find_by_name("Astoria Brewhouse")
   m = Micropost.create!(content: "$4 select pints of domestic beer, bottled beers; $5 wines, well drinks, call drinks, Mon-Fri 11am-7pm", venue_id: v.id, user_id:u.id)
 
-  puts "done."
-end
+  end
 
 
-task :update_feed_thursday => :environment do
-  puts "Updating feed..."
+  if Time.now.thursday?
   
   v = Venue.find_by_name("Casa Nonna")
   u = User.find_by_name("Casa Nonna")
@@ -89,12 +85,10 @@ task :update_feed_thursday => :environment do
   u = User.find_by_name("Zablozki's")
   m = Micropost.create!(content: "$3 well drinks, $1 off draft beers, Mon-Fri 2pm-8pm", venue_id: v.id, user_id:u.id)
 
-  puts "done."
-end
+  end
 
 
-task :update_feed_friday => :environment do
-  puts "Updating feed..."
+  if Time.now.friday?
   
   v = Venue.find_by_name("The Stumble Inn")
   u = User.find_by_name("The Stumble Inn")
@@ -112,12 +106,10 @@ task :update_feed_friday => :environment do
   u = User.find_by_name("Barbossa")
   m = Micropost.create!(content: "$5 draft beers, $6 house red wines, house write wines, Mon-Fri 11am-7pm", venue_id: v.id, user_id:u.id)
 
-  puts "done."
-end
+  end
 
 
-task :update_feed_saturday => :environment do
-  puts "Updating feed..."
+  if Time.now.saturday?
   
   v = Venue.find_by_name("Ten Degrees")
   u = User.find_by_name("Ten Degrees")
@@ -135,12 +127,10 @@ task :update_feed_saturday => :environment do
   u = User.find_by_name("Verlaine")
   m = Micropost.create!(content: "5 to 10pm, 7 days a week., $6 Hanoi Lychee Martinis, Sangrias, Vietnamese Bloody Marys, $6 House red & white wines, basic cocktails, $3 bottles of Yuengling", venue_id: v.id, user_id:u.id)
 
-  puts "done."
-end
+  end
 
 
-task :update_feed_sunday => :environment do
-  puts "Updating feed..."
+  if Time.now.friday?
   
   v = Venue.find_by_name("Broadway Dive Bar")
   u = User.find_by_name("Broadway Dive Bar")
@@ -158,5 +148,5 @@ task :update_feed_sunday => :environment do
   u = User.find_by_name("Keybar")
   m = Micropost.create!(content: "Our legendary 2 for 1 Happy Hour on EVERYTHING is BACK for EVERY DAY/7 days a week!", venue_id: v.id, user_id:u.id)
 
-  puts "done."
+  end
 end
