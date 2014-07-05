@@ -155,7 +155,8 @@ class UsersController < ApplicationController
 
     puts '====================== feedpopular'
 
-    @user = User.find_by_email("mybarkeepers@lifestylesupply.co")
+    #@userpopular = User.find_by_email("mybarkeepers@lifestylesupply.co")
+    @user = User.find(params[:id])
     @feed_items = @user.feedpopular.paginate(page: params[:page], :per_page => 50).includes(:user, :venue, :users)
     respond_to do |format|
       format.html # index.html.erb
