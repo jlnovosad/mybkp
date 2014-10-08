@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   #########################################
   # Setup accessible (or protected) attributes for your model
   #########################################
-  attr_accessible :name, :email, :current_password, :password, :password_confirmation, :remember_me, :photo, :tender, :invitation_token, :invited_by_id, :invited_by_type, :notify, :privateprofile, :venueprofile, :location_id
+  attr_accessible :name, :email, :current_password, :password, :password_confirmation, :remember_me, :photo, :tender, :invitation_token, :invited_by_id, :invited_by_type, :notify, :privateprofile, :venueprofile, :location_id, :bio
   attr_accessor :current_password
 
 
@@ -27,13 +27,16 @@ class User < ActiveRecord::Base
   belongs_to :locations
   has_many :microposts, dependent: :destroy
   has_many :micropost_users, dependent: :destroy # tagged in posts, but we don't also have microposts because of the dual name conflict
+  has_many :checkins
+  has_many :likes
+  has_many :comments
 
   has_many :relationships, 
             foreign_key: "follower_id", 
             dependent: :destroy
 
   has_many :followed_users, 
-            -> { where(['relationships.status = ?',"FOLLOWING"] ) },
+            -> { where(['relationships.status = ? AND privateprofile != ?',"FOLLOWING", "INACTIVE"] ) },
             through: :relationships, 
             class_name: "User", 
             source: :followed
@@ -44,7 +47,7 @@ class User < ActiveRecord::Base
             dependent: :destroy
 
   has_many :followers, 
-            -> { where(['relationships.status = ?',"FOLLOWING"] ) },
+            -> { where(['relationships.status = ? AND privateprofile != ?',"FOLLOWING", "INACTIVE"] ) },
             through: :reverse_relationships, 
             class_name: "User", 
             source: :follower 
@@ -106,8 +109,16 @@ class User < ActiveRecord::Base
     Micropost.from_userspopular_followed_by(self)
   end
 
+  def feedlocal
+    Micropost.from_userslocal_followed_by(self)
+  end
+
   def followersfeed
     Micropost.from_users_followers(self)
+  end
+
+  def self.isliked(micropost)
+    likes.find_by_micropost_id(micropost.id)
   end
   
   # users following
@@ -121,6 +132,14 @@ class User < ActiveRecord::Base
 
   def unfollow!(other_user)
     favorites.find_by_followed_id(other_user.id).destroy
+  end
+
+  def followers_count
+    followers.count
+  end
+
+  def following_count
+    followed_users.count
   end
 
   # venues favoriting
@@ -156,7 +175,7 @@ class User < ActiveRecord::Base
 
   # search
   def self.search(search)
-    order('name ASC').where('lower(name) LIKE ? AND venueprofile IS NULL', "%#{search.downcase}%").limit(50)
+    order('name ASC').where('lower(name) LIKE ? AND venueprofile IS NULL AND privateprofile != ?', "%#{search.downcase}%", "INACTIVE").limit(50)
   end
 
   def self.searchbyemail(email)

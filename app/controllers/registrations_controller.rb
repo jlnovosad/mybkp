@@ -6,7 +6,7 @@ class RegistrationsController < Devise::RegistrationsController
   before_filter :configure_devise_params, if: :devise_controller?
   def configure_devise_params
     devise_parameter_sanitizer.for(:sign_up) do |u|
-      u.permit(:name, :email, :password, :password_confirmation, :tender, :privateprofile)
+      u.permit(:name, :email, :password, :password_confirmation, :tender, :privateprofile, :bio)
     end
   end
   
@@ -32,7 +32,7 @@ class RegistrationsController < Devise::RegistrationsController
           redirect_to after_update_path_for(@user)
         }
         format.json  { render :json=> { 
-          :user=>@user.as_json(:only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile, :location_id], :methods => [:photo_url],
+          :user=>@user.as_json(:only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile, :location_id, :bio], :methods => [:photo_url],
             :include => { 
               :drinks => { :only => [:id, :name] },
               :workvenues => { :only => [:id, :fs_venue_id, :name] }

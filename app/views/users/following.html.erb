@@ -1,0 +1,15 @@
+<div class="span10 offset1">
+<h2>Following</h2>
+
+<%= render 'layouts/messages' %>
+
+<ul class="users">
+	<%= will_paginate %>
+	  <% @users.each do |user| %>
+	    <li>
+	      <%= link_to user.name, user %> signed up <%= user.created_at.to_date %>
+	    </li>
+	  <% end %>
+ 	<%= will_paginate %>
+</ul>
+</div>

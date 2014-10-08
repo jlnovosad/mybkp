@@ -204,6 +204,7 @@ $fluidGridGutterWidth:    2.127659574%;
 /* get bootstrap */
 /* ========================================================== */
 @import "bootstrap";
+//@import "bootstrap-responsive";
 
 @mixin box_sizing {
   -moz-box-sizing: border-box; 
@@ -271,12 +272,13 @@ section {
 
 .maincta {
   margin: 20px 0 0 0;
+  text-align: center;
 }
 
 .appbuttoncontainer {
+  width: 100%;
   margin: 10px 0 20px 0;
-  width: 135px;
-  height: 40px;
+  text-align: center;
 }
 
 .appbutton {
@@ -284,10 +286,11 @@ section {
   background-image: image-url("appstore.png");
   width: 135px;
   height: 40px;
+  text-align: center;
 }
 
-.homeblurb {
-  
+#homeblurb {
+  text-align: center;
 }
 
 .center {

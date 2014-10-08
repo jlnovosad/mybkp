@@ -25,20 +25,25 @@ class VenuesController < ApplicationController
   #########################################
   def workerfeed 
     @venue = Venue.find(params[:id])
-    @feed_items = @venue.workerfeed.paginate(page: params[:page], :per_page => 50).includes(:user, :venue, :users)
+    @feed_items = @venue.workerfeed.paginate(page: params[:page], :per_page => 50).includes(:user, :checkin, :likes, :comments, :users)
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :feed_items=>@feed_items.as_json(:only => [:id, :content, :created_at, :working], :methods => [:photo_url], 
+        :feed_items=>@feed_items.as_json(:only => [:id, :content, :created_at, :working, :promo], :methods => [:photo_url, :like_count, :comment_count],
           :include => { 
-            :user => { :only => [:id, :name, :tender], :methods => [:photo_url],
+            :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
               :include => { 
-                :drinks => { :only => [:id, :name] },
                 :workvenues => { :only => [:id, :fs_venue_id, :name] }
               }
             },
             :venue => { :only => [:id, :fs_venue_id, :name] },
-            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }  
+            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] },
+            :checkin => { :only => [:id, :working],
+              :include => { 
+                :venue => { :only => [:id, :fs_venue_id, :name] }
+              }
+            },
+            :likes => { :only => [:id, :user_id] }
           }
         )
       } }
@@ -50,20 +55,25 @@ class VenuesController < ApplicationController
   #########################################
   def feed 
     @venue = Venue.find(params[:id])
-    @feed_items = @venue.feed.paginate(page: params[:page], :per_page => 50).includes(:user, :venue, :users)
+    @feed_items = @venue.feed.paginate(page: params[:page], :per_page => 50).includes(:user, :checkin, :likes, :comments, :users)
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :feed_items=>@feed_items.as_json(:only => [:id, :content, :created_at, :working], :methods => [:photo_url], 
+        :feed_items=>@feed_items.as_json(:only => [:id, :content, :created_at, :working, :promo], :methods => [:photo_url, :like_count, :comment_count],
           :include => { 
-            :user => { :only => [:id, :name, :tender], :methods => [:photo_url],
+            :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
               :include => { 
-                :drinks => { :only => [:id, :name] },
                 :workvenues => { :only => [:id, :fs_venue_id, :name] }
               }
             },
             :venue => { :only => [:id, :fs_venue_id, :name] },
-            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }  
+            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] },
+            :checkin => { :only => [:id, :working],
+              :include => { 
+                :venue => { :only => [:id, :fs_venue_id, :name] }
+              }
+            },
+            :likes => { :only => [:id, :user_id] }
           }
         )
       } }

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140706144638) do
+ActiveRecord::Schema.define(version: 20140901150841) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,30 @@ ActiveRecord::Schema.define(version: 20140706144638) do
   end
 
   add_index "categories", ["created_at"], name: "index_categories_on_created_at", using: :btree
+
+  create_table "checkins", force: true do |t|
+    t.string   "working"
+    t.integer  "micropost_id"
+    t.integer  "user_id"
+    t.integer  "venue_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "checkins", ["micropost_id", "created_at"], name: "index_checkins_on_micropost_id_and_created_at", using: :btree
+  add_index "checkins", ["user_id", "created_at"], name: "index_checkins_on_user_id_and_created_at", using: :btree
+  add_index "checkins", ["venue_id", "created_at"], name: "index_checkins_on_venue_id_and_created_at", using: :btree
+
+  create_table "comments", force: true do |t|
+    t.string   "content"
+    t.integer  "micropost_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "comments", ["micropost_id", "created_at"], name: "index_comments_on_micropost_id_and_created_at", using: :btree
+  add_index "comments", ["user_id", "created_at"], name: "index_comments_on_user_id_and_created_at", using: :btree
 
   create_table "drink_categories", force: true do |t|
     t.integer  "drink_id"
@@ -40,6 +64,10 @@ ActiveRecord::Schema.define(version: 20140706144638) do
     t.datetime "updated_at"
     t.string   "popular"
     t.integer  "user_id"
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
+    t.datetime "photo_updated_at"
   end
 
   add_index "drinks", ["created_at"], name: "index_drinks_on_created_at", using: :btree
@@ -53,6 +81,16 @@ ActiveRecord::Schema.define(version: 20140706144638) do
   end
 
   add_index "favorites", ["user_id", "venue_id"], name: "index_favorites_on_user_id_and_venue_id", using: :btree
+
+  create_table "likes", force: true do |t|
+    t.integer  "micropost_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "likes", ["micropost_id", "created_at"], name: "index_likes_on_micropost_id_and_created_at", using: :btree
+  add_index "likes", ["user_id", "created_at"], name: "index_likes_on_user_id_and_created_at", using: :btree
 
   create_table "locations", force: true do |t|
     t.text     "city"
@@ -84,6 +122,7 @@ ActiveRecord::Schema.define(version: 20140706144638) do
     t.integer  "photo_file_size"
     t.datetime "photo_updated_at"
     t.string   "working"
+    t.string   "promo"
   end
 
   add_index "microposts", ["user_id", "created_at"], name: "index_microposts_on_user_id_and_created_at", using: :btree
@@ -151,6 +190,7 @@ ActiveRecord::Schema.define(version: 20140706144638) do
     t.string   "venueprofile"
     t.integer  "location_id"
     t.string   "featured"
+    t.text     "bio"
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree

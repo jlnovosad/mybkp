@@ -12,7 +12,7 @@ class DrinksController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :drinks=>@drinks.as_json(:only => [:id, :name],
+        :drinks=>@drinks.as_json(:only => [:id, :name], :methods => [:photo_url],
           :include => { 
             :categories => { :only => [:id, :name, :popular] },
             :users => { :only => [:id, :name, :tender], :methods => [:photo_url] }
@@ -30,7 +30,7 @@ class DrinksController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :drinks=>@drinks.as_json(:only => [:id, :name, :popular])
+        :drinks=>@drinks.as_json(:only => [:id, :name, :popular], :methods => [:photo_url])
       } }
     end
   end
@@ -53,7 +53,7 @@ class DrinksController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :drinks=>@drinks.as_json(:only => [:id, :name, :popular])
+        :drinks=>@drinks.as_json(:only => [:id, :name, :popular], :methods => [:photo_url])
       } }
     end
   end
@@ -83,7 +83,7 @@ class DrinksController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id],
+        :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id], :methods => [:photo_url],
           :include => { 
             :categories => { :only => [:id, :name, :popular] },
             :users => { :only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
@@ -106,7 +106,7 @@ class DrinksController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id],
+        :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id], :methods => [:photo_url],
           :include => { 
             :categories => { :only => [:id, :name, :popular] },
             :users => { :only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
@@ -142,7 +142,7 @@ class DrinksController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id],
+        :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id], :methods => [:photo_url],
           :include => { 
             :categories => { :only => [:id, :name, :popular] },
             :users => { :only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
@@ -166,7 +166,7 @@ class DrinksController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id],
+        :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id], :methods => [:photo_url],
           :include => { 
             :categories => { :only => [:id, :name, :popular] },
             :users => { :only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
@@ -217,6 +217,31 @@ class DrinksController < ApplicationController
       format.html # index.html.erb
       format.json  { render :json=> { 
         :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id],
+          :include => { 
+            :categories => { :only => [:id, :name, :popular] },
+            :users => { :only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],
+              :include => { 
+                :workvenues => { :only => [:id, :fs_venue_id, :name] }
+              }
+            }
+          }
+        )
+      } }
+    end
+  end
+
+  #########################################
+  # upload photo
+  #########################################
+  def updatephoto
+    
+    @drink = Drink.find(params[:id])
+    @drink.update_attribute(:photo, params[:drink][:photo])
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> { 
+        :drink=>@drink.as_json(:only => [:id, :name, :popular, :user_id], :methods => [:photo_url],
           :include => { 
             :categories => { :only => [:id, :name, :popular] },
             :users => { :only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile], :methods => [:photo_url],

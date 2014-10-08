@@ -19,7 +19,7 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   resources :users, only: [:index, :create, :show, :update]  do
     # added GETs for all these to customize data we get about a user
     member do
-      get :following, :following_count, :followers, :followers_count, :recentfollowers, :friendrequests, :myrelationship, :myreverserelationship, :venues, :microposts, :feed, :feedtender, :feedpopular, :valid, :search
+      get :following, :following_count, :followers, :followers_count, :recentfollowers, :friendrequests, :myrelationship, :myreverserelationship, :venues, :microposts, :feed, :feedtender, :feedpopular, :feedlocal, :valid, :search
     end
     member do
       post :searchemail, :invitationemailonly, :refreshnotify, :blockuser
@@ -29,10 +29,19 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   #########################################
   # user related models
   #########################################
-  resources :microposts, only: [:create, :destroy] do
+  resources :microposts, only: [:create, :destroy, :show] do
     member do
       post :taguser
     end
+  end
+  resources :checkins, only: [:create, :destroy] do
+
+  end
+  resources :likes, only: [:create, :destroy] do
+    
+  end
+  resources :comments, only: [:create, :destroy] do
+    
   end
   resources :tokens,:only => [:create, :destroy]
   resources :relationships, only: [:create, :destroy] do
@@ -65,7 +74,7 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
       get :drinkusers
     end
     member do
-      post :favorite, :unfavorite, :tagdrink, :untagdrink
+      post :favorite, :unfavorite, :tagdrink, :untagdrink, :updatephoto
     end
   end
   resources :categories, only: [:index, :create, :show] do 

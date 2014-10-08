@@ -16,17 +16,18 @@ class Venue < ActiveRecord::Base
 	#has_and_belongs_to_many :users, :uniq => true
 	has_many :favorites, dependent: :destroy
   has_many :users,
-  					-> { where(['privateprofile != ?',"YES"]) },
+  					-> { where(['privateprofile != ? AND privateprofile != ?',"YES","INACTIVE"]) },
             :through => :favorites,
             class_name: "User",
             source: :user
 
   has_many :workfavorites, dependent: :destroy
   has_many :tenders,
-  					-> { where(['privateprofile != ?',"YES"]) },
+  					-> { where(['privateprofile != ? AND privateprofile != ?',"YES","INACTIVE"]) },
             :through => :workfavorites,
             class_name: "User",
             source: :user
+  has_many :checkins
 
 	#########################################
 	# these methods can be called from the controller to get data from other models 
