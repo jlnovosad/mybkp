@@ -268,7 +268,7 @@ class UsersController < ApplicationController
     end
   end
 
-  # viewing user profiles (feed) (DEPRECATED)
+  # viewing user profiles (feed)
   def microposts
     @title = "Latest Posts"
 

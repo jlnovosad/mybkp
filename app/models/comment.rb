@@ -7,5 +7,4 @@ class Comment < ActiveRecord::Base
   belongs_to :micropost
   belongs_to :user
   default_scope order: 'comments.created_at DESC'
-
 end

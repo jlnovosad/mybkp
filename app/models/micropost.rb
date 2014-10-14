@@ -27,7 +27,7 @@ class Micropost < ActiveRecord::Base
   has_many :micropost_users, dependent: :destroy
   has_many :users,
             -> { uniq },
-            :through => :micropost_users,
+            through: :micropost_users,
             class_name: "User"
   has_one :checkin
   has_many :likes
@@ -39,58 +39,62 @@ class Micropost < ActiveRecord::Base
 
   # people you follow
   def self.from_users_followed_by(user)
-    followed_user_ids = "SELECT followed_id FROM relationships
+    relationship_user_ids = "SELECT followed_id FROM relationships
                          WHERE follower_id = :user_id
                          AND status = 'FOLLOWING'"
-    where("user_id IN (#{followed_user_ids})", user_id: user.id)
+    main_user_ids = "SELECT id FROM users
+                          WHERE tender = 'YES'
+                          AND privateprofile != 'INACTIVE'"
+    where("user_id IN (#{relationship_user_ids}) AND user_id IN (#{main_user_ids})", user_id: user.id)
   end
 
   # tenders you follow
   def self.from_userstender_followed_by(user)
-    followed_user_ids = "SELECT followed_id FROM relationships
+    relationship_user_ids = "SELECT followed_id FROM relationships
                           WHERE follower_id = :user_id
                           AND status = 'FOLLOWING'"
-    tender_user_ids = "SELECT id FROM users
-                          WHERE tender = 'YES'"
-    where("user_id IN (#{followed_user_ids}) AND user_id IN (#{tender_user_ids})", user_id: user.id)
+    main_user_ids = "SELECT id FROM users
+                          WHERE tender = 'YES'
+                          AND privateprofile != 'INACTIVE'"
+    where("user_id IN (#{relationship_user_ids}) AND user_id IN (#{main_user_ids})", user_id: user.id)
   end
 
   # featured tenders and places
   def self.from_userspopular_followed_by(user)
-    popular_user_ids = "SELECT id FROM users
+    relationship_user_ids = "SELECT followed_id FROM relationships
+                          WHERE follower_id = :user_id
+                          AND status = 'BLOCKED'"
+    main_user_ids = "SELECT id FROM users
                          WHERE featured = 'YES'
                          AND privateprofile != 'INACTIVE'
                          AND (location_id = :location_id)"
-    where("user_id IN (#{popular_user_ids})", location_id: user.location_id)
+    where("user_id NOT IN (#{relationship_user_ids}) AND user_id IN (#{main_user_ids})", user_id: user.id, location_id: user.location_id)
   end
 
   # all local activity 
   def self.from_userslocal_followed_by(user)
-    followed_user_ids = "SELECT id FROM users
+    relationship_user_ids = "SELECT followed_id FROM relationships
+                          WHERE follower_id = :user_id
+                          AND status = 'BLOCKED'"
+    main_user_ids = "SELECT id FROM users
                          WHERE privateprofile != 'YES'
                          AND privateprofile != 'INACTIVE'
                          AND (location_id = :location_id)
                          OR (user_id = :user_id AND privateprofile != 'INACTIVE')"
-    where("user_id IN (#{followed_user_ids})", user_id: user.id, location_id: user.location_id)
-  end
-
-  # people who follow you
-  def self.from_users_followers(user)
-    followers_user_ids = "SELECT follower_id FROM relationships
-                         WHERE followed_id = :user_id
-                         AND privateprofile != 'INACTIVE'
-                         AND status = 'FOLLOWING'"
-    where("user_id IN (#{followers_user_ids})", user_id: user.id)
+    where("user_id NOT IN (#{relationship_user_ids}) AND user_id IN (#{main_user_ids})", user_id: user.id, location_id: user.location_id)
   end
 
   # posts from a venue
-  def self.from_venue(venue)
-    where("checkins.venue_id = ? AND users.privateprofile != ? AND users.privateprofile != ?" , venue.id, "YES", "INACTIVE")
+  def self.from_venue(venue, user)
+    #where("user_id NOT IN (#{relationship_user_ids}) AND user_id IN (#{main_user_ids}) AND checkins.venue_id = ?", user_id: venue.id, venue.id)
+    #where("checkins.venue_id = ? AND users.privateprofile != ? AND users.privateprofile != ?" , venue.id, "YES", "INACTIVE")
+    where("checkins.venue_id = ? AND users.privateprofile != 'YES' AND users.privateprofile != 'INACTIVE' OR (checkins.venue_id = ? AND users.privateprofile != 'INACTIVE' AND users.id = ?)", venue.id, venue.id, user.id)
   end
 
   # posts from a venue's tenders
-  def self.from_venue_workers(venue)
-    where("checkins.venue_id = ? AND checkins.working = ? AND microposts.updated_at >= ? AND users.privateprofile != ? AND users.privateprofile != ?", venue.id, "YES", Time.now - 8.hours, "YES", "INACTIVE")
+  def self.from_venue_workers(venue, user)
+    where("checkins.venue_id = ? AND checkins.working = 'YES' AND microposts.updated_at >= ? AND users.privateprofile != 'YES' AND users.privateprofile != 'INACTIVE' AND users.tender = 'YES'
+      OR (users.id = ? AND users.privateprofile != 'INACTIVE' AND users.tender = 'YES' AND checkins.venue_id = ? AND checkins.working = 'YES' AND microposts.updated_at >= ?)", venue.id, Time.now - 8.hours, user.id, venue.id, Time.now - 8.hours)
   end
 
   def photo_url

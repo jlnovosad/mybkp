@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
             source: :follower 
 
   has_many :friendrequests, 
-            -> { where(['relationships.status = ?',"REQUEST"] ).order('relationships.updated_at DESC') },
+            -> { where(['relationships.status = ? AND privateprofile != ?',"REQUEST", "INACTIVE"] ).order('relationships.updated_at DESC') },
             through: :reverse_relationships, 
             class_name: "User", 
             source: :follower 
@@ -111,10 +111,6 @@ class User < ActiveRecord::Base
 
   def feedlocal
     Micropost.from_userslocal_followed_by(self)
-  end
-
-  def followersfeed
-    Micropost.from_users_followers(self)
   end
 
   def self.isliked(micropost)

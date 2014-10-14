@@ -25,7 +25,7 @@ class VenuesController < ApplicationController
   #########################################
   def workerfeed 
     @venue = Venue.find(params[:id])
-    @feed_items = @venue.workerfeed.paginate(page: params[:page], :per_page => 50).includes(:user, :checkin, :likes, :comments, :users)
+    @feed_items = @venue.workerfeed(current_user).paginate(page: params[:page], :per_page => 50).includes(:user, :checkin, :likes, :comments, :users)
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
@@ -55,7 +55,7 @@ class VenuesController < ApplicationController
   #########################################
   def feed 
     @venue = Venue.find(params[:id])
-    @feed_items = @venue.feed.paginate(page: params[:page], :per_page => 50).includes(:user, :checkin, :likes, :comments, :users)
+    @feed_items = @venue.feed(current_user).paginate(page: params[:page], :per_page => 50).includes(:user, :checkin, :likes, :comments, :users)
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 

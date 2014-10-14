@@ -33,11 +33,11 @@ class Venue < ActiveRecord::Base
 	# these methods can be called from the controller to get data from other models 
 	# look in the controller and see these get called 
 	#########################################                       
-	def feed
-		Micropost.from_venue(self)
+	def feed(user)
+		Micropost.from_venue(self, user)
 	end
 
-	def workerfeed
-		Micropost.from_venue_workers(self)
+	def workerfeed(user)
+		Micropost.from_venue_workers(self, user)
 	end
 end
