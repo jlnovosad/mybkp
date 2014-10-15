@@ -43,8 +43,7 @@ class Micropost < ActiveRecord::Base
                          WHERE follower_id = :user_id
                          AND status = 'FOLLOWING'"
     main_user_ids = "SELECT id FROM users
-                          WHERE tender = 'YES'
-                          AND privateprofile != 'INACTIVE'"
+                          WHERE privateprofile != 'INACTIVE'"
     where("user_id IN (#{relationship_user_ids}) AND user_id IN (#{main_user_ids})", user_id: user.id)
   end
 

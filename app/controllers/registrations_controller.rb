@@ -93,6 +93,7 @@ class RegistrationsController < Devise::RegistrationsController
         tempfollowers.each do |follower|
           follower.follow!(@user, "FOLLOWING")
         end
+        @user.update_attributes!(:notify => "YES")
       end
 
       @user.save!

@@ -16,14 +16,14 @@ class Venue < ActiveRecord::Base
 	#has_and_belongs_to_many :users, :uniq => true
 	has_many :favorites, dependent: :destroy
   has_many :users,
-  					-> { where(['privateprofile != ? AND privateprofile != ?',"YES","INACTIVE"]) },
+  					-> { where("privateprofile != 'YES' AND privateprofile != 'INACTIVE'") },
             :through => :favorites,
             class_name: "User",
             source: :user
 
   has_many :workfavorites, dependent: :destroy
   has_many :tenders,
-  					-> { where(['privateprofile != ? AND privateprofile != ?',"YES","INACTIVE"]) },
+  					-> { where("privateprofile != 'YES' AND privateprofile != 'INACTIVE' AND tender = 'YES'") },
             :through => :workfavorites,
             class_name: "User",
             source: :user
