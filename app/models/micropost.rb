@@ -72,28 +72,53 @@ class Micropost < ActiveRecord::Base
 
   # all local activity 
   def self.from_userslocal_followed_by(user)
-    relationship_user_ids = "SELECT followed_id FROM relationships
+    blocked_user_ids = "SELECT followed_id FROM relationships
                           WHERE follower_id = :user_id
                           AND status = 'BLOCKED'"
-    main_user_ids = "SELECT id FROM users
-                         WHERE privateprofile != 'YES'
-                         AND privateprofile != 'INACTIVE'
-                         AND (location_id = :location_id)
-                         OR (user_id = :user_id AND privateprofile != 'INACTIVE')"
-    where("user_id NOT IN (#{relationship_user_ids}) AND user_id IN (#{main_user_ids})", user_id: user.id, location_id: user.location_id)
+    following_user_ids = "SELECT followed_id FROM relationships
+                          WHERE follower_id = :user_id
+                          AND status = 'FOLLOWING'"                   
+    all_user_ids = "SELECT id FROM users
+                         WHERE (privateprofile != 'YES' AND privateprofile != 'INACTIVE' AND location_id = :location_id)
+                         OR (user_id = :user_id AND privateprofile != 'INACTIVE')
+                         OR (user_id IN (#{following_user_ids}) AND privateprofile != 'INACTIVE' AND location_id = :location_id)"
+    where("user_id NOT IN (#{blocked_user_ids}) AND user_id IN (#{all_user_ids})", user_id: user.id, location_id: user.location_id)
   end
 
   # posts from a venue
   def self.from_venue(venue, user)
     #where("user_id NOT IN (#{relationship_user_ids}) AND user_id IN (#{main_user_ids}) AND checkins.venue_id = ?", user_id: venue.id, venue.id)
     #where("checkins.venue_id = ? AND users.privateprofile != ? AND users.privateprofile != ?" , venue.id, "YES", "INACTIVE")
-    where("checkins.venue_id = ? AND users.privateprofile != 'YES' AND users.privateprofile != 'INACTIVE' OR (checkins.venue_id = ? AND users.privateprofile != 'INACTIVE' AND users.id = ?)", venue.id, venue.id, user.id)
+    #where("checkins.venue_id = ? AND users.privateprofile != 'YES' AND users.privateprofile != 'INACTIVE' OR (checkins.venue_id = ? AND users.privateprofile != 'INACTIVE' AND users.id = ?)", venue.id, venue.id, user.id)
+
+    blocked_user_ids = "SELECT followed_id FROM relationships
+                          WHERE follower_id = :user_id
+                          AND status = 'BLOCKED'"
+    following_user_ids = "SELECT followed_id FROM relationships
+                          WHERE follower_id = :user_id
+                          AND status = 'FOLLOWING'"  
+    main_user_ids = "SELECT id FROM users
+                          WHERE privateprofile != 'YES'
+                          AND privateprofile != 'INACTIVE'"
+    where("(microposts.user_id IN (#{following_user_ids}) AND checkins.venue_id = :venue_id) OR (microposts.user_id NOT IN (#{blocked_user_ids}) AND microposts.user_id IN (#{main_user_ids}) AND checkins.venue_id = :venue_id)", user_id: user.id, venue_id: venue.id)
   end
 
   # posts from a venue's tenders
   def self.from_venue_workers(venue, user)
-    where("checkins.venue_id = ? AND checkins.working = 'YES' AND microposts.updated_at >= ? AND users.privateprofile != 'YES' AND users.privateprofile != 'INACTIVE' AND users.tender = 'YES'
-      OR (users.id = ? AND users.privateprofile != 'INACTIVE' AND users.tender = 'YES' AND checkins.venue_id = ? AND checkins.working = 'YES' AND microposts.updated_at >= ?)", venue.id, Time.now - 8.hours, user.id, venue.id, Time.now - 8.hours)
+    #where("checkins.venue_id = ? AND checkins.working = 'YES' AND microposts.updated_at >= ? AND users.privateprofile != 'YES' AND users.privateprofile != 'INACTIVE' AND users.tender = 'YES'
+    #  OR (users.id = ? AND users.privateprofile != 'INACTIVE' AND users.tender = 'YES' AND checkins.venue_id = ? AND checkins.working = 'YES' AND microposts.updated_at >= ?)", venue.id, Time.now - 8.hours, user.id, venue.id, Time.now - 8.hours)
+
+    blocked_user_ids = "SELECT followed_id FROM relationships
+                          WHERE follower_id = :user_id
+                          AND status = 'BLOCKED'"
+    following_user_ids = "SELECT followed_id FROM relationships
+                          WHERE follower_id = :user_id
+                          AND status = 'FOLLOWING'"  
+    main_user_ids = "SELECT id FROM users
+                          WHERE privateprofile != 'YES'
+                          AND privateprofile != 'INACTIVE'
+                          AND tender = 'YES'"
+    where("(microposts.user_id IN (#{following_user_ids}) AND checkins.venue_id = :venue_id AND checkins.working = 'YES' AND microposts.updated_at >= :recent) OR (microposts.user_id NOT IN (#{blocked_user_ids}) AND microposts.user_id IN (#{main_user_ids}) AND checkins.venue_id = :venue_id AND checkins.working = 'YES' AND microposts.updated_at >= :recent)", user_id: user.id, venue_id: venue.id, recent: Time.now - 8.hours)
   end
 
   def photo_url
@@ -109,6 +134,11 @@ class Micropost < ActiveRecord::Base
   end
 
   def isliked
+    User.isliked(self)
+  end
+  
+  # comments only from good users
+  def goodcomments
     User.isliked(self)
   end
 
