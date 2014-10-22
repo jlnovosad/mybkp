@@ -100,7 +100,7 @@ class Micropost < ActiveRecord::Base
     main_user_ids = "SELECT id FROM users
                           WHERE privateprofile != 'YES'
                           AND privateprofile != 'INACTIVE'"
-    where("(microposts.user_id IN (#{following_user_ids}) AND checkins.venue_id = :venue_id) OR (microposts.user_id NOT IN (#{blocked_user_ids}) AND microposts.user_id IN (#{main_user_ids}) AND checkins.venue_id = :venue_id)", user_id: user.id, venue_id: venue.id)
+    where("(microposts.user_id IN (#{following_user_ids}) AND checkins.venue_id = :venue_id) OR (microposts.user_id NOT IN (#{blocked_user_ids}) AND microposts.user_id IN (#{main_user_ids}) AND checkins.venue_id = :venue_id) OR (microposts.user_id = :user_id AND checkins.venue_id = :venue_id)", user_id: user.id, venue_id: venue.id)
   end
 
   # posts from a venue's tenders
@@ -118,7 +118,7 @@ class Micropost < ActiveRecord::Base
                           WHERE privateprofile != 'YES'
                           AND privateprofile != 'INACTIVE'
                           AND tender = 'YES'"
-    where("(microposts.user_id IN (#{following_user_ids}) AND checkins.venue_id = :venue_id AND checkins.working = 'YES' AND microposts.updated_at >= :recent) OR (microposts.user_id NOT IN (#{blocked_user_ids}) AND microposts.user_id IN (#{main_user_ids}) AND checkins.venue_id = :venue_id AND checkins.working = 'YES' AND microposts.updated_at >= :recent)", user_id: user.id, venue_id: venue.id, recent: Time.now - 8.hours)
+    where("(microposts.user_id IN (#{following_user_ids}) AND checkins.venue_id = :venue_id AND checkins.working = 'YES' AND microposts.updated_at >= :recent) OR (microposts.user_id NOT IN (#{blocked_user_ids}) AND microposts.user_id IN (#{main_user_ids}) AND checkins.venue_id = :venue_id AND checkins.working = 'YES' AND microposts.updated_at >= :recent) OR (microposts.user_id = :user_id AND checkins.venue_id = :venue_id AND checkins.working = 'YES' AND microposts.updated_at >= :recent)", user_id: user.id, venue_id: venue.id, recent: Time.now - 8.hours)
   end
 
   def photo_url
