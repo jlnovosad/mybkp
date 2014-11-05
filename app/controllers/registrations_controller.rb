@@ -60,6 +60,7 @@ class RegistrationsController < Devise::RegistrationsController
       @user = User.find_by_email_and_encrypted_password(user_hash[:email], '')
       
       if @user
+        params[:user][:notify] = 'YES'
         invitation_info[:invitation_sent_at] = @user[:invitation_sent_at]
         invitation_info[:invited_by_id] = @user[:invited_by_id]
         invitation_info[:invited_by_type] = @user[:invited_by_type]
