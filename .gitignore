@@ -17,6 +17,8 @@
 /server.orig.key
 /rapidssl_bundle.pem
 /*.pem
+/www_heybarkeep_co.pem
+/www_heybarkeep_co.key
 
 # bundler state
 /.bundle
