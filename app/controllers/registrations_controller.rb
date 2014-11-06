@@ -61,6 +61,7 @@ class RegistrationsController < Devise::RegistrationsController
       
       if @user
         params[:user][:notify] = 'YES'
+        user_hash[:notify] = 'YES'
         invitation_info[:invitation_sent_at] = @user[:invitation_sent_at]
         invitation_info[:invited_by_id] = @user[:invited_by_id]
         invitation_info[:invited_by_type] = @user[:invited_by_type]
