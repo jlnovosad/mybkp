@@ -159,8 +159,8 @@ task :update_feed => :environment do
 
   if Time.now.sunday?
   
-  @v = Venue.find_by_name("Broadway Dive Bar")
-  @u = User.find_by_name("Broadway Dive Bar")
+  @v = Venue.find_by_name("Broadway Dive")
+  @u = User.find_by_name("Broadway Dive")
   @m = Micropost.create!(content: "$3 Bud, Bud Light, $4 Corona, Heineken, $5 well drinks, wines, $2 off domestic draft beers, every day 12pm-7pm", user_id:@u.id)
   @c = Checkin.create!(micropost_id: @m.id, user_id:@u.id, venue_id: @v.id)
 
