@@ -94,6 +94,7 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   # match defines a url directly 
   # these are the static pages
   #########################################
+  match 'privacy' => 'static_pages#privacy', :as => 'privacy', :via => :get
   match 'list/subscribe' => 'static_pages#subscribe', :as => 'subscribe', :via => :get
   match 'list/unsubscribe' => 'static_pages#unsubscribe', :as => 'unsubscribe', :via => :get
   match 'list/confirmed' => 'static_pages#confirmed', :as => 'confirmed', :via => :get
