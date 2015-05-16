@@ -10,8 +10,8 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   # the routes for user stuff etc are somewhere else because we are using devise
   # although this line overrides the registrations because we wanted to customize
   #########################################
-  devise_for :users, :controllers => { :registrations => "registrations" }
-  
+  devise_for :users, path_names: {sign_in: "login", sign_out: "logout"},
+  controllers: {omniauth_callbacks: "authentications", registrations: "registrations"}
 
   #########################################
   # the users
@@ -61,6 +61,9 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
       post :favorite, :unfavorite, :workfavorite, :workunfavorite
       get :feed, :workerfeed
     end
+  end
+  resources :shifts, only: [:index, :create, :destroy] do 
+
   end
 
   #########################################

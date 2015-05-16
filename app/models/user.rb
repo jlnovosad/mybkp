@@ -4,20 +4,24 @@ class User < ActiveRecord::Base
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable, :token_authenticatable, :invitable
+         :recoverable, :rememberable, :trackable, :validatable, :token_authenticatable, :invitable, :omniauthable, :authentication_keys => [:login]
 
   before_save :ensure_authentication_token
 
   #validates :name, presence: true
   validates_length_of :name, :maximum => 50
   #validates_uniqueness_of :name, :case_sensitive => false;
+  def email_required?
+    false
+  end
 
   #########################################
   # Setup accessible (or protected) attributes for your model
   #########################################
-  attr_accessible :name, :email, :current_password, :password, :password_confirmation, :remember_me, :photo, :tender, :invitation_token, :invited_by_id, :invited_by_type, :notify, :privateprofile, :venueprofile, :location_id, :bio
-  attr_accessor :current_password
+  attr_accessible :name, :email, :current_password, :password, :password_confirmation, :remember_me, :photo, :tender, :invitation_token, :invited_by_id, :invited_by_type, :notify, :privateprofile, :venueprofile, :location_id, :bio, :login, :phone
+  attr_accessor :current_password, :login
 
+  has_many :authentications
 
   #########################################
   # my custom ones
@@ -27,9 +31,10 @@ class User < ActiveRecord::Base
   belongs_to :locations
   has_many :microposts, dependent: :destroy
   has_many :micropost_users, dependent: :destroy # tagged in posts, but we don't also have microposts because of the dual name conflict
-  has_many :checkins
-  has_many :likes
-  has_many :comments
+  has_many :checkins, dependent: :destroy
+  has_many :likes, dependent: :destroy
+  has_many :comments, dependent: :destroy
+  has_many :shifts, dependent: :destroy
 
   has_many :relationships, 
             foreign_key: "follower_id", 
@@ -162,6 +167,9 @@ class User < ActiveRecord::Base
 
   def removeworkplace!(venue)
     workfavorites.find_by_venue_id(venue.id).destroy
+    if not shifts.find_by_venue_id(venue.id).nil?
+      shifts.find_by_venue_id(venue.id).destroy
+    end
   end
 
   # profile photos
@@ -189,5 +197,38 @@ class User < ActiveRecord::Base
     limit(10)
   end
 
+  # to allow phone number login
+  def self.find_first_by_auth_conditions(warden_conditions)
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login)
+      where(conditions).where(["lower(phone) = :value OR lower(email) = :value", { :value => login.downcase }]).first
+    else
+      if conditions[:phone].nil?
+        where(conditions).first
+      else
+        where(phone: conditions[:phone]).first
+      end
+    end
+  end
+
+  # omniauth
+  def apply_omniauth(omni)
+    authentications.build(:provider => omni['provider'], 
+                          :uid => omni['uid'], 
+                          :token => omni['credentials'].token, 
+                          :token_secret => omni['credentials'].secret)
+  end
+
+  def password_required?
+    (authentications.empty? || !password.blank?) && super #&& provider.blank?
+  end
+  
+  def update_with_password(params, *options)
+    if encrypted_password.blank?
+      update_attributes(params, *options)
+    else
+      super
+    end
+  end
 end
 

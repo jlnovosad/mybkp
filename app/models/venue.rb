@@ -30,6 +30,7 @@ class Venue < ActiveRecord::Base
             class_name: "User",
             source: :user
   has_many :checkins
+  has_many :shifts
 
 	#########################################
 	# these methods can be called from the controller to get data from other models 

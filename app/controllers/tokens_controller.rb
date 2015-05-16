@@ -13,6 +13,7 @@ class TokensController  < ApplicationController
 
     # get args
     email = params[:user][:email]
+    phone = params[:user][:phone]
     password = params[:user][:password]
 
     # some error checking
@@ -20,18 +21,28 @@ class TokensController  < ApplicationController
       render :status=>406, :json=>{:message=>"Oops! The request must be json."}
       return
     end
-    if email.nil? or password.nil?
+    if (email.nil? and phone.nil?) or password.nil?
        render :status=>400,
-              :json=>{:message=>"Oops! Invalid email or password."}
+              :json=>{:message=>"Oops! Invalid email/phone or password."}
        return
     end
 
-    # is the email right?
-    @user=User.find_by_email(email.downcase)
-    if @user.nil?
-      logger.info("User #{email} failed signin, user cannot be found.")
-      render :status=>401, :json=>{:message=>"Oops! Invalid email or password."}
-      return
+    if email.nil?
+      # find phone
+      @user=User.find_by_phone(phone.downcase)
+      if @user.nil?
+        logger.info("User #{phone} failed signin, user cannot be found.")
+        render :status=>401, :json=>{:message=>"Oops! Invalid phone or password."}
+        return
+      end
+    else
+      # find email
+      @user=User.find_by_email(email.downcase)
+      if @user.nil?
+        logger.info("User #{email} failed signin, user cannot be found.")
+        render :status=>401, :json=>{:message=>"Oops! Invalid email or password."}
+        return
+      end
     end
 
     # http://rdoc.info/github/plataformatec/devise/master/Devise/Models/TokenAuthenticatable

@@ -128,7 +128,7 @@ Devise.setup do |config|
 
   # ==> Configuration for :rememberable
   # The time the user will be remembered without asking for credentials again.
-  config.remember_for = 100.weeks
+  config.remember_for = 300.weeks
 
   # If true, extends the user's remember period when remembered via cookie.
   # config.extend_remember_period = false
@@ -254,4 +254,12 @@ Devise.setup do |config|
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = "/my_engine/users/auth"
+
+  config.authentication_keys = [ :login ]
+
+  config.reset_password_keys = [ :phone ]
+  config.confirmation_keys = [ :phone ]
+
+  config.omniauth :twitter, ENV["TWITTER_CONSUMER_KEY"], ENV["TWITTER_CONSUMER_SECRET"]
+  config.omniauth :facebook, 'APP_ID', 'APP_SECRET', {:scope => 'publish_stream, email'}
 end

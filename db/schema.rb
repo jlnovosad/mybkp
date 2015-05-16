@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140901150841) do
+ActiveRecord::Schema.define(version: 20150429222937) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "authentications", force: true do |t|
+    t.string   "user_id"
+    t.string   "provider"
+    t.string   "uid"
+    t.string   "token"
+    t.string   "token_secret"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
 
   create_table "categories", force: true do |t|
     t.string   "name"
@@ -127,6 +137,14 @@ ActiveRecord::Schema.define(version: 20140901150841) do
 
   add_index "microposts", ["user_id", "created_at"], name: "index_microposts_on_user_id_and_created_at", using: :btree
 
+  create_table "quips", force: true do |t|
+    t.string   "content"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "quips", ["created_at"], name: "index_quips_on_created_at", using: :btree
+
   create_table "relationships", force: true do |t|
     t.integer  "follower_id"
     t.integer  "followed_id"
@@ -149,6 +167,33 @@ ActiveRecord::Schema.define(version: 20140901150841) do
 
   add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
+
+  create_table "shifts", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "venue_id"
+    t.time     "starttime"
+    t.time     "endtime"
+    t.string   "day"
+    t.string   "frequency"
+    t.string   "shifttype"
+    t.string   "social"
+    t.string   "content"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "shifts", ["user_id", "venue_id"], name: "index_shifts_on_user_id_and_venue_id", using: :btree
+
+  create_table "specials", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "venue_id"
+    t.string   "content"
+    t.string   "dayoftheweek"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "specials", ["created_at"], name: "index_specials_on_created_at", using: :btree
 
   create_table "user_drinks", force: true do |t|
     t.integer  "user_id"
@@ -191,12 +236,13 @@ ActiveRecord::Schema.define(version: 20140901150841) do
     t.integer  "location_id"
     t.string   "featured"
     t.text     "bio"
+    t.string   "phone"
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
   add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
+  add_index "users", ["phone"], name: "index_users_on_phone", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "users_roles", id: false, force: true do |t|

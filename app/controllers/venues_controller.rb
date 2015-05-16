@@ -2,25 +2,6 @@ class VenuesController < ApplicationController
   before_filter :authenticate_user!
 
   #########################################
-  # lists all the venues that we have saved, not actually used
-  #########################################
-  def index
-    @venues = Venue.paginate(page: params[:page], :per_page => 50).includes(:tenders, :favorites, :workfavorites).order('lower(name) ASC')
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json  { render :json=> { 
-        :venues=>@venues.as_json(:only => [:id, :fs_venue_id, :name], 
-          :include => { 
-            :tenders => { :only => [:id, :name, :tender, :privateprofile], :methods => [:photo_url] },
-            :favorites => { :only => [:id, :user_id, :venue_id] },
-            :workfavorites => { :only => [:id, :user_id, :venue_id] }
-          }
-        ) 
-      } }
-    end
-  end
-
-  #########################################
   # posts from tenders currently working
   #########################################
   def workerfeed 
@@ -33,7 +14,8 @@ class VenuesController < ApplicationController
           :include => { 
             :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
               :include => { 
-                :workvenues => { :only => [:id, :fs_venue_id, :name] }
+                :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                :shifts => { }
               }
             },
             :venue => { :only => [:id, :fs_venue_id, :name] },
@@ -63,7 +45,8 @@ class VenuesController < ApplicationController
           :include => { 
             :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
               :include => { 
-                :workvenues => { :only => [:id, :fs_venue_id, :name] }
+                :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                :shifts => { }
               }
             },
             :venue => { :only => [:id, :fs_venue_id, :name] },
@@ -96,7 +79,11 @@ class VenuesController < ApplicationController
           :venue=>@venue.as_json(:only => [:id, :fs_venue_id, :name], 
             :include => { 
               :users => { :only => [:id, :name, :tender, :privateprofile], :methods => [:photo_url] },
-              :tenders => { :only => [:id, :name, :tender, :privateprofile], :methods => [:photo_url] },
+              :tenders => { :only => [:id, :name, :tender, :privateprofile], :methods => [:photo_url],
+                :include => { 
+                  :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                  :shifts => { }
+              } },
               :favorites => { :only => [:id, :user_id, :venue_id] },
               :workfavorites => { :only => [:id, :user_id, :venue_id] }
             }
@@ -114,7 +101,11 @@ class VenuesController < ApplicationController
           :venue=>@venue.as_json(:only => [:id, :fs_venue_id, :name], 
             :include => { 
               :users => { :only => [:id, :name, :tender, :privateprofile], :methods => [:photo_url] },
-              :tenders => { :only => [:id, :name, :tender, :privateprofile], :methods => [:photo_url] },
+              :tenders => { :only => [:id, :name, :tender, :privateprofile], :methods => [:photo_url],
+                :include => { 
+                  :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                  :shifts => { }
+              } },
               :favorites => { :only => [:id, :user_id, :venue_id] },
               :workfavorites => { :only => [:id, :user_id, :venue_id] }
             }
@@ -135,7 +126,11 @@ class VenuesController < ApplicationController
       format.json  { render :json=> { 
         :venue=>@venue.as_json(:only => [:id, :fs_venue_id, :name], 
           :include => { 
-            :tenders => { :only => [:id, :name, :tender], :methods => [:photo_url] },
+            :tenders => { :only => [:id, :name, :tender], :methods => [:photo_url],
+              :include => { 
+                :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                :shifts => { }
+            } },
             :favorites => { :only => [:id, :user_id, :venue_id] },
             :workfavorites => { :only => [:id, :user_id, :venue_id] }
           }
@@ -155,7 +150,11 @@ class VenuesController < ApplicationController
       format.json  { render :json=> { 
         :venue=>@venue.as_json(:only => [:id, :fs_venue_id, :name], 
           :include => { 
-            :tenders => { :only => [:id, :name, :tender], :methods => [:photo_url] },
+            :tenders => { :only => [:id, :name, :tender], :methods => [:photo_url],
+              :include => { 
+                :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                :shifts => { }
+            } },
             :favorites => { :only => [:id, :user_id, :venue_id] },
             :workfavorites => { :only => [:id, :user_id, :venue_id] }
           }
@@ -175,7 +174,11 @@ class VenuesController < ApplicationController
       format.json  { render :json=> { 
         :venue=>@venue.as_json(:only => [:id, :fs_venue_id, :name], 
           :include => { 
-            :tenders => { :only => [:id, :name, :tender, :privateprofile], :methods => [:photo_url] },
+            :tenders => { :only => [:id, :name, :tender, :privateprofile], :methods => [:photo_url],
+              :include => { 
+                :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                :shifts => { }
+            } },
             :favorites => { :only => [:id, :user_id, :venue_id] },
             :workfavorites => { :only => [:id, :user_id, :venue_id] }
           }
@@ -195,7 +198,11 @@ class VenuesController < ApplicationController
       format.json  { render :json=> { 
         :venue=>@venue.as_json(:only => [:id, :fs_venue_id, :name], 
           :include => { 
-            :tenders => { :only => [:id, :name, :tender, :privateprofile], :methods => [:photo_url] },
+            :tenders => { :only => [:id, :name, :tender, :privateprofile], :methods => [:photo_url],
+              :include => { 
+                :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                :shifts => { }
+            } },
             :favorites => { :only => [:id, :user_id, :venue_id] },
             :workfavorites => { :only => [:id, :user_id, :venue_id] }
           }

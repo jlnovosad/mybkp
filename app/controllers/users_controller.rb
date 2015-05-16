@@ -39,7 +39,8 @@ class UsersController < ApplicationController
       format.json  { render :json=> { 
         :users=>@users.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile, :venueprofile], :methods => [:photo_url],
           :include => { 
-            :workvenues => { :only => [:id, :fs_venue_id, :name] }
+            :workvenues => { :only => [:id, :fs_venue_id, :name] },
+            :shifts => { }
           }
         ) 
       } }
@@ -66,9 +67,10 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :user=>@user.as_json(:only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile, :bio], :methods => [:photo_url],
+        :user=>@user.as_json(:only => [:id, :name, :tender, :phone, :email, :invitation_token, :notify, :privateprofile, :bio], :methods => [:photo_url],
           :include => { 
-            :workvenues => { :only => [:id, :fs_venue_id, :name] }
+            :workvenues => { :only => [:id, :fs_venue_id, :name] },
+            :shifts => { }
           }
         ) 
       } }
@@ -84,9 +86,10 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :user=>@user.as_json(:only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile, :location_id, :bio], :methods => [:photo_url],
+        :user=>@user.as_json(:only => [:id, :name, :tender, :phone, :email, :invitation_token, :notify, :privateprofile, :location_id, :bio], :methods => [:photo_url],
           :include => { 
-            :workvenues => { :only => [:id, :fs_venue_id, :name] }
+            :workvenues => { :only => [:id, :fs_venue_id, :name] },
+            :shifts => { }
           }
         ) 
       } }
@@ -113,7 +116,8 @@ class UsersController < ApplicationController
           :include => { 
             :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
               :include => { 
-                :workvenues => { :only => [:id, :fs_venue_id, :name] }
+                :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                :shifts => { }
               }
             },
             :venue => { :only => [:id, :fs_venue_id, :name] },
@@ -145,7 +149,8 @@ class UsersController < ApplicationController
           :include => { 
             :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
               :include => { 
-                :workvenues => { :only => [:id, :fs_venue_id, :name] }
+                :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                :shifts => { }
               }
             },
             :venue => { :only => [:id, :fs_venue_id, :name] },
@@ -177,7 +182,8 @@ class UsersController < ApplicationController
           :include => { 
             :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
               :include => { 
-                :workvenues => { :only => [:id, :fs_venue_id, :name] }
+                :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                :shifts => { }
               }
             },
             :venue => { :only => [:id, :fs_venue_id, :name] },
@@ -209,7 +215,8 @@ class UsersController < ApplicationController
           :include => { 
             :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
               :include => { 
-                :workvenues => { :only => [:id, :fs_venue_id, :name] }
+                :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                :shifts => { }
               }
             },
             :venue => { :only => [:id, :fs_venue_id, :name] },
@@ -240,7 +247,16 @@ class UsersController < ApplicationController
         :user=>@user.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile, :location_id, :bio], :methods => [:photo_url],
           :include => { 
             :drinks => { :only => [:id, :name] },
-            :workvenues => { :only => [:id, :fs_venue_id, :name] }
+            :workvenues => { :only => [:id, :fs_venue_id, :name], 
+              :include => { 
+                :tenders => { :only => [:id, :name, :tender], :methods => [:photo_url],
+                  :include => { 
+                    :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                    :shifts => { }
+                  }
+                }
+              } 
+            }
           }
         ) 
       } }
@@ -259,9 +275,10 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :user=>@user.as_json(:only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile, :bio], :methods => [:photo_url],
+        :user=>@user.as_json(:only => [:id, :name, :tender, :phone, :email, :invitation_token, :notify, :privateprofile, :bio], :methods => [:photo_url],
           :include => { 
-            :workvenues => { :only => [:id, :fs_venue_id, :name] }
+            :workvenues => { :only => [:id, :fs_venue_id, :name] },
+            :shifts => { }
           }
         ) 
       } }
@@ -283,7 +300,8 @@ class UsersController < ApplicationController
           :include => { 
             :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
               :include => { 
-                :workvenues => { :only => [:id, :fs_venue_id, :name] }
+                :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                :shifts => { }
               }
             },
             :venue => { :only => [:id, :fs_venue_id, :name] },
@@ -339,7 +357,8 @@ class UsersController < ApplicationController
       format.json  { render :json=> { 
           :followed_users=>@users.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile, :bio], :methods => [:photo_url, :following_count],
           :include => { 
-            :workvenues => { :only => [:id, :fs_venue_id, :name] }
+            :workvenues => { :only => [:id, :fs_venue_id, :name] },
+            :shifts => { }
           }
         ) 
       } }
@@ -369,7 +388,8 @@ class UsersController < ApplicationController
       format.json  { render :json=> { 
         :followers=>@users.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile, :bio], :methods => [:photo_url],
           :include => { 
-            :workvenues => { :only => [:id, :fs_venue_id, :name] }
+            :workvenues => { :only => [:id, :fs_venue_id, :name] },
+            :shifts => { }
           }
         ) 
       } }
@@ -398,7 +418,8 @@ class UsersController < ApplicationController
       format.json  { render :json=> { 
         :followers=>@users.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile, :bio], :methods => [:photo_url],
           :include => { 
-            :workvenues => { :only => [:id, :fs_venue_id, :name] }
+            :workvenues => { :only => [:id, :fs_venue_id, :name] },
+            :shifts => { }
           }
         ) 
       } }
@@ -417,7 +438,8 @@ class UsersController < ApplicationController
       format.json  { render :json=> { 
         :followers=>@users.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile, :bio], :methods => [:photo_url],
           :include => { 
-            :workvenues => { :only => [:id, :fs_venue_id, :name] }
+            :workvenues => { :only => [:id, :fs_venue_id, :name] },
+            :shifts => { }
           }
         ) 
       } }
@@ -493,7 +515,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :user=>@user.as_json(:only => [:id, :name, :tender, :email, :invitation_token, :notify, :privateprofile, :bio], :methods => [:photo_url])
+        :user=>@user.as_json(:only => [:id, :name, :tender, :phone, :email, :invitation_token, :notify, :privateprofile, :bio], :methods => [:photo_url])
         } }
     end
   end
@@ -523,7 +545,8 @@ class UsersController < ApplicationController
       format.json  { render :json=> { 
         :user=>@user.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile, :bio], :methods => [:photo_url],
           :include => { 
-            :workvenues => { :only => [:id, :fs_venue_id, :name] }
+            :workvenues => { :only => [:id, :fs_venue_id, :name] },
+            :shifts => { }
           }
         ) 
       } }

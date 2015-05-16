@@ -41,3 +41,12 @@ gem 'mandrill-api'
 group :production do
   gem 'rails_12factor'
 end
+
+# auth
+gem 'omniauth-twitter'
+gem 'omniauth-facebook'
+gem 'twitter'
+gem 'fb_graph'
+gem 'nifty-generators'
+
+gem "mocha", group: :test

@@ -18,7 +18,8 @@ class MicropostsController < ApplicationController
               :user => { :only => [:id, :name, :tender], :methods => [:photo_url],
                 :include => { 
                   :drinks => { :only => [:id, :name] },
-                  :workvenues => { :only => [:id, :fs_venue_id] }
+                  :workvenues => { :only => [:id, :fs_venue_id] },
+                  :shifts => { }
                 }
               },
               :venue => { :only => [:id, :fs_venue_id, :name] },
@@ -50,7 +51,8 @@ class MicropostsController < ApplicationController
             :include => { 
               :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
                 :include => { 
-                  :workvenues => { :only => [:id, :fs_venue_id, :name] }
+                  :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                  :shifts => { }
                 }
               },
               :venue => { :only => [:id, :fs_venue_id, :name] },
