@@ -1,5 +1,6 @@
 class ShiftsController < ApplicationController
   before_filter :authenticate_user!
+  before_filter :correct_user,   only: :destroy
   
   #########################################
   # creates new
@@ -26,5 +27,13 @@ class ShiftsController < ApplicationController
       format.html # index.html.erb
       format.json  { render :json=> @shift.as_json() } 
     end
+  end
+
+  #########################################
+  # only you can perform actions on your stuff
+  #########################################
+  def correct_user
+    @shift = current_user.shifts.find_by_id(params[:id])
+    redirect_to root_url if @shift.nil?
   end
 end

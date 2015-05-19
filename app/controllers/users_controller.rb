@@ -256,7 +256,8 @@ class UsersController < ApplicationController
                   }
                 }
               } 
-            }
+            },
+            :shifts => { }
           }
         ) 
       } }
