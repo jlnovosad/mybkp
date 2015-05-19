@@ -67,20 +67,10 @@ class AuthenticationsController < ApplicationController
           sign_in_and_redirect User.find(authentication.user_id)
         }
         format.json  { render :json=> { 
-          :user=>@user.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile, :location_id, :bio], :methods => [:photo_url],
+          :user=>@user.as_json(:only => [:id, :name, :tender, :phone, :email, :invitation_token, :notify, :privateprofile, :location_id, :bio], :methods => [:photo_url],
             :include => { 
               :drinks => { :only => [:id, :name] },
-              :workvenues => { :only => [:id, :fs_venue_id, :name], 
-                :include => { 
-                  :tenders => { :only => [:id, :name, :tender], :methods => [:photo_url],
-                    :include => { 
-                      :workvenues => { :only => [:id, :fs_venue_id, :name] },
-                      :shifts => { }
-                    }
-                  }
-                } 
-              },
-              :shifts => { }
+              :workvenues => { :only => [:id, :fs_venue_id, :name] }
             }
           ) 
         } }
@@ -102,20 +92,10 @@ class AuthenticationsController < ApplicationController
           sign_in_and_redirect current_user
         }
         format.json  { render :json=> { 
-          :user=>@user.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile, :location_id, :bio], :methods => [:photo_url],
+          :user=>@user.as_json(:only => [:id, :name, :tender, :phone, :email, :invitation_token, :notify, :privateprofile, :location_id, :bio], :methods => [:photo_url],
             :include => { 
               :drinks => { :only => [:id, :name] },
-              :workvenues => { :only => [:id, :fs_venue_id, :name], 
-                :include => { 
-                  :tenders => { :only => [:id, :name, :tender], :methods => [:photo_url],
-                    :include => { 
-                      :workvenues => { :only => [:id, :fs_venue_id, :name] },
-                      :shifts => { }
-                    }
-                  }
-                } 
-              },
-              :shifts => { }
+              :workvenues => { :only => [:id, :fs_venue_id, :name] }
             }
           ) 
         } }
@@ -136,23 +116,13 @@ class AuthenticationsController < ApplicationController
             sign_in_and_redirect User.find(user.id) 
           }
           format.json  { render :json=> { 
-            :user=>@user.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile, :location_id, :bio], :methods => [:photo_url],
-              :include => { 
-                :drinks => { :only => [:id, :name] },
-                :workvenues => { :only => [:id, :fs_venue_id, :name], 
-                  :include => { 
-                    :tenders => { :only => [:id, :name, :tender], :methods => [:photo_url],
-                      :include => { 
-                        :workvenues => { :only => [:id, :fs_venue_id, :name] },
-                        :shifts => { }
-                      }
-                    }
-                  } 
-                },
-                :shifts => { }
-              }
-            ) 
-          } }
+          :user=>@user.as_json(:only => [:id, :name, :tender, :phone, :email, :invitation_token, :notify, :privateprofile, :location_id, :bio], :methods => [:photo_url],
+            :include => { 
+              :drinks => { :only => [:id, :name] },
+              :workvenues => { :only => [:id, :fs_venue_id, :name] }
+            }
+          ) 
+        } }
         end       
       else
         session[:omniauth] = omni.except('extra')
