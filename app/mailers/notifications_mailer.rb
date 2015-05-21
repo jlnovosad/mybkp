@@ -1,6 +1,6 @@
 class NotificationsMailer < ActionMailer::Base
 
-  default :from => "HeyBarkeep!<heybarkeep@lifestylesupply.co"
+  default :from => "Good Times<goodtimes@lifestylesupply.co>"
   default :to => "jlnovosad@gmail.com"
 
   def new_message(message)

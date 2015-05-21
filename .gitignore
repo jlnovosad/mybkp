@@ -19,6 +19,8 @@
 /*.pem
 /www_heybarkeep_co.pem
 /www_heybarkeep_co.key
+/www_goodtimesapp_co.pem
+/www_goodtimesapp_co.key
 
 # bundler state
 /.bundle

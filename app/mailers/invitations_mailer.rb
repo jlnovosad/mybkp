@@ -1,6 +1,6 @@
 class InvitationsMailer < ActionMailer::Base
 
-  default :from => "HeyBarkeep!<heybarkeep@lifestylesupply.co>"
+  default :from => "Good Times<goodtimes@lifestylesupply.co>"
 
 
   def new_message(message)
