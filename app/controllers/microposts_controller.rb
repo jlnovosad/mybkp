@@ -75,7 +75,8 @@ class MicropostsController < ApplicationController
                 :include => { 
                   :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
                     :include => { 
-                      :workvenues => { :only => [:id, :fs_venue_id, :name] }
+                      :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                      :shifts => { }
                     }
                   }
                 }
