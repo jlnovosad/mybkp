@@ -115,6 +115,45 @@ class VenuesController < ApplicationController
     end
   end
 
+  def venuesfromarray
+
+    @venuearray = params[:venues]
+    @returnvenues = []
+    @venuearray.each do |v|
+
+      @venue = Venue.includes(:tenders, :favorites, :workfavorites).find_by_fs_venue_id(v[:fs_venue_id])
+      if @venue
+
+        # if the venue was already in the db, return that entry so the app has the info anyway (refresh name first)
+        @venue.update_attributes(name: v[:name])
+        @returnvenues << @venue
+      else
+        
+        # create
+        @venue = Venue.includes(:tenders, :favorites, :workfavorites).create(v)
+        @returnvenues << @venue
+      end
+    end
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> { 
+        :venues=>@returnvenues.as_json(:only => [:id, :fs_venue_id, :name], 
+          :include => { 
+            :users => { :only => [:id, :name, :tender, :privateprofile], :methods => [:photo_url] },
+            :tenders => { :only => [:id, :name, :tender, :privateprofile], :methods => [:photo_url],
+              :include => { 
+                :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                :shifts => { }
+            } },
+            :favorites => { :only => [:id, :user_id, :venue_id] },
+            :workfavorites => { :only => [:id, :user_id, :venue_id] }
+          }
+        ) 
+      } }
+    end
+  end
+
   #########################################
   # accesses favorite join table
   #########################################

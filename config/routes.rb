@@ -57,6 +57,9 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   # the venues
   #########################################
   resources :venues, only: [:index, :create] do 
+    collection do
+      post :venuesfromarray
+    end
     member do
       post :favorite, :unfavorite, :workfavorite, :workunfavorite
       get :feed, :workerfeed
