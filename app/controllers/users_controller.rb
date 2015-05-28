@@ -553,5 +553,25 @@ class UsersController < ApplicationController
       } }
     end
   end
+
+  #########################################
+  # destroys 
+  #########################################
+  def destroy
+    @user.destroy
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> @user.as_json() } 
+    end
+  end
+
+  private
+
+  #########################################
+  # only you can perform actions 
+  #########################################
+  def correct_user
+    @user = current_user
+  end
   
 end

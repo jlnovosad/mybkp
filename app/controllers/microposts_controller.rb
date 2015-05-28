@@ -104,7 +104,7 @@ class MicropostsController < ApplicationController
   end
 
   #########################################
-  # destroys the post
+  # destroys 
   #########################################
   def destroy
     @micropost.destroy
@@ -117,7 +117,7 @@ class MicropostsController < ApplicationController
   private
 
   #########################################
-  # only you can perform actions on your stuff
+  # only you can perform actions 
   #########################################
   def correct_user
     @micropost = current_user.microposts.find_by_id(params[:id])
