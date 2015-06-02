@@ -182,6 +182,14 @@ class User < ActiveRecord::Base
     order('name ASC').where('lower(name) LIKE ? AND venueprofile IS NULL AND privateprofile != ?', "%#{search.downcase}%", "INACTIVE").limit(50)
   end
 
+  def searchfollowers(search)
+    followers.order('name ASC').where('lower(name) LIKE ? AND venueprofile IS NULL AND privateprofile != ?', "%#{search.downcase}%", "INACTIVE").limit(50)
+  end
+
+  def searchfollowing(search)
+    followed_users.order('name ASC').where('lower(name) LIKE ? AND venueprofile IS NULL AND privateprofile != ?', "%#{search.downcase}%", "INACTIVE").limit(50)
+  end
+
   def self.searchbyemail(email)
     where('lower(email) = ?', email.downcase)
   end

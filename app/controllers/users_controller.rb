@@ -376,6 +376,35 @@ class UsersController < ApplicationController
     end
   end
 
+  # search following
+  def searchfollowing
+    
+    puts '====================== search'
+
+    # get search term
+    if params[:search].nil?
+      @users = []
+    else 
+      @users = User.find(params[:id]).searchfollowing(params[:search]).limit(50).includes(:workvenues, :drinks).order('lower(name) ASC')
+      if @users.nil?
+        @users = []
+      end
+    end
+
+    # find
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> { 
+        :users=>@users.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile, :venueprofile], :methods => [:photo_url],
+          :include => { 
+            :workvenues => { :only => [:id, :fs_venue_id, :name] },
+            :shifts => { }
+          }
+        ) 
+      } }
+    end
+  end
+
   # any user followers
   def followers
     @title = "Followers"
@@ -404,6 +433,35 @@ class UsersController < ApplicationController
       format.json  { render :json=> { 
         :modelcount=>@fcount.as_json() 
         } }
+    end
+  end
+
+  # search followers
+  def searchfollowers
+    
+    puts '====================== search'
+
+    # get search term
+    if params[:search].nil?
+      @users = []
+    else 
+      @users = User.find(params[:id]).searchfollowers(params[:search]).limit(50).includes(:workvenues, :drinks).order('lower(name) ASC')
+      if @users.nil?
+        @users = []
+      end
+    end
+
+    # find
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> { 
+        :users=>@users.as_json(:only => [:id, :name, :tender, :invitation_token, :notify, :privateprofile, :venueprofile], :methods => [:photo_url],
+          :include => { 
+            :workvenues => { :only => [:id, :fs_venue_id, :name] },
+            :shifts => { }
+          }
+        ) 
+      } }
     end
   end
 
