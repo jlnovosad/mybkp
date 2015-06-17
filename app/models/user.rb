@@ -4,7 +4,8 @@ class User < ActiveRecord::Base
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable, :token_authenticatable, :invitable, :omniauthable, :authentication_keys => [:login]
+         :recoverable, :rememberable, :trackable, :validatable, :token_authenticatable, :invitable, :authentication_keys => [:login]
+         # :omniauthable, 
 
   before_save :ensure_authentication_token
 

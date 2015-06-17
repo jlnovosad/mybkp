@@ -612,6 +612,32 @@ class UsersController < ApplicationController
     end
   end
 
+  def blockuserrel # returns relationship object instead of user
+
+    # other user
+    @user = User.find(params[:id])
+    @relationship = @user.following?(current_user)
+    if @relationship.nil?
+      
+      # create relationship
+      @user.follow!(current_user, params[:relationship][:status])
+      @relationship = @user.following?(current_user)
+    else
+
+      # update
+      @relationship.update_attributes!(:status => params[:relationship][:status])
+      @user = User.find(@relationship.followed_id)
+    end
+
+    # done
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> { 
+        :relationship=>@relationship.as_json() 
+      } }
+    end
+  end
+
   #########################################
   # destroys 
   #########################################
