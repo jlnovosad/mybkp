@@ -385,7 +385,7 @@ class UsersController < ApplicationController
     if params[:search].nil?
       @users = []
     else 
-      @users = User.find(params[:id]).searchfollowing(params[:search]).limit(50).includes(:workvenues, :drinks).order('lower(name) ASC')
+      @users = User.find(params[:id]).searchfollowing(params[:search]).paginate(page: params[:page], :per_page => 50).includes(:workvenues, :drinks).order('lower(name) ASC')
       if @users.nil?
         @users = []
       end
@@ -445,7 +445,7 @@ class UsersController < ApplicationController
     if params[:search].nil?
       @users = []
     else 
-      @users = User.find(params[:id]).searchfollowers(params[:search]).limit(50).includes(:workvenues, :drinks).order('lower(name) ASC')
+      @users = User.find(params[:id]).searchfollowers(params[:search]).paginate(page: params[:page], :per_page => 50).includes(:workvenues, :drinks).order('lower(name) ASC')
       if @users.nil?
         @users = []
       end
@@ -491,7 +491,7 @@ class UsersController < ApplicationController
     
     puts '====================== friendrequests'
 
-    @users = current_user.friendrequests.limit(50).includes(:workvenues, :drinks).order('relationships.updated_at DESC')
+    @users = current_user.friendrequests.paginate(page: params[:page], :per_page => 50).includes(:workvenues, :drinks).order('relationships.updated_at DESC')
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
