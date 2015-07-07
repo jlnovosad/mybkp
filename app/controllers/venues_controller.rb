@@ -207,7 +207,9 @@ class VenuesController < ApplicationController
   #########################################
   def workfavorite
     @venue = Venue.find(params[:id])
-    current_user.addworkplace!(@venue)
+    if not current_user.workfavorited?(@venue)
+      current_user.addworkplace!(@venue)
+    end
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
@@ -232,6 +234,13 @@ class VenuesController < ApplicationController
   def workunfavorite
     @venue = Venue.find(params[:id])
     current_user.removeworkplace!(@venue)
+    if not current_user.shifts.find_all_by_venue_id(@venue.id).nil?
+      @deleteshifts = [] 
+      @deleteshifts = current_user.shifts.find_all_by_venue_id(@venue.id)
+      @deleteshifts.each do |s|
+        s.destroy
+      end
+    end
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 

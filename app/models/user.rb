@@ -168,9 +168,6 @@ class User < ActiveRecord::Base
 
   def removeworkplace!(venue)
     workfavorites.find_by_venue_id(venue.id).destroy
-    if not shifts.find_by_venue_id(venue.id).nil?
-      shifts.find_by_venue_id(venue.id).destroy
-    end
   end
 
   # profile photos
