@@ -638,17 +638,6 @@ class UsersController < ApplicationController
     end
   end
 
-  #########################################
-  # destroys 
-  #########################################
-  def destroy
-    @user.destroy
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json  { render :json=> @user.as_json() } 
-    end
-  end
-
   private
 
   #########################################

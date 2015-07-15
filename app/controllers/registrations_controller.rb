@@ -14,6 +14,15 @@ class RegistrationsController < Devise::RegistrationsController
     super
     session[:omniauth] = nil unless @user.new_record?
   end
+
+  def destroy
+    @user = current_user
+    @user.destroy
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> @user.as_json() } 
+    end
+  end
   
   def build_resource(*args)
       super
