@@ -196,7 +196,7 @@ class User < ActiveRecord::Base
 
     # ordering by number of followers
     select( "DISTINCT users.*, count(relationships.id) AS relationships_count" ).
-    where( "users.id IN (SELECT user_id FROM user_drinks WHERE drink_id = :drink_id) AND users.tender = 'YES'", drink_id: drink.id).
+    where( "users.id IN (SELECT user_id FROM user_drinks WHERE drink_id = :drink_id) AND upper(users.tender) = 'YES'", drink_id: drink.id).
     joins( "INNER JOIN relationships ON relationships.followed_id = users.id" ).
     group( "users.id" ).
     order( "relationships_count DESC").

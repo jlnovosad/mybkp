@@ -25,7 +25,7 @@ class Venue < ActiveRecord::Base
   has_many :workfavorites, dependent: :destroy
   has_many :tenders,
   					#-> { where("privateprofile != 'YES' AND privateprofile != 'INACTIVE' AND tender = 'YES'") },
-  					-> { where("privateprofile != 'INACTIVE' AND tender = 'YES'") },
+  					-> { where("privateprofile != 'INACTIVE' AND upper(tender) = 'YES'") },
             :through => :workfavorites,
             class_name: "User",
             source: :user

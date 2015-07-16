@@ -11,7 +11,7 @@ class Drink < ActiveRecord::Base
 
   has_many :user_drinks, dependent: :destroy
   has_many :users,
-            -> { where(['tender = ? AND privateprofile != ?',"YES","INACTIVE"]).order('lower(name) ASC')},
+            -> { where(['upper(tender) = ? AND privateprofile != ?',"YES","INACTIVE"]).order('lower(name) ASC')},
             :through => :user_drinks,
             class_name: "User"
             #-> { where(['tender = ?',"NO"]).uniq.order("users.followers_count DESC").limit(50) },
