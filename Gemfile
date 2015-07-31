@@ -50,3 +50,6 @@ gem 'fb_graph'
 gem 'nifty-generators'
 
 gem "mocha", group: :test
+
+# notifications
+gem 'zero_push'
