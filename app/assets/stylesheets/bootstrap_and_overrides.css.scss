@@ -276,17 +276,44 @@ section {
   text-align: center;
 }
 
-.appbuttoncontainer {
-  width: 100%;
-  margin: 10px 0 20px 0;
+.mainctainner {
+  margin: 20px 0 0 0;
   text-align: center;
 }
 
-.appbutton {
-  margin: 0;
-  background-image: image-url("appstore.png");
+.btn-ios {
   width: 135px;
   height: 40px;
+  text-align: center;
+  background-image: image-url("Download_on_the_App_Store_Badge_US-UK_135x40.svg");
+  float: right;
+}
+
+.btn-android {
+  width: 129px;
+  height: 45px;
+  text-align: center;
+  background-image: image-url("en_generic_rgb_wo_45.png");
+}
+
+.maincta {
+  margin: 20px 0 50px 0;
+  text-align: center;
+}
+
+.mainctainnerleft {
+  float: left;
+  width: 48%;
+}
+
+.mainctainnerright {
+  float: right;
+  width: 48%;
+}
+
+.appbuttoncontainer {
+  width: 100%;
+  margin: 10px 0 20px 0;
   text-align: center;
 }
 
