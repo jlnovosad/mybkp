@@ -6,7 +6,7 @@ class RegistrationsController < Devise::RegistrationsController
   before_filter :configure_devise_params, if: :devise_controller?
   def configure_devise_params
     devise_parameter_sanitizer.for(:sign_up) do |u|
-      u.permit(:name, :phone, :email, :password, :password_confirmation, :remember_me, :tender, :privateprofile, :bio)
+      u.permit(:name, :phone, :email, :password, :password_confirmation, :remember_me, :tender, :privateprofile, :bio, :location_id)
     end
   end
   
@@ -98,6 +98,9 @@ class RegistrationsController < Devise::RegistrationsController
         @user.destroy
       end
     end
+
+    # workaround for Android location error for now
+    params[:user][:location_id] = 1
 
     # execute the action (create)
     yield
