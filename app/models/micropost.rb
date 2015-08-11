@@ -72,6 +72,12 @@ class Micropost < ActiveRecord::Base
 
   # all local activity 
   def self.from_userslocal_followed_by(user)
+
+    # temp location hack fix
+    if (user.location_id == 138)
+      user.location_id = 1
+    end
+
     blocked_user_ids = "SELECT followed_id FROM relationships
                           WHERE follower_id = :user_id
                           AND status = 'BLOCKED'"
