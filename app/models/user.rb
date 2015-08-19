@@ -35,7 +35,9 @@ class User < ActiveRecord::Base
   has_many :checkins, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :comments, dependent: :destroy
-  has_many :shifts, dependent: :destroy
+  has_many :shifts,
+            :order => "day = 'SUN', day = 'SAT', day = 'FRI', day = 'THU', day = 'WED', day = 'TUE', day = 'MON'",
+            dependent: :destroy
 
   has_many :relationships, 
             foreign_key: "follower_id", 
