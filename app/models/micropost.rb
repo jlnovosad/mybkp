@@ -77,6 +77,9 @@ class Micropost < ActiveRecord::Base
     if (user.location_id == 138)
       user.location_id = 1
     end
+    if (user.location_id == 165)
+      user.location_id = 1
+    end
 
     blocked_user_ids = "SELECT followed_id FROM relationships
                           WHERE follower_id = :user_id
