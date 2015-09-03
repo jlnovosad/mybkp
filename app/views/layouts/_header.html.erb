@@ -26,22 +26,7 @@
     </header>
   </div>
 <% else %>
-  <%- if controller_name != 'home' %>
-    <div class="headercontainer">
-      <header class="navbar navbar-fixed-top">
-        <nav class="navbar-inner">
-          <div class="container">
-            <div class="row">
-              <div class="span10 offset1">
-                <%= link_to "", root_path, { :id => 'logo', :alt => 'Good Times' } %>
-              </div>
-            </div>
-          </div>
-        </nav>
-      </header>
-    </div>
-  <% else -%>
-    <div class="herocontainer">
+  <div class="herocontainer">
       <div id="main" role="main">
         <div class="container">
           <div class="content">
@@ -56,5 +41,4 @@
         </div>
       </div>
     </div>
-  <% end -%>
 <% end %>
