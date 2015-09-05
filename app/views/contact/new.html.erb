@@ -1,7 +1,12 @@
-<div class="span6 offset3">
+<div class="span10 offset1">
+
+<div id="homeblurb">
+
 <h2>Contact Us</h2>
 
 <%= render 'layouts/messages' %>
+
+<div id="formholder">
 
 <%= form_for @message, :url => contact_path do |f| %>
   
@@ -20,5 +25,9 @@
   <div><%= f.submit "Submit", :class => 'btn btn-large btn-primary' %></div>
 
 <% end %>
+
+</div>
+
+</div>
 
 </div>

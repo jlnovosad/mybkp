@@ -180,7 +180,7 @@ Devise.setup do |config|
   # ==> Configuration for :recoverable
   #
   # Defines which key will be used when recovering the password for an account
-  # config.reset_password_keys = [ :email ]
+  # config.reset_password_keys = [ :phone ]
 
   # Time interval you can reset your password with a reset password key.
   # Don't put a too small interval or your users won't have the time to
@@ -257,8 +257,8 @@ Devise.setup do |config|
 
   config.authentication_keys = [ :login ]
 
-  config.reset_password_keys = [ :phone ]
-  config.confirmation_keys = [ :phone ]
+  #config.reset_password_keys = [ :phone ]
+  #config.confirmation_keys = [ :phone ]
 
   config.omniauth :twitter, ENV["TWITTER_CONSUMER_KEY"], ENV["TWITTER_CONSUMER_SECRET"]
   config.omniauth :facebook, 'APP_ID', 'APP_SECRET', {:scope => 'publish_stream, email'}

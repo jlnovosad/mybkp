@@ -1,8 +1,13 @@
-<div class="span6 offset3">
+<div class="span10 offset1">
+
+<div id="homeblurb">
+
 <h2>Edit My Profile</h2>
 
 <%= render 'layouts/messages' %>
 
+<div id="formholder">
+  
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :multipart => true }) do |f| %>
   <%= devise_error_messages! %>
 
@@ -27,5 +32,9 @@
   <div><%= f.submit "Update", :class => 'btn btn-large btn-primary' %></div>
 
 <% end %>
+
+</div>
+
+</div>
 
 </div>

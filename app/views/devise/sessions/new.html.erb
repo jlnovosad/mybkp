@@ -1,8 +1,13 @@
-<div class="span6 offset3">
+<div class="span10 offset1">
+
+<div id="homeblurb">
+
 <h2>Sign in</h2>
 
 <%= render 'layouts/messages' %>
 
+<div id="formholder">
+	
 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
 
   <%= devise_error_messages! %>
@@ -21,4 +26,9 @@
 <% end %>
 
 <%= render "devise/shared/links" %>
+
+</div>
+
+</div>
+
 </div>
