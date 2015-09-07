@@ -2,32 +2,9 @@
 
 <div id="homeblurb">
 
-<h2>Sign in</h2>
-
-<%= render 'layouts/messages' %>
-
-<div id="formholder">
-	
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-
-  <%= devise_error_messages! %>
-  <div><%= f.label :email %>
-  <%= f.email_field :email %></div>
-
-  <div><%= f.label :password %>
-  <%= f.password_field :password %></div>
-
-  <% if devise_mapping.rememberable? -%>
-    <div><%= f.check_box :remember_me %> <%= f.label :remember_me %></div>
-  <% end -%><br/>
-
-  <div><%= f.submit 'Sign in', :class => 'btn btn-large btn-primary' %></div>
-
-<% end %>
-
-<%= render "devise/shared/links" %>
-
-</div>
+  <%= render 'layouts/messages' %>
+  <div class="maincta"><%= link_to "Open App on iPhone", "GoodTimes://", class: "btn btn-large btn-primary" %></div> 
+  <%= link_to 'Sign Out', destroy_user_session_path, :method=>'delete' %> 
 
 </div>
 

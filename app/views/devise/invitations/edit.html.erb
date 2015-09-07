@@ -1,5 +1,10 @@
-<div class="span6 offset3">
-	<h2><%= t 'devise.invitations.edit.header' %></h2>
+<div class="span10 offset1">
+
+<div id="homeblurb">
+
+<h2><%= t 'devise.invitations.edit.header' %></h2>
+
+<div id="formholder">
 
 <%= form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => { :method => :put } do |f| %>
   <%= devise_error_messages! %>
@@ -13,4 +18,9 @@
 <br/>
   <div><%= f.submit t("devise.invitations.edit.submit_button") %></div>
 <% end %>
+
+</div>
+
+</div>
+
 </div>

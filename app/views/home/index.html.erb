@@ -1,27 +1,11 @@
 <% provide(:title, '') %>
 <% if signed_in? %>
     
-  <%-# Profile Info -%>
-  <div class="span6 offset3">
-    <h2><%= @user.name %></h2>
-
+  <div class="span10 offset1">
     <%= render 'layouts/messages' %>
-
-    <div class="profile">
-      <div class="profilephoto">
-        <%= image_tag @user.photo.url(:small) %>
-      </div>
-    </div>
-    <br />
-    <div class="profile">
-      <ul>
-        <li><%= link_to 'Update My Profile', edit_user_registration_path %></li>
-        <!--<li><a href="<%= following_user_path(@user) %>">My Bartenders (<%= @user.followed_users.count %>)</a></li>
-        <li><a href="<%= followers_user_path(@user) %>">My Followers (<%= @user.followers.count %>)</a></li>-->
-      </ul>
-    </div>
-  </div>
-
+    <div class="maincta"><%= link_to "Open App on iPhone", "GoodTimes://", class: "btn btn-large btn-primary" %></div> 
+    <%= link_to 'Sign Out', destroy_user_session_path, :method=>'delete' %> 
+  </div> 
 <% else %>
 
   <%-# Home page -%>

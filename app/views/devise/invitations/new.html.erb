@@ -1,5 +1,10 @@
-<div class="span6 offset3">
+<div class="span10 offset1">
+
+<div id="homeblurb">
+
 <h2>Invite a Friend</h2>
+
+<div id="formholder">
 
 <%= form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => {:method => :post} do |f| %>
   <%= devise_error_messages! %>
@@ -11,5 +16,9 @@
 <br/>
   <div><%= f.submit "Send Invitation", :class => 'btn btn-large btn-primary'  %></div>
 <% end %>
+
+</div>
+
+</div>
 
 </div>
