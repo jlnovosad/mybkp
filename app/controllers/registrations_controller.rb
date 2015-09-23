@@ -100,7 +100,7 @@ class RegistrationsController < Devise::RegistrationsController
     end
 
     # workaround for Android location error for now
-    params[:user][:location_id] = 1
+    #params[:user][:location_id] = 1
 
     # execute the action (create)
     yield
