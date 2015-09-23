@@ -2,14 +2,17 @@
 <% if signed_in? %>
     
   <div class="span10 offset1">
+    <div class="homeblurb">
     <%= render 'layouts/messages' %>
     <div class="maincta"><%= link_to "Open App on iPhone", "GoodTimes://", class: "btn btn-large btn-primary" %></div> 
+    <%= link_to 'Sign Out', destroy_user_session_path, :method=>'delete' %> 
+    </div> 
   </div> 
 <% else %>
 
   <%-# Home page -%>
   <div class="span10 offset1">
-    <div id="homeblurb">
+    <div class="homeblurb">
     <%= render 'layouts/messages' %>
     The Good Times app lets you stay in touch with your favorite bartenders. You and your friends can see who's working where and discover new drinking destinations. Bartenders can build their following and promote their latest concoction.<br /><br /><strong>When you have good people, you have Good Times!</strong></div>
     <div class="maincta">
