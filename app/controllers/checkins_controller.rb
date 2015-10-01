@@ -21,7 +21,7 @@ class CheckinsController < ApplicationController
         device_token = d.token
         notificationmessage = @user.name + ' is working now at ' + @venue.name + '!'
         APNS.send_notification(device_token, notificationmessage )
-      }
+      end
     end
 
     
