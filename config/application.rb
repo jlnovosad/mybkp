@@ -78,7 +78,8 @@ module Rails3BootstrapDeviseCancan
     end
     
     # ios notifications
-    APNS.host = 'gateway.push.apple.com' 
+    #APNS.host = 'gateway.push.apple.com' 
+    APNS.host = 'gateway.sandbox.push.apple.com' 
     APNS.pem  = File.join(Rails.root, 'lib','ck.pem')
     APNS.port = 2195
     APNS.pass = ENV["NOTIFICATION_PEM_PASS"]
