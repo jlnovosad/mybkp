@@ -11,8 +11,8 @@ class MicropostsController < ApplicationController
     @micropost = @user.microposts.build(params[:micropost])
 
     device_token = '67004294d1bc637b8ba645d34da8b3be02f2d9af3d32531110b3d601fd98cd04'
-    APNS.send_notification(device_token, 'Hello iPhone!' )
-    APNS.send_notification(device_token, :alert => 'Hello iPhone!', :badge => 1, :sound => 'default')
+    #APNS.send_notification(device_token, 'Hello iPhone!' )
+    #APNS.send_notification(device_token, :alert => 'Hello iPhone!', :badge => 1, :sound => 'default')
   
     if @user.save
       respond_to do |format|
