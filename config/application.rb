@@ -78,11 +78,17 @@ module Rails3BootstrapDeviseCancan
     end
     
     # ios notifications
-    #APNS.host = 'gateway.push.apple.com' 
-    APNS.host = 'gateway.sandbox.push.apple.com' 
-    APNS.pem  = File.join(Rails.root, 'lib','ck.pem')
+    APNS.host = "gateway.sandbox.push.apple.com"  
+    APNS.pem  = File.join(Rails.root, 'lib','ckdev.pem')
     APNS.port = 2195
     APNS.pass = ENV["NOTIFICATION_PEM_PASS"]
+
+    # Set the environment variable `APPLE_SANDBOX` to use the development certificate in production
+    #if Rails.env.production? && !ENV["APPLE_SANDBOX"] 
+    #if Rails.env.production?  
+    #  APNS.host = "gateway.push.apple.com"
+    #  APNS.pem  = File.join(Rails.root, 'lib','ckprod.pem')
+    #end 
 
   end
 end
