@@ -52,6 +52,9 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   resources :locations, only: [:index, :create, :show] do
     
   end
+  resources :devices, only: [:create, :destroy] do
+    
+  end
 
   #########################################
   # the venues

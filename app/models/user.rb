@@ -30,6 +30,7 @@ class User < ActiveRecord::Base
   #########################################
 
   belongs_to :locations
+  has_many :devices, dependent: :destroy
   has_many :microposts, dependent: :destroy
   has_many :micropost_users, dependent: :destroy # tagged in posts, but we don't also have microposts because of the dual name conflict
   has_many :checkins, dependent: :destroy
