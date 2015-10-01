@@ -77,5 +77,11 @@ module Rails3BootstrapDeviseCancan
         DeviseController.respond_to :html, :json
     end
     
+    # ios notifications
+    APNS.host = 'gateway.push.apple.com' 
+    APNS.pem  = File.join(Rails.root, 'lib','ck.pem')
+    APNS.port = 2195
+    APNS.pass = ENV["NOTIFICATION_PEM_PASS"]
+
   end
 end

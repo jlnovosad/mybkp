@@ -17,6 +17,7 @@
 /server.orig.key
 /rapidssl_bundle.pem
 /*.pem
+/lib/ck.pem
 /www_heybarkeep_co.pem
 /www_heybarkeep_co.key
 /www_goodtimesapp_co.pem

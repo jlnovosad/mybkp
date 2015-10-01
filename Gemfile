@@ -53,3 +53,4 @@ gem "mocha", group: :test
 
 # notifications
 gem 'zero_push'
+gem 'apns'
