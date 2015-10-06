@@ -17,12 +17,10 @@ class CheckinsController < ApplicationController
       @devices.each do |d|
 
         # notify followers
-        device_token = '61d71c3a561460364f9fbcbbf005454f382bfa79a1c68a0cddef31c3dd3631c6'
         device_token = d.token
         notificationmessage = @user.name + ' is working now at ' + @venue.name + '!'
         APNS.send_notification(device_token, notificationmessage )
-        APNS.send_notification(device_token, :alert => 'Hello iPhone!', :badge => 0, :sound => 'default')
-  
+        
       end
   
     end
