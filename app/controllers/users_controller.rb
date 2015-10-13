@@ -90,7 +90,7 @@ class UsersController < ApplicationController
           :include => { 
             :workvenues => { :only => [:id, :fs_venue_id, :name] },
             :shifts => { },
-            :devices => { }
+            :devices => { :only => [:id] }
           }
         ) 
       } }
@@ -281,7 +281,7 @@ class UsersController < ApplicationController
           :include => { 
             :workvenues => { :only => [:id, :fs_venue_id, :name] },
             :shifts => { },
-            :devices => { }
+            :devices => { :only => [:id] }
           }
         ) 
       } }

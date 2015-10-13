@@ -58,7 +58,7 @@ class RegistrationsController < Devise::RegistrationsController
             :include => { 
               :workvenues => { :only => [:id, :fs_venue_id, :name] },
               :shifts => { },
-              :devices => { }
+              :devices => { :only => [:id] }
             }
           ) 
         } }
