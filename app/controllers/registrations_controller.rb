@@ -56,8 +56,9 @@ class RegistrationsController < Devise::RegistrationsController
         format.json  { render :json=> { 
           :user=>@user.as_json(:only => [:id, :name, :tender, :phone, :email, :invitation_token, :notify, :privateprofile, :location_id, :bio], :methods => [:photo_url],
             :include => { 
-              :drinks => { :only => [:id, :name] },
-              :workvenues => { :only => [:id, :fs_venue_id, :name] }
+              :workvenues => { :only => [:id, :fs_venue_id, :name] },
+              :shifts => { },
+              :devices => { }
             }
           ) 
         } }

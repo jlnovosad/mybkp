@@ -89,7 +89,8 @@ class UsersController < ApplicationController
         :user=>@user.as_json(:only => [:id, :name, :tender, :phone, :email, :invitation_token, :notify, :privateprofile, :location_id, :bio], :methods => [:photo_url],
           :include => { 
             :workvenues => { :only => [:id, :fs_venue_id, :name] },
-            :shifts => { }
+            :shifts => { },
+            :devices => { }
           }
         ) 
       } }
@@ -276,10 +277,11 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :user=>@user.as_json(:only => [:id, :name, :tender, :phone, :email, :invitation_token, :notify, :privateprofile, :bio], :methods => [:photo_url],
+        :user=>@user.as_json(:only => [:id, :name, :tender, :phone, :email, :invitation_token, :notify, :privateprofile, :location_id, :bio], :methods => [:photo_url],
           :include => { 
             :workvenues => { :only => [:id, :fs_venue_id, :name] },
-            :shifts => { }
+            :shifts => { },
+            :devices => { }
           }
         ) 
       } }
