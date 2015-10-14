@@ -11,7 +11,7 @@ class CheckinsController < ApplicationController
 
     if (@checkin.venue_id.present? and @checkin.working == 'YES') 
       @venue = Venue.find_by_id(@checkin.venue_id)
-      @notifyusers = @user.notifiedfollowers
+      @notifyusers = @user.followers
 
       # for each follower
       @notifyusers.each do |n|
