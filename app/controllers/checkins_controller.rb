@@ -11,16 +11,22 @@ class CheckinsController < ApplicationController
 
     if (@checkin.venue_id.present? and @checkin.working == 'YES') 
       @venue = Venue.find_by_id(@checkin.venue_id)
+      @notifyusers = @user.notifiedfollowers
 
-      # find each device
-      @devices = @user.devices
-      @devices.each do |d|
+      # for each follower
+      @notifyusers.each do |n|
 
-        # notify followers
-        device_token = d.token
-        notificationmessage = @user.name + ' is working now at ' + @venue.name + '!'
-        APNS.send_notification(device_token, notificationmessage )
-        
+        # find each device
+        @devices = n.devices
+        @devices.each do |d|
+
+          # notify followers
+          device_token = d.token
+          notificationmessage = @user.name + ' is working now at ' + @venue.name + '!'
+          APNS.send_notification(device_token, notificationmessage )
+          
+        end
+
       end
   
     end

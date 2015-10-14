@@ -61,6 +61,12 @@ class User < ActiveRecord::Base
             class_name: "User", 
             source: :follower 
 
+  has_many :notifiedfollowers, 
+            -> { where(['relationships.notify = ? AND relationships.status = ? AND privateprofile != ?',"YES", "FOLLOWING", "INACTIVE"] ) },
+            through: :reverse_relationships, 
+            class_name: "User", 
+            source: :follower 
+
   has_many :friendrequests, 
             -> { where(['relationships.status = ? AND privateprofile != ?',"REQUEST", "INACTIVE"] ).order('relationships.updated_at DESC') },
             through: :reverse_relationships, 
