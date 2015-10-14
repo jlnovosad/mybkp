@@ -5,7 +5,8 @@ class DevicesController < ApplicationController
   # creates a new or finds the existing
   #########################################
   def create
-    @device = Device.find_by_token(params[:device][:token])
+    @user = current_user
+    @device = Device.find_by_token_and_user_id(params[:device][:token],@user.id)
     if @device
 
       # if the device was already in the db, return that entry so the app has the info anyway (refresh name first)
