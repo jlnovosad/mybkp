@@ -295,7 +295,7 @@ class UsersController < ApplicationController
     puts '====================== microposts'
 
     @user = User.find(params[:id])
-    @microposts = @user.microposts.paginate(page: params[:page], :per_page => 50).includes(:user, :checkin, :likes, :comments, :users)
+    @microposts = @user.microposts.paginate(page: params[:page], :per_page => 10).includes(:user, :checkin, :likes, :comments, :users)
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
