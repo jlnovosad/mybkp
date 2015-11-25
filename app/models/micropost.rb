@@ -18,7 +18,7 @@ class Micropost < ActiveRecord::Base
   #########################################
   # paperclip photos
   #########################################
-  has_attached_file :photo, :styles => { :small => "640" },
+  has_attached_file :photo, :styles => { :small => "640x640" },
                             :default_url => 'missing_photo.png'
 
   #########################################
