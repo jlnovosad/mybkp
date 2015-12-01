@@ -37,6 +37,8 @@ GEM
     arel (4.0.0)
     atomic (1.1.10)
     attr_required (1.0.0)
+    av (0.8.0)
+      cocaine
     aws-sdk (1.30.0)
       json (~> 1.4)
       nokogiri (>= 1.4.4)
@@ -135,6 +137,9 @@ GEM
       activesupport (>= 3.0.0)
       cocaine (~> 0.5.0)
       mime-types
+    paperclip-av-transcoder (0.6.2)
+      av (>= 0.7.1)
+      paperclip (>= 2.5.2)
     pg (0.16.0)
     polyglot (0.3.3)
     protected_attributes (1.0.3)
@@ -229,6 +234,7 @@ DEPENDENCIES
   omniauth-facebook
   omniauth-twitter
   paperclip (~> 3.1)
+  paperclip-av-transcoder
   pg
   protected_attributes
   rails (= 4.0.0)

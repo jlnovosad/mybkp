@@ -21,6 +21,17 @@ class Micropost < ActiveRecord::Base
   has_attached_file :photo, :styles => { :small => "640X640#" },
                             :default_url => 'missing_photo.png'
 
+  has_attached_file( :video, styles: {
+      original: { format: "mp4",
+        convert_options: {
+          output: { strict: "experimental", s: "480x270" }}},
+      thumb: { format: "jpg",
+        convert_options: {
+          output: { strict: "experimental", ss: 1, vframes: 1, s: "120x67" }}}
+    },
+    processors: [:transcoder]
+  )
+
   #########################################
   # included
   #########################################

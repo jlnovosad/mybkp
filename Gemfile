@@ -55,3 +55,7 @@ gem "mocha", group: :test
 gem 'zero_push'
 gem 'apns'
 gem 'figaro'
+
+#video
+gem 'paperclip-av-transcoder'
+
