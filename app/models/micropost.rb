@@ -18,26 +18,12 @@ class Micropost < ActiveRecord::Base
   #########################################
   # paperclip photos
   #########################################
-  has_attached_file :photo, :styles => { :small => "640X640#" },
-                            :default_url => 'missing_photo.png'
-
-  has_attached_file( :video, styles: {
-      original: { format: "mp4",
-        convert_options: {
-          output: { strict: "experimental", s: "480x270" }}},
-      thumb: { format: "jpg",
-        convert_options: {
-          output: { strict: "experimental", ss: 1, vframes: 1, s: "120x67" }}}
-    },
-    processors: [:transcoder]
-  )
-
-  validates_attachment_content_type :source,
+  validates_attachment_content_type :photo,
     :content_type => ['video/mp4'],
     :styles => { :small => {:geometry => "640x480", :format => 'mp4'} },
     :processors => [:transcoder],
     :if => :is_type_of_video?
-  validates_attachment_content_type :source,
+  validates_attachment_content_type :photo,
     :content_type => ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'],
     :styles => { :small => "640X640#" },
     :default_url => 'missing_photo.png',
