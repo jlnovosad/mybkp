@@ -32,6 +32,18 @@ class Micropost < ActiveRecord::Base
     processors: [:transcoder]
   )
 
+  validates_attachment_content_type :source,
+    :content_type => ['video/mp4'],
+    :styles => { :small => {:geometry => "640x480", :format => 'mp4'} },
+    :processors => [:transcoder]
+    :if => :is_type_of_video?
+  validates_attachment_content_type :source,
+    :content_type => ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'],
+    :styles => { :small => "640X640#" },
+    :default_url => 'missing_photo.png',
+    :if => :is_type_of_image?
+  has_attached_file :photo
+
   #########################################
   # included
   #########################################
@@ -146,7 +158,7 @@ class Micropost < ActiveRecord::Base
   end
 
   def video_url
-    video.url(:original)
+    video.url(:small)
   end
 
   def like_count
@@ -164,6 +176,15 @@ class Micropost < ActiveRecord::Base
   # comments only from good users
   def goodcomments
     User.isliked(self)
+  end
+
+  protected
+  def is_type_of_video?
+    source.content_type =~ %r(video)
+  end
+
+  def is_type_of_image?
+    source.content_type =~ %r(image)
   end
 
 end
