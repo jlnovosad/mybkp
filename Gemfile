@@ -58,4 +58,4 @@ gem 'figaro'
 
 #video
 gem 'paperclip-av-transcoder'
-
+gem "paperclip-ffmpeg", "~> 1.2.0"
