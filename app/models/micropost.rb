@@ -35,7 +35,7 @@ class Micropost < ActiveRecord::Base
   validates_attachment_content_type :source,
     :content_type => ['video/mp4'],
     :styles => { :small => {:geometry => "640x480", :format => 'mp4'} },
-    :processors => [:transcoder]
+    :processors => [:transcoder],
     :if => :is_type_of_video?
   validates_attachment_content_type :source,
     :content_type => ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'],
