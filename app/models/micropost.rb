@@ -3,7 +3,7 @@ class Micropost < ActiveRecord::Base
   #########################################
   # Setup accessible (or protected) attributes for your model
   #########################################
-  attr_accessible :content, :venue_id, :photo, :working, :users, :user_id, :promo, :video
+  attr_accessible :content, :venue_id, :photo, :working, :users, :user_id, :promo
   belongs_to :user
   belongs_to :venue
   attr_accessor :current_user
@@ -159,10 +159,6 @@ class Micropost < ActiveRecord::Base
 
   def photo_url
     photo.url(:small)
-  end
-
-  def video_url
-    video.url(:small)
   end
 
   def like_count
