@@ -30,8 +30,8 @@ class Micropost < ActiveRecord::Base
       { :small => "640X640#" }
     elsif is_video_type?
       {
-          :medium => { :geometry => "300x300#", :format => 'jpg'},
-          :video => {:geometry => "640x360#", :format => 'mp4', :processors => [:transcoder]}
+          :thumb => { :geometry => "320x320#", :format => 'jpg'},
+          :small => {:geometry => "640x360#", :format => 'mp4', :processors => [:transcoder]}
       }
     else
       {}
