@@ -38,6 +38,16 @@ class Micropost < ActiveRecord::Base
     end
   end
 
+  # Method returns true if file's content type contains word 'image', overwise false
+  def is_image_type?
+    avatar_content_type =~ %r(image)
+  end
+
+  # Method returns true if file's content type contains word 'video', overwise false
+  def is_video_type?
+    avatar_content_type =~ %r(video)
+  end
+
   #########################################
   # included
   #########################################
@@ -170,15 +180,6 @@ class Micropost < ActiveRecord::Base
   # comments only from good users
   def goodcomments
     User.isliked(self)
-  end
-
-  protected
-  def is_type_of_video?
-    photo.content_type =~ %r(video)
-  end
-
-  def is_type_of_image?
-    photo.content_type =~ %r(image)
   end
 
 end
