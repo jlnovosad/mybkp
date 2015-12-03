@@ -40,12 +40,12 @@ class Micropost < ActiveRecord::Base
 
   # Method returns true if file's content type contains word 'image', overwise false
   def is_image_type?
-    avatar_content_type =~ %r(image)
+    photo_content_type =~ %r(image)
   end
 
   # Method returns true if file's content type contains word 'video', overwise false
   def is_video_type?
-    avatar_content_type =~ %r(video)
+    photo_content_type =~ %r(video)
   end
 
   #########################################
