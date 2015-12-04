@@ -161,6 +161,10 @@ class Micropost < ActiveRecord::Base
     photo.url(:small)
   end
 
+  def thumb_url
+    photo.url(:thumb)
+  end
+
   def like_count
     likes.count
   end
