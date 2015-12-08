@@ -299,7 +299,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
-        :microposts=>@microposts.as_json(:only => [:id, :content, :created_at, :working, :promo], :methods => [:photo_url, :like_count, :comment_count],
+        :microposts=>@microposts.as_json(:only => [:id, :content, :created_at, :working, :promo], :methods => [:photo_url, :thumb_url, :like_count, :comment_count],
           :include => { 
             :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
               :include => { 
