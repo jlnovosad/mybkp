@@ -82,7 +82,9 @@ class UsersController < ApplicationController
 
     puts '====================== valid'
 
-    @user = current_user
+    #@user = current_user
+    @user = User.find_by_authentication_token(params[:auth_token])
+
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
