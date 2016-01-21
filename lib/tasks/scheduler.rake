@@ -8,7 +8,7 @@ task :make_users => :environment do
   puts "Updating users..."
 
   require 'csv'
-	require 'User'
+	#require 'User'
 
 	puts Dir.pwd
 
