@@ -18,25 +18,8 @@ class Micropost < ActiveRecord::Base
   #########################################
   # paperclip photos
   #########################################
-  #has_attached_file :photo, :styles => { :small => "640X640#" },
-  #                          :default_url => 'missing_photo.png'
-
-  # Apply styling appropriate for this file
-  has_attached_file :photo, styles: lambda { |a| a.instance.check_file_type}, :default_url => "missing_photo.png"
-  validates_attachment_content_type :photo, :content_type => /.*/
-
-  def check_file_type
-    if is_image_type?
-      { :small => "640X640#" }
-    elsif is_video_type?
-      {
-          :thumb => { :geometry => "320x320#", :format => 'jpg'},
-          :small => {:geometry => "640x360#", :format => 'mp4', :processors => [:transcoder]}
-      }
-    else
-      {}
-    end
-  end
+  has_attached_file :photo, :styles => { :small => "640X640#" },
+                            :default_url => 'missing_photo.png'
 
   # Method returns true if file's content type contains word 'image', overwise false
   def is_image_type?
@@ -99,6 +82,30 @@ class Micropost < ActiveRecord::Base
 
   # all local activity 
   def self.from_userslocal_followed_by(user)
+
+    # temp location hack fix
+    if (user.location_id == 138)
+      user.location_id = 1
+    end
+    if (user.location_id == 165)
+      user.location_id = 1
+    end
+
+    blocked_user_ids = "SELECT followed_id FROM relationships
+                          WHERE follower_id = :user_id
+                          AND status = 'BLOCKED'"
+    following_user_ids = "SELECT followed_id FROM relationships
+                          WHERE follower_id = :user_id
+                          AND status = 'FOLLOWING'"                   
+    all_user_ids = "SELECT id FROM users
+                         WHERE (privateprofile != 'YES' AND privateprofile != 'INACTIVE' AND location_id = :location_id AND upper(tender) = 'YES')
+                         OR (user_id = :user_id AND privateprofile != 'INACTIVE')
+                         OR (user_id IN (#{following_user_ids}) AND privateprofile != 'INACTIVE' AND location_id = :location_id)"
+    where("user_id NOT IN (#{blocked_user_ids}) AND user_id IN (#{all_user_ids})", user_id: user.id, location_id: user.location_id)
+  end
+
+  # all local activity tenders only
+  def self.from_userslocaltenders_followed_by(user)
 
     # temp location hack fix
     if (user.location_id == 138)

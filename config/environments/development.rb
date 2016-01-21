@@ -31,4 +31,9 @@ Rails3BootstrapDeviseCancan::Application.configure do
 
   # new
   config.eager_load = false
+
+  # paperclip
+  Paperclip.options[:command_path] = "/usr/local/bin/"
+  Paperclip.options[:log] = true
+  Paperclip.options[:log_command] = true
 end
