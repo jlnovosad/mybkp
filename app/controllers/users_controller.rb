@@ -323,6 +323,16 @@ class UsersController < ApplicationController
     end
   end
 
+  def microposts_count
+    @mcount = User.find(params[:id]).microposts.count
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> { 
+        :modelcount=>@mcount.as_json() 
+        } }
+    end
+  end
+
   # any user favorite venues
   def venues
     @title = "Venues"
