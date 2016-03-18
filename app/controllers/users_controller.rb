@@ -355,6 +355,22 @@ class UsersController < ApplicationController
     end
   end
 
+  # any user favorite drinks
+  def drinks
+    @title = "Drinks"
+
+    puts '====================== drinks'
+
+    @user = User.find(params[:id])
+    @drinks = @user.drinks
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> { 
+        :drinks=>@drinks.as_json() 
+      } }
+    end
+  end
+
   #########################################
   # relationships
   #########################################
