@@ -78,6 +78,13 @@ class User < ActiveRecord::Base
             class_name: "Venue",
             source: :venue
 
+  has_many :checkfavorites, dependent: :destroy
+  has_many :checkvenues,
+            -> { order('lower(name) ASC').limit(50) },
+            through: :checkfavorites,
+            class_name: "Venue",
+            source: :venue
+
   has_many :workfavorites, dependent: :destroy
   has_many :workvenues,
             -> { order('lower(name) ASC').limit(50) },
