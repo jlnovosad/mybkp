@@ -79,7 +79,7 @@ module Rails3BootstrapDeviseCancan
     
     # ios notifications
     APNS.host = "gateway.sandbox.push.apple.com"  
-    APNS.pem  = File.join(Rails.root, 'lib','ckdev.pem')
+    APNS.pem  = File.join(Rails.root, 'lib','pzdev.pem')
     APNS.port = 2195
     APNS.pass = ENV["NOTIFICATION_PEM_PASS"]
 
@@ -87,7 +87,7 @@ module Rails3BootstrapDeviseCancan
     #if Rails.env.production? && !ENV["APPLE_SANDBOX"] 
     if Rails.env.production?  
     APNS.host = "gateway.push.apple.com"
-    APNS.pem  = File.join(Rails.root, 'lib','ckprod.pem')
+    APNS.pem  = File.join(Rails.root, 'lib','pzprod.pem')
     end 
 
   end
