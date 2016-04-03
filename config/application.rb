@@ -83,8 +83,12 @@ module Rails3BootstrapDeviseCancan
     APNS.port = 2195
     APNS.pass = ENV["NOTIFICATION_PEM_PASS"]
 
-    
-    end 
+    # Set the environment variable `APPLE_SANDBOX` to use the development certificate in production
+    #if Rails.env.production? && !ENV["APPLE_SANDBOX"] 
+    #if Rails.env.production?  
+    #APNS.host = "gateway.push.apple.com"
+    #APNS.pem  = File.join(Rails.root, 'lib','ckprod.pem')
+    #end 
 
   end
 end
