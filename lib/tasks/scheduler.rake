@@ -50,9 +50,12 @@ task :update_happyhr => :environment do
 
 	  # happy hr
 	  #@myspecial = Special.offset(rand(Special.where("dayoftheweek = ? AND location_id = ?", @d, l).count)).first
+	  puts @d
+	  puts l
 
-	  @todayspecial = Special.where("dayoftheweek = ? AND location_id = ?", @d, l)
-	  @myspecial = @todayspecial.sample
+	  @myspecial = Special.where("dayoftheweek = ? AND location_id = ?", @d, l).sample
+	  
+puts @myspecial.content
 
 	  @mypeep = User.find(@myspecial.user_id)
 	  @myvenue = Venue.find(@myspecial.venue_id)
