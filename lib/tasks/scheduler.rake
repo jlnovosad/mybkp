@@ -41,23 +41,32 @@ task :update_activity => :environment do
   
   	# insert random here, will do this task every 10 min, sometimes you wont do anything
     case rand(100) + 1
-    when  1..50   
-    when 50..75   
-    when 75..100  
+    when  1..25 
+
+    	# users with venue checkin
+	    @mypeep = User.where("venueprofile = ? AND location_id = ?", "HELPER", l).sample
+	    @myquip = Quip.all.sample
+	    @myvenue = @mypeep.checkfavorites.sample
+	    @m = Micropost.create!(content: @myquip.content, user_id:@mypeep.id)
+	    @c = Checkin.create!(micropost_id: @m.id, user_id:@mypeep.id, venue_id: @myvenue.id)
+
+    when 56..50  
+
+	    # users with no checkin
+	    @mypeep = User.where("venueprofile = ? AND location_id = ?", "HELPER", l).sample
+	    @myquip = Quip.all.sample
+	    @m = Micropost.create!(content: @myquip.content, user_id:@mypeep.id)
+
+    when 51..100 
+
+    	# nothing
+    	 
     else
     end
     
-    # users with venue checkin
-    @mypeep = User.where("venueprofile = ? AND location_id = ?", "HELPER", l).sample
-    @myquip = Quip.all.sample
-    @myvenue = @mypeep.checkfavorites.sample
-    @m = Micropost.create!(content: @myquip.content, user_id:@mypeep.id)
-    @c = Checkin.create!(micropost_id: @m.id, user_id:@mypeep.id, venue_id: @myvenue.id)
+    
 
-    # users with no checkin
-    @mypeep = User.where("venueprofile = ? AND location_id = ?", "HELPER", l).sample
-    @myquip = Quip.all.sample
-    @m = Micropost.create!(content: @myquip.content, user_id:@mypeep.id)
+    
     
   end
 
