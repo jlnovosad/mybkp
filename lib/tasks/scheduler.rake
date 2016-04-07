@@ -40,6 +40,8 @@ task :update_activity => :environment do
   @locations.each do |l|
   
   	puts l
+  	puts "looping..."
+  	puts @locations.count
 
     # insert random here, will do this task every 10 min, sometimes you wont do anything
     case rand(100) + 1
