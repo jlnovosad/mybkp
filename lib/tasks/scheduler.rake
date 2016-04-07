@@ -9,10 +9,10 @@ end
 task :populate_activity => :environment do
   puts "Populating..."
 
-	#csv = CSV.read('lib/tasks/d_quip.csv', :headers => true, :encoding => 'iso-8859-1:utf-8')
-  #csv.each_with_index do |row, index|
-  #  Quip.create!(:content => row['content'])
-  #end
+	csv = CSV.read('lib/tasks/d_quip.csv', :headers => true, :encoding => 'iso-8859-1:utf-8')
+  csv.each_with_index do |row, index|
+    Quip.create!(:content => row['content'])
+  end
 
   scsv = CSV.read('lib/tasks/d_special.csv', :headers => true, :encoding => 'iso-8859-1:utf-8')
   scsv.each_with_index do |row, index|
@@ -24,11 +24,10 @@ end
 task :populate_favorites => :environment do
   puts "Populating..."
 
-  #@users = User.where("venueprofile = ? AND location_id = ?", "HELPER", 1)
-  @users = User.where("id <= ?", 10)
+  @users = User.where("venueprofile = ? AND location_id = ?", "HELPER", 1)
   @favs = User.find(1).favorites
   @users.each do |u|
-  	(1..2).each do |p| 
+  	(1..10).each do |p| 
   		@venue = Venue.offset(rand(@favs.count)).first
   		u.checkfavorite!(@venue)
 		end
