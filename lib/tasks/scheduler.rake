@@ -53,7 +53,13 @@ task :update_happyhr => :environment do
 	  @mypeep = User.find(@myspecial.user_id)
 	  @myvenue = Venue.find(@myspecial.venue_id)
 	  @m = Micropost.create!(content: @myspecial.content, user_id:@mypeep.id)
-	  @c = Checkin.create!(micropost_id: @m.id, user_id:@mypeep.id, venue_id: @myvenue.id)
+
+	  puts @m.id
+	  puts @mypeep.id
+	  puts @myvenue.id
+	  puts "Now Updating happyhr..."
+
+	  @c = Checkin.create!(micropost_id: @m.id, user_id:@mypeep.id, venue_id: @myvenue.id, working: "NO")
 
 	end
   

@@ -30,8 +30,6 @@ class CheckinsController < ApplicationController
       end
   
     end
-
-    
   
     if @user.save
       respond_to do |format|
