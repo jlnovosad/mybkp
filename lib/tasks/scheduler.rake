@@ -54,9 +54,6 @@ task :update_happyhr => :environment do
 	  @todayspecial = Special.where("dayoftheweek = ? AND location_id = ?", @d, l)
 	  @myspecial = @todayspecial.offset(rand(@todayspecial.count)).first
 
-	  Thing.offset(rand(Thing.count)).first
-
-
 	  @mypeep = User.find(@myspecial.user_id)
 	  @myvenue = Venue.find(@myspecial.venue_id)
 	  @m = Micropost.create!(content: @myspecial.content, user_id:@mypeep.id)
