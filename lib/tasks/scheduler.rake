@@ -43,7 +43,7 @@ task :update_happyhr => :environment do
   @d = time.strftime("%^a") #SUN,MON etc
   
   # which cities (location ids)
-  @locations = Array.new(1,165)
+  @locations = Array.new(1)
 
   # for each city
   @locations.each do |l|
