@@ -34,7 +34,7 @@ task :update_activity => :environment do
   puts "Updating activity..."
   
   # which cities (location ids)
-  @locations = Array.new(1,165)
+  @locations = Array.new[1,165]
 
   # for each city
   @locations.each do |l|
