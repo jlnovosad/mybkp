@@ -43,17 +43,16 @@ task :update_happyhr => :environment do
   @d = time.strftime("%^a") #SUN,MON etc
   
   # which cities (location ids)
-  @locations = Array.new(1)
+  #@locations = Array.new(1)
 
   # for each city
-  @locations.each do |l|
+  #@locations.each do |l|
 
 	  # happy hr
 	  #@myspecial = Special.offset(rand(Special.where("dayoftheweek = ? AND location_id = ?", @d, l).count)).first
 	  puts @d
-	  puts l
 
-	  @myspecial = Special.where("dayoftheweek = ? AND location_id = ?", @d, l).sample
+	  @myspecial = Special.where("dayoftheweek = ? AND location_id = ?", @d, 1).sample
 	  
 puts @myspecial.content
 
@@ -62,7 +61,7 @@ puts @myspecial.content
 	  @m = Micropost.create!(content: @myspecial.content, user_id:@mypeep.id)
 		@c = Checkin.create!(micropost_id: @m.id, user_id:@mypeep.id, venue_id: @myvenue.id)
 
-	end
+	#end
   
 end
 
