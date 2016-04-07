@@ -167,6 +167,14 @@ class User < ActiveRecord::Base
     favorites.find_by_venue_id(venue.id).destroy
   end
 
+  def checkfavorite!(venue)
+    checkfavorites.create!(venue_id: venue.id)
+  end
+
+  def uncheckfavorite!(venue)
+    checkfavorites.find_by_venue_id(venue.id).destroy
+  end
+
   # workfavorites
   def workfavorited?(venue)
     workfavorites.find_by_venue_id(venue.id)
