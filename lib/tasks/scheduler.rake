@@ -15,7 +15,7 @@ task :update_happyhr => :environment do
   puts @d
 
   # which cities (location ids)
-  #@locations = Array.new(1,165)
+  #@locations = [1]
 
   # for each city
   #@locations.each do |l|
@@ -39,11 +39,7 @@ task :update_activity => :environment do
   # for each city
   @locations.each do |l|
   
-  	puts l
-  	puts "looping..."
-  	puts @locations.count
-
-    # insert random here, will do this task every 10 min, sometimes you wont do anything
+  	# insert random here, will do this task every 10 min, sometimes you wont do anything
     case rand(100) + 1
     when  1..50   
     when 50..75   

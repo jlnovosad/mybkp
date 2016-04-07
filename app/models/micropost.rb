@@ -98,7 +98,7 @@ class Micropost < ActiveRecord::Base
                           WHERE follower_id = :user_id
                           AND status = 'FOLLOWING'"                   
     all_user_ids = "SELECT id FROM users
-                         WHERE (privateprofile != 'YES' AND privateprofile != 'INACTIVE' AND location_id = :location_id AND upper(tender) = 'YES')
+                         WHERE (privateprofile != 'YES' AND privateprofile != 'INACTIVE' AND location_id = :location_id)
                          OR (user_id = :user_id AND privateprofile != 'INACTIVE')
                          OR (user_id IN (#{following_user_ids}) AND privateprofile != 'INACTIVE' AND location_id = :location_id)"
     where("user_id NOT IN (#{blocked_user_ids}) AND user_id IN (#{all_user_ids})", user_id: user.id, location_id: user.location_id)
