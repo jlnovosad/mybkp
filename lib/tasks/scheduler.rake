@@ -9,14 +9,14 @@ end
 task :populate_activity => :environment do
   puts "Populating..."
 
-	csv = CSV.read('lib/tasks/d_quip.csv', :headers => true, :encoding => 'iso-8859-1:utf-8')
-  csv.each_with_index do |row, index|
-    Quip.create!(:content => row['content'])
-  end
+	#csv = CSV.read('lib/tasks/d_quip.csv', :headers => true, :encoding => 'iso-8859-1:utf-8')
+  #csv.each_with_index do |row, index|
+  #  Quip.create!(:content => row['content'])
+  #end
 
   scsv = CSV.read('lib/tasks/d_special.csv', :headers => true, :encoding => 'iso-8859-1:utf-8')
   scsv.each_with_index do |row, index|
-    Special.create!(:content => row['content'], :dayoftheweek => row['dayoftheweek'], :user_id => "user_id", :venue_id => "venue_id")
+    Special.create!(:content => row['content'], :dayoftheweek => row['dayoftheweek'], :user_id => row["user_id"], :venue_id => row["venue_id"], :location_id => row["location_id"])
   end
 
 end
