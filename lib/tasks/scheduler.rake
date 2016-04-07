@@ -49,17 +49,18 @@ task :update_happyhr => :environment do
   @locations.each do |l|
 
 	  # happy hr
-	  @myspecial = Special.offset(rand(Special.where("dayoftheweek = ? AND location_id = ?", @d, l).count)).first
+	  #@myspecial = Special.offset(rand(Special.where("dayoftheweek = ? AND location_id = ?", @d, l).count)).first
+
+	  @todayspecial = Special.where("dayoftheweek = ? AND location_id = ?", @d, l)
+	  @myspecial = @todayspecial.offset(rand(@todayspecial.count)).first
+
+	  Thing.offset(rand(Thing.count)).first
+
+
 	  @mypeep = User.find(@myspecial.user_id)
 	  @myvenue = Venue.find(@myspecial.venue_id)
 	  @m = Micropost.create!(content: @myspecial.content, user_id:@mypeep.id)
-
-	  puts @m.id
-	  puts @mypeep.id
-	  puts @myvenue.id
-	  puts "Now Updating happyhr..."
-
-	  @c = Checkin.create!(micropost_id: @m.id, user_id:@mypeep.id, venue_id: @myvenue.id, working: "NO")
+		@c = Checkin.create!(micropost_id: @m.id, user_id:@mypeep.id, venue_id: @myvenue.id)
 
 	end
   
