@@ -42,7 +42,7 @@ task :update_activity => :environment do
   	# insert random here, will do this task every 10 min, sometimes you wont do anything
     case rand(100) + 1
     when  1..25 
-
+    	puts "WITH CHECK"
     	# users with venue checkin
 	    @mypeep = User.where("venueprofile = ? AND location_id = ?", "HELPER", l).sample
 	    @myquip = Quip.all.sample
@@ -51,17 +51,18 @@ task :update_activity => :environment do
 	    @c = Checkin.create!(micropost_id: @m.id, user_id:@mypeep.id, venue_id: @myvenue.id)
 
     when 56..50  
-
+    	puts "WITHOUT CHECK"
 	    # users with no checkin
 	    @mypeep = User.where("venueprofile = ? AND location_id = ?", "HELPER", l).sample
 	    @myquip = Quip.all.sample
 	    @m = Micropost.create!(content: @myquip.content, user_id:@mypeep.id)
 
     when 51..100 
-
+    	puts "NOTHING"
     	# nothing
-    	 
+
     else
+    	puts "ELSE"
     end
     
     
