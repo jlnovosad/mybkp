@@ -40,7 +40,8 @@ task :update_activity => :environment do
   @locations.each do |l|
   
   	# insert random here, will do this task every 10 min, sometimes you wont do anything
-    case rand(100) + 1
+  	rand = rand(1..100)
+    case rand
     when  1..25 
     	puts "WITH CHECK"
     	# users with venue checkin
