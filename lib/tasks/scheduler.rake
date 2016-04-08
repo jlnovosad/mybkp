@@ -55,7 +55,7 @@ task :update_activity => :environment do
 	    @m = Micropost.create!(content: @myquip.content, user_id:@mypeep.id)
 	    @c = Checkin.create!(micropost_id: @m.id, user_id:@mypeep.id, venue_id: @myvenue.id)
 
-    when 56..50  
+    when 26..50  
     	
     	puts "Without checkin"
 	    
