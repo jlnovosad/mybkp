@@ -41,8 +41,8 @@ task :update_activity => :environment do
   
   	# insert random here, will do this task every 10 min, sometimes you wont do anything
   	rand = rand(1..100)
+  	puts rand
     case rand
-		puts rand
 
     when  1..25 
     	
