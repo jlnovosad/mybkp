@@ -33,55 +33,64 @@ end
 task :update_activity => :environment do
   puts "Updating activity for testing..."
   
-  # which cities (location ids)
-  @locations = [1,165]
+  thistime = Time.now.utc
+  if night?(thistime) || latenight?(thistime)
 
-  # for each city
-  @locations.each do |l|
-  
-  	# insert random here, will do this task every 10 min, sometimes you wont do anything
-  	rand = rand(1..100)
-  	puts rand
-    case rand
+    # which cities (location ids)
+    @locations = [1,165]
 
-    when  1..25 
-    	
-    	puts "With checkin"
-    	
-    	# users with venue checkin
-	    @mypeep = User.where("venueprofile = ? AND location_id = ?", "HELPER", l).sample
-	    @myquip = Quip.all.sample
-	    @myvenue = @mypeep.checkfavorites.sample
-	    @m = Micropost.create!(content: @myquip.content, user_id:@mypeep.id)
-	    @c = Checkin.create!(micropost_id: @m.id, user_id:@mypeep.id, venue_id: @myvenue.id)
+    # for each city
+    @locations.each do |l|
+    
+    	# insert random here, will do this task every 10 min, sometimes you wont do anything
+    	rand = rand(1..100)
+    	puts rand
+      case rand
 
-    when 26..50  
-    	
-    	puts "Without checkin"
-	    
-	    # users with no checkin
-	    @mypeep = User.where("venueprofile = ? AND location_id = ?", "HELPER", l).sample
-	    @myquip = Quip.all.sample
-	    @m = Micropost.create!(content: @myquip.content, user_id:@mypeep.id)
+      when  1..40 
+      	
+      	puts "With checkin"
+      	
+      	# users with venue checkin
+  	    @mypeep = User.where("venueprofile = ? AND location_id = ?", "HELPER", l).sample
+  	    @myquip = Quip.all.sample
+  	    @myvenue = @mypeep.checkfavorites.sample
+  	    @m = Micropost.create!(content: @myquip.content, user_id:@mypeep.id)
+  	    @c = Checkin.create!(micropost_id: @m.id, user_id:@mypeep.id, venue_id: @myvenue.id)
 
-    when 51..100 
-    	
-    	puts "Nothing"
-    	
-    	# nothing
+      when 40..80  
+      	
+      	puts "Without checkin"
+  	    
+  	    # users with no checkin
+  	    @mypeep = User.where("venueprofile = ? AND location_id = ?", "HELPER", l).sample
+  	    @myquip = Quip.all.sample
+  	    @m = Micropost.create!(content: @myquip.content, user_id:@mypeep.id)
 
-    else
+      when 80..100 
+      	
+      	puts "Nothing"
+      	
+      	# nothing
 
-    	puts "Else"
+      else
 
+      	puts "Else"
+
+      end
+      
     end
-    
-    
 
-    
-    
   end
 
+end
+
+def night?(date)
+    ((21...24).include? date.hour)
+end
+
+def latenight?(date)
+    ((0...7).include? date.hour)
 end
 
 
