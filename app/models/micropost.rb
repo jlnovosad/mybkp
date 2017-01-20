@@ -104,6 +104,22 @@ class Micropost < ActiveRecord::Base
     where("user_id NOT IN (#{blocked_user_ids}) AND user_id IN (#{all_user_ids})", user_id: user.id, location_id: user.location_id)
   end
 
+  # all local activity (public)
+  def self.feedlocalpublic(location_id)
+
+    # temp location hack fix
+    if (location_id == 138)
+      location_id = 1
+    end
+    if (location_id == 165)
+      location_id = 1
+    end
+
+    all_user_ids = "SELECT id FROM users
+                         WHERE (privateprofile != 'YES' AND privateprofile != 'INACTIVE' AND location_id = :location_id)"
+    where("user_id IN (#{all_user_ids})", location_id: location_id)
+  end
+
   # all local activity tenders only
   def self.from_userslocaltenders_followed_by(user)
 
@@ -162,6 +178,23 @@ class Micropost < ActiveRecord::Base
                           AND privateprofile != 'INACTIVE'
                           AND upper(tender) = 'YES'"
     where("(microposts.user_id IN (#{following_user_ids}) AND checkins.venue_id = :venue_id AND checkins.working = 'YES' AND microposts.updated_at >= :recent) OR (microposts.user_id NOT IN (#{blocked_user_ids}) AND microposts.user_id IN (#{main_user_ids}) AND checkins.venue_id = :venue_id AND checkins.working = 'YES' AND microposts.updated_at >= :recent) OR (microposts.user_id = :user_id AND checkins.venue_id = :venue_id AND checkins.working = 'YES' AND microposts.updated_at >= :recent)", user_id: user.id, venue_id: venue.id, recent: Time.now - 8.hours)
+  end
+
+  # public posts from a venue
+  def self.publicfrom_venue(venue)
+    main_user_ids = "SELECT id FROM users
+                          WHERE privateprofile != 'YES'
+                          AND privateprofile != 'INACTIVE'"
+    where("(microposts.user_id IN (#{main_user_ids}) AND checkins.venue_id = :venue_id)", venue_id: venue.id)
+  end
+
+  # public posts from a venue's tenders
+  def self.publicfrom_venue_workers(venue)
+    main_user_ids = "SELECT id FROM users
+                          WHERE privateprofile != 'YES'
+                          AND privateprofile != 'INACTIVE'
+                          AND upper(tender) = 'YES'"
+    where("(microposts.user_id IN (#{main_user_ids}) AND checkins.venue_id = :venue_id AND checkins.working = 'YES' AND microposts.updated_at >= :recent)", venue_id: venue.id, recent: Time.now - 8.hours)
   end
 
   def photo_url

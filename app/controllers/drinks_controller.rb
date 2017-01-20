@@ -1,6 +1,6 @@
 class DrinksController < ApplicationController
 
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => [:show, :drinkusers]
   before_filter :correct_user, only: [:tagdrink, :untagdrink, :destroy]
 
   #########################################

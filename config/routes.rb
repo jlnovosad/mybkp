@@ -30,6 +30,9 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   # user related models
   #########################################
   resources :microposts, only: [:create, :destroy, :show] do
+    collection do
+      get :feedlocalpublic
+    end
     member do
       post :taguser
     end
@@ -50,7 +53,9 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
     end
   end
   resources :locations, only: [:index, :create, :show] do
-    
+    collection do
+      post :find
+    end
   end
   resources :devices, only: [:create, :destroy] do
     
@@ -65,7 +70,7 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
     end
     member do
       post :favorite, :unfavorite, :workfavorite, :workunfavorite
-      get :feed, :workerfeed
+      get :feed, :workerfeed, :publicfeed, :publicworkerfeed
     end
   end
   resources :shifts, only: [:index, :create, :destroy] do 

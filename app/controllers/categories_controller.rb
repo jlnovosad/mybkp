@@ -1,6 +1,6 @@
 class CategoriesController < ApplicationController
 
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => [:show]
 
   #########################################
   # lists all the categories that we have saved, not actually used

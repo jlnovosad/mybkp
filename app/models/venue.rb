@@ -43,4 +43,12 @@ class Venue < ActiveRecord::Base
 	def workerfeed(user)
 		Micropost.from_venue_workers(self, user)
 	end
+
+	def publicfeed()
+		Micropost.publicfrom_venue(self)
+	end
+
+	def publicworkerfeed()
+		Micropost.publicfrom_venue_workers(self)
+	end
 end

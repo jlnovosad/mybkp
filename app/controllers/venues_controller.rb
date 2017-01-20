@@ -1,5 +1,5 @@
 class VenuesController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => [:create, :publicfeed, :publicworkerfeed]
 
   #########################################
   # posts from tenders currently working
@@ -38,6 +38,68 @@ class VenuesController < ApplicationController
   def feed 
     @venue = Venue.find(params[:id])
     @feed_items = @venue.feed(current_user).paginate(page: params[:page], :per_page => 50).includes(:user, :checkin, :likes, :comments, :users)
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> { 
+        :feed_items=>@feed_items.as_json(:only => [:id, :content, :created_at, :working, :promo], :methods => [:photo_url, :thumb_url, :like_count, :comment_count],
+          :include => { 
+            :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
+              :include => { 
+                :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                :shifts => { }
+              }
+            },
+            :venue => { :only => [:id, :fs_venue_id, :name] },
+            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] },
+            :checkin => { :only => [:id, :working],
+              :include => { 
+                :venue => { :only => [:id, :fs_venue_id, :name] }
+              }
+            },
+            :likes => { :only => [:id, :user_id] }
+          }
+        )
+      } }
+    end
+  end
+
+  #########################################
+  # public posts from tenders currently working
+  #########################################
+  def publicworkerfeed 
+    @venue = Venue.find(params[:id])
+    @feed_items = @venue.publicworkerfeed.paginate(page: params[:page], :per_page => 50).includes(:user, :checkin, :likes, :comments, :users)
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json  { render :json=> { 
+        :feed_items=>@feed_items.as_json(:only => [:id, :content, :created_at, :working, :promo], :methods => [:photo_url, :thumb_url, :like_count, :comment_count],
+          :include => { 
+            :user => { :only => [:id, :name, :tender, :venueprofile], :methods => [:photo_url],
+              :include => { 
+                :workvenues => { :only => [:id, :fs_venue_id, :name] },
+                :shifts => { }
+              }
+            },
+            :venue => { :only => [:id, :fs_venue_id, :name] },
+            :users => { :only => [:id, :name, :tender], :methods => [:photo_url] },
+            :checkin => { :only => [:id, :working],
+              :include => { 
+                :venue => { :only => [:id, :fs_venue_id, :name] }
+              }
+            },
+            :likes => { :only => [:id, :user_id] }
+          }
+        )
+      } }
+    end
+  end
+
+  #########################################
+  # venue tagged in posts
+  #########################################
+  def publicfeed 
+    @venue = Venue.find(params[:id])
+    @feed_items = @venue.publicfeed.paginate(page: params[:page], :per_page => 50).includes(:user, :checkin, :likes, :comments, :users)
     respond_to do |format|
       format.html # index.html.erb
       format.json  { render :json=> { 
