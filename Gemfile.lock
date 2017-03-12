@@ -70,6 +70,7 @@ GEM
     excon (0.25.3)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    facebook-messenger (0.1.0)
     faker (0.3.1)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
@@ -232,6 +233,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   devise (~> 3.0.0.rc)
   devise_invitable!
+  facebook-messenger
   faker (= 0.3.1)
   fb_graph
   figaro
@@ -257,3 +259,6 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   will_paginate (= 3.0.3)
   zero_push
+
+BUNDLED WITH
+   1.11.2

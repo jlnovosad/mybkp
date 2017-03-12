@@ -62,3 +62,6 @@ gem "paperclip-ffmpeg", "~> 1.2.0"
 
 gem 'mail'
 gem 'postmark-rails', '>= 0.10.0'
+
+# facebook
+gem 'facebook-messenger'

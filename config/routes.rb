@@ -112,4 +112,9 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   match 'list/subscribe' => 'static_pages#subscribe', :as => 'subscribe', :via => :get
   match 'list/unsubscribe' => 'static_pages#unsubscribe', :as => 'unsubscribe', :via => :get
   match 'list/confirmed' => 'static_pages#confirmed', :as => 'confirmed', :via => :get
+
+  # facebook bot
+  scope '/bot', :controller => :bot do
+    post :webhook 
+  end
 end
