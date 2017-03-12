@@ -114,7 +114,6 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   match 'list/confirmed' => 'static_pages#confirmed', :as => 'confirmed', :via => :get
 
   # facebook bot
-  scope '/bot', :controller => :bot do
-    post :webhook 
-  end
+  get 'bot/webhook' => 'bot#webhook'
+  post 'bot/webhook' => 'bot#receive_message'
 end
