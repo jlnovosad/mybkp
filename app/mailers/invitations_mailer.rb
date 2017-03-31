@@ -1,6 +1,6 @@
 class InvitationsMailer < ActionMailer::Base
 
-  default :from => "Tipsly<tipsly@popzenith.com>"
+  default :from => "YipTip<YipTip@popzenith.com>"
 
 
   def new_message(message)

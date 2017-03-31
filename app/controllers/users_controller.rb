@@ -590,10 +590,10 @@ class UsersController < ApplicationController
     @message[:body] = "
     <p>Hello #{@email}!</p>
     <br/>
-    <p>#{@name} has invited you to try out Tipsly, a new app sthat lets you stay in touch with your favorite bartenders.</p>
+    <p>#{@name} has invited you to try out YipTip, a new app sthat lets you stay in touch with your favorite bartenders.</p>
     <p>You and your friends can see who's working where and discover new drinking destinations. Bartenders can build their following and promote their latest concoction.</p>
     <br/>
-    <p>Learn more and download the app for iPhone at <a href='https://www.goodtimesapp.co'>goodtimesapp.co</a>.</p>"
+    <p>Learn more and download the app for iPhone at <a href='https://www.yiptip.com'>yiptip.com</a>.</p>"
 
     # send email
     @sendmessage = Message.new(@message)

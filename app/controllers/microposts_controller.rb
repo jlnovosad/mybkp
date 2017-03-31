@@ -124,6 +124,8 @@ class MicropostsController < ApplicationController
     puts '====================== feedlocalpublic'
 
     #@user = User.find(params[:id])
+    #params[:location_id] = 3;
+
     @feed_items = Micropost.feedlocalpublic(params[:location_id]).paginate(page: params[:page], :per_page => 50).includes(:user, :checkin, :likes, :comments, :users)
     respond_to do |format|
       format.html # index.html.erb

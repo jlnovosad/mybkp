@@ -1,10 +1,22 @@
 <li>
   <%= micropost.content %> 
-  <div class="timestamp">
-    <% if micropost.fsid.nil? || micropost.fsid.empty? %>
-  	<% else %>
-      at <%= find_venue_name(micropost.fsid) %>
-    <% end %>
+  <div class="content">
+    
+
+	<%= image_tag micropost.user.photo.url(:small) %>
+	<div class="user"><%= link_to micropost.user.name, micropost.user %></div>
+	<div class="content"><%= micropost.content %></div>
+
+	<div class="timestamp">
+	<% if micropost.checkin.venue_id.nil? %>
+	<% else %>
+	at <%= micropost.checkin.venue.name %>
+	<% end %>
+	</div>
+
+	<div class="timestamp"><%= time_ago_in_words(micropost.created_at) %> ago.</div>
+
+
+
   </div>
-  <div class="timestamp"><%= time_ago_in_words(micropost.created_at) %> ago</div>
 </li>
